@@ -1,0 +1,5 @@
+suites:
+    beanstalkd_lib:
+        namespace: Zlikavac32\BeanstalkdLib
+        psr4_prefix: Zlikavac32\BeanstalkdLib
+formatter.name: dot

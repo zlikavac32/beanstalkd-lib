@@ -1,0 +1,53 @@
+{
+    "name": "zlikavac32/beanstalkd-lib",
+    "description": "Beanstalkd client and worker implementation",
+    "keywords": ["beanstalkd", "worker", "job", "queue"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marijan Šuflaj",
+            "email": "msufflaj32@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Zlikavac32\\BeanstalkdLib\\": "src/"
+        }
+    },
+    "autoload-dev":  {
+        "files": [
+            "src-test/phpSpec/asserts.php",
+            "src-test/phpSpec/matchers.php",
+            "src-test/PHPUnit/misc.php",
+            "src-test/PHPUnit/asserts.php",
+            "src-test/PHPUnit/factories.php"
+        ],
+        "psr-4": {
+            "Zlikavac32\\BeanstalkdLib\\Tests\\": "tests/",
+            "Zlikavac32\\BeanstalkdLib\\TestHelper\\": "src-test/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.1",
+        "ext-pcntl": "*",
+        "ext-posix": "*",
+        "zlikavac32/php-enum": "^1.3",
+        "php-ds/php-ds": "^1.2",
+        "zlikavac32/alarm-scheduler": "^0.2.0"
+    },
+    "suggest": {
+        "ext-ds": "Native php-ds implementation",
+        "ext-json": "Native JSON implementation",
+        "ext-sockets": "Native socket implementation",
+        "symfony/yaml": "Symfony YAML parser"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5",
+        "phpspec/phpspec": "^5.1",
+        "symfony/yaml": "^4.2",
+        "ext-sockets": "*",
+        "ext-json": "*"
+    }
+}
