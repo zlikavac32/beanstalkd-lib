@@ -34,8 +34,8 @@ class NativePHPJsonSerializer implements Serializer {
         int $decodeOptions = 0,
         int $decodeDepth = 512
     ) {
-        $this->encodeOptions = $encodeOptions | \JSON_THROW_ON_ERROR;
-        $this->decodeOptions = $decodeOptions | \JSON_THROW_ON_ERROR;
+        $this->encodeOptions = $encodeOptions;
+        $this->decodeOptions = $decodeOptions;
         $this->decodeObjectAsArray = $objectAsArray;
         $this->decodeDepth = $decodeDepth;
     }
@@ -43,16 +43,20 @@ class NativePHPJsonSerializer implements Serializer {
     public function serialize($payload): string {
         try {
             return \json_encode($payload, $this->encodeOptions);
-        } catch (JsonException $e) {
-            throw new SerializeException('There was an error while serializing as JSON', $payload, $e);
+        } finally {
+            if (\json_last_error() !== JSON_ERROR_NONE) {
+                throw new SerializeException(\json_last_error_msg(), $payload);
+            }
         }
     }
 
     public function deserialize(string $payload) {
         try {
             return \json_decode($payload, $this->decodeObjectAsArray, $this->decodeDepth, $this->decodeOptions);
-        } catch (JsonException $e) {
-            throw new DeserializeException('There was an error while deserializing JSON', $payload, $e);
+        } finally {
+            if (\json_last_error() !== JSON_ERROR_NONE) {
+                throw new DeserializeException(\json_last_error_msg(), $payload);
+            }
         }
     }
 }

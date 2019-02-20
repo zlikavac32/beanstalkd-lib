@@ -29,10 +29,8 @@ class NativePHPJsonSerializerSpec extends ObjectBehavior {
         try {
             $this->shouldThrow(
                 new SerializeException(
-                    'There was an error while serializing as JSON',
-                    $payload,
-                    new JsonException()
-
+                    'Type is not supported',
+                    $payload
                 )
             )
                 ->duringSerialize($payload);
@@ -44,7 +42,7 @@ class NativePHPJsonSerializerSpec extends ObjectBehavior {
     public function it_should_throw_error_on_deserialize_error(): void {
         $payload = '[';
         $this->shouldThrow(
-            new DeserializeException('There was an error while deserializing JSON', $payload, new JsonException())
+            new DeserializeException('Syntax error', $payload)
         )
             ->duringDeserialize($payload);
     }
