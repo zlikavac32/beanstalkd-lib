@@ -23,4 +23,11 @@ class GracefulExitInterruptHandlerSpec extends ObjectBehavior {
         $this->inProgress()
             ->shouldReturn(true);
     }
+
+    public function it_should_not_be_in_progress_after_interrupt_and_clear(): void {
+        $this->handle();
+        $this->clear();
+
+        $this->inProgress()->shouldReturn(false);
+    }
 }

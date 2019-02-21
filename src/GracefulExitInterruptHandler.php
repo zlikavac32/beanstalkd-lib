@@ -15,4 +15,8 @@ class GracefulExitInterruptHandler implements InterruptHandler, GracefulExit {
     public function handle(): void {
         $this->inProgress = true;
     }
+
+    public function clear(): void {
+        $this->inProgress = false;
+    }
 }
