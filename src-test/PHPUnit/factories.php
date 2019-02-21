@@ -159,7 +159,7 @@ function createDefaultClient(Protocol $protocol, TubeConfigurationFactory $tubeC
 }
 
 function createJobInTube(Protocol $protocol, string $tube): Job {
-    return createJob($protocol, 'foo', 0, 0, 60, $tube);
+    return createJob($protocol, 'foo', 1024, 0, 60, $tube);
 }
 
 function createJobWithPriority(Protocol $protocol, int $priority): Job {
@@ -167,14 +167,14 @@ function createJobWithPriority(Protocol $protocol, int $priority): Job {
 }
 
 function createJobWithDelay(Protocol $protocol, int $delay): Job {
-    return createJob($protocol, 'foo', 0, $delay);
+    return createJob($protocol, 'foo', 1024, $delay);
 }
 
 function createJobWithTimeToRun(Protocol $protocol, int $timeToRun): Job {
-    return createJob($protocol, 'foo', 0, 0, $timeToRun);
+    return createJob($protocol, 'foo', 1024, 0, $timeToRun);
 }
 
-function createJob(Protocol $protocol, string $payload = 'foo', $priority = 0, $delay = 0, $timeToRun = 60, string $tube = 'default'): Job {
+function createJob(Protocol $protocol, string $payload = 'foo', $priority = 1024, $delay = 0, $timeToRun = 60, string $tube = 'default'): Job {
     $protocol->useTube($tube);
 
     $jobId = $protocol->put($priority, $delay, $timeToRun, $payload);

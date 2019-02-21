@@ -309,7 +309,7 @@ class BasicFunctionalityTest extends TestCase {
      * @test
      */
     public function delayed_job_can_be_peeked(): void {
-        $createdJob = createJob($this->protocol, 'foo', 0, 50);
+        $createdJob = createJobWithDelay($this->protocol, 50);
 
         $peekedJob = $this->protocol->peekDelayed();
 

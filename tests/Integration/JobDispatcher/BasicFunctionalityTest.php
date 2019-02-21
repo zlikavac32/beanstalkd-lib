@@ -174,7 +174,7 @@ class BasicFunctionalityTest extends TestCase {
      * @test
      */
     public function log_running_job_is_auto_touched(): void {
-        $createdJob = createJob($this->protocol, 'foo', 0, 0, 6, 'bar');
+        $createdJob = createJob($this->protocol, 'foo', 1024, 0, 6, 'bar');
 
         $this->barTubeRunner->changeRunnerTo(createRunnerThatSleepsAndThenBuriesJob(6));
 
