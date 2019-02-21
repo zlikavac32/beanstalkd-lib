@@ -12,6 +12,7 @@ use Zlikavac32\AlarmScheduler\NaiveAlarmScheduler;
 use Zlikavac32\BeanstalkdLib\Client;
 use Zlikavac32\BeanstalkdLib\GracefulExit;
 use Zlikavac32\BeanstalkdLib\GracefulExitInterruptHandler;
+use Zlikavac32\BeanstalkdLib\InterruptException;
 use Zlikavac32\BeanstalkdLib\InterruptExceptionJobDispatcher;
 use Zlikavac32\BeanstalkdLib\JobDispatcher;
 use Zlikavac32\BeanstalkdLib\JobState;
@@ -207,14 +208,20 @@ class BasicFunctionalityTest extends TestCase {
      * @test
      */
     public function runner_should_perform_hard_interrupt_on_second_signal(): void {
-        createJobInTube($this->protocol, 'bar');
+        $createdJob = createJobInTube($this->protocol, 'bar');
 
         $this->barTubeRunner->changeRunnerTo(createRunnerThatSleepsAndThenBuriesJob(4));
 
         $this->alarmScheduler->schedule(1, $this->emulateInterruptAlarmHandler);
         $this->alarmScheduler->schedule(2, $this->emulateInterruptAlarmHandler);
 
-        $this->jobDispatcher->run($this->client);
+        try {
+            $this->jobDispatcher->run($this->client);
+        } catch (InterruptException $e) {
+            self::assertThat($createdJob->id(), new JobIdIsInState($this->protocol, JobState::DELAYED()));
+
+            throw $e;
+        }
     }
 
     /**
@@ -222,12 +229,18 @@ class BasicFunctionalityTest extends TestCase {
      * @test
      */
     public function runner_should_perform_delayed_hard_interrupt(): void {
-        createJobInTube($this->protocol, 'bar');
+        $createdJob = createJobInTube($this->protocol, 'bar');
 
         $this->barTubeRunner->changeRunnerTo(createRunnerThatSleepsAndThenBuriesJob(8));
 
         $this->alarmScheduler->schedule(1, $this->emulateInterruptAlarmHandler);
 
-        $this->jobDispatcher->run($this->client);
+        try {
+            $this->jobDispatcher->run($this->client);
+        } catch (InterruptException $e) {
+            self::assertThat($createdJob->id(), new JobIdIsInState($this->protocol, JobState::DELAYED()));
+
+            throw $e;
+        }
     }
 }

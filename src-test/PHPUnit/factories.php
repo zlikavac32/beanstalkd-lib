@@ -19,6 +19,7 @@ use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\ProtocolOverSocket;
+use Zlikavac32\BeanstalkdLib\ReleaseOnInterruptExceptionRunner;
 use Zlikavac32\BeanstalkdLib\Runner;
 use Zlikavac32\BeanstalkdLib\Serializer;
 use Zlikavac32\BeanstalkdLib\StateAwareProtocol;
@@ -93,13 +94,15 @@ function createDefaultInterruptHandler(InterruptHandler $gracefulExitInterruptHa
 }
 
 function createDefaultRunner(Runner $runner, Client $client, AlarmScheduler $alarmScheduler): Runner {
-    return new BuryOnExceptionRunner(
-        new AutoTouchJobRunner(
-            $runner,
-            $client,
-            $alarmScheduler
-        ),
-        new ThrowAllThrowableAuthority()
+    return new ReleaseOnInterruptExceptionRunner(
+        new BuryOnExceptionRunner(
+            new AutoTouchJobRunner(
+                $runner,
+                $client,
+                $alarmScheduler
+            ),
+            new ThrowAllThrowableAuthority()
+        )
     );
 }
 
