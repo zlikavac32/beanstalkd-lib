@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib\Tests\Integration\Client;
 
+use Ds\Map;
 use Ds\Set;
 use PHPUnit\Framework\TestCase;
 use Zlikavac32\BeanstalkdLib\Adapter\NativePHPJsonSerializer;
@@ -23,7 +24,6 @@ use Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\Constraint\JobStatsIsForJob;
 use Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\Constraint\ServerStatsIsForServer;
 use Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\Constraint\TubeStatsIsForTube;
 use Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\Constraint\TwoTubeSetsMatch;
-use Zlikavac32\BeanstalkdLib\TubeConfiguration;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createDefaultClient;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createDefaultProtocol;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createJob;
@@ -34,6 +34,8 @@ use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createJobWithTimeToRun;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createMockSerializer;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createMutableProxySerializer;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\purgeProtocol;
+use Zlikavac32\BeanstalkdLib\TubeConfigurationFactory;
+use Zlikavac32\BeanstalkdLib\TubeMapConfigurationFactory;
 
 class BasicFunctionalityTest extends TestCase {
 
@@ -46,9 +48,9 @@ class BasicFunctionalityTest extends TestCase {
      */
     private $client;
     /**
-     * @var TubeConfiguration
+     * @var TubeConfigurationFactory
      */
-    private $tubeConfiguration;
+    private $tubeConfigurationFactory;
     /**
      * @var Serializer
      */
@@ -61,18 +63,29 @@ class BasicFunctionalityTest extends TestCase {
 
         $this->serializer = createMutableProxySerializer($mockSerializer);
 
-        $this->tubeConfiguration = new StaticTubeConfiguration(
-            1, 2, 3, 4, $this->serializer
-        );
+        $this->tubeConfigurationFactory = new TubeMapConfigurationFactory(new Map([
+            'default' => new StaticTubeConfiguration(
+                1, 2, 3, 4, $this->serializer
+            ),
+            'bar' => new StaticTubeConfiguration(
+                1, 2, 3, 4, $this->serializer
+            ),
+            'foo' => new StaticTubeConfiguration(
+                1, 2, 3, 4, $this->serializer
+            ),
+            'baz' => new StaticTubeConfiguration(
+                1, 2, 3, 4, $this->serializer
+            )
+        ]));
 
-        $this->client = createDefaultClient($this->protocol, $this->tubeConfiguration);
+        $this->client = createDefaultClient($this->protocol, $this->tubeConfigurationFactory);
 
         purgeProtocol($this->protocol);
     }
 
     protected function tearDown() {
         unset($this->serializer);
-        unset($this->tubeConfiguration);
+        unset($this->tubeConfigurationFactory);
         unset($this->client);
         unset($this->protocol);
     }

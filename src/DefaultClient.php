@@ -14,13 +14,13 @@ class DefaultClient implements Client {
      */
     private $protocol;
     /**
-     * @var TubeConfiguration
+     * @var TubeConfigurationFactory
      */
-    private $tubeConfiguration;
+    private $tubeConfigurationFactory;
 
-    public function __construct(Protocol $protocol, TubeConfiguration $tubeConfiguration) {
+    public function __construct(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory) {
         $this->protocol = $protocol;
-        $this->tubeConfiguration = $tubeConfiguration;
+        $this->tubeConfigurationFactory = $tubeConfigurationFactory;
     }
 
     /**
@@ -45,7 +45,7 @@ class DefaultClient implements Client {
         return new DefaultTubeHandle(
             $tubeName,
             $this->protocol,
-            $this->tubeConfiguration
+            $this->tubeConfigurationFactory->createForTube($tubeName)
         );
     }
 
@@ -149,12 +149,16 @@ class DefaultClient implements Client {
     }
 
     private function createJobHandleFromJob(Job $job): JobHandle {
+        $tubeName = $this->protocol->statsJob($job->id())['tube'];
+
+        $tubeConfiguration = $this->tubeConfigurationFactory->createForTube($tubeName);
+
         return new DefaultJobHandle(
             $job->id(),
-            $this->tubeConfiguration->serializer()
+            $tubeConfiguration->serializer()
                 ->deserialize($job->payload()),
             $this->protocol,
-            $this->tubeConfiguration
+            $tubeConfiguration
         );
     }
 }

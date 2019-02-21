@@ -24,6 +24,7 @@ use Zlikavac32\BeanstalkdLib\Serializer;
 use Zlikavac32\BeanstalkdLib\StateAwareProtocol;
 use Zlikavac32\BeanstalkdLib\ThrowAllThrowableAuthority;
 use Zlikavac32\BeanstalkdLib\TubeConfiguration;
+use Zlikavac32\BeanstalkdLib\TubeConfigurationFactory;
 
 function createDefaultProtocol(int $readTimeout = 1500000): Protocol {
     $socket = new ExclusiveAccessSocket(
@@ -153,8 +154,8 @@ function createJustBuryJobRunner(): Runner {
     };
 }
 
-function createDefaultClient(Protocol $protocol, TubeConfiguration $tubeConfiguration): Client {
-    return new DefaultClient($protocol, $tubeConfiguration);
+function createDefaultClient(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory): Client {
+    return new DefaultClient($protocol, $tubeConfigurationFactory);
 }
 
 function createJobInTube(Protocol $protocol, string $tube): Job {

@@ -21,6 +21,8 @@ use Zlikavac32\BeanstalkdLib\Serializer;
 use Zlikavac32\BeanstalkdLib\StaticTubeConfiguration;
 use Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\Constraint\JobIdIsInState;
 use Zlikavac32\BeanstalkdLib\TubeConfiguration;
+use Zlikavac32\BeanstalkdLib\TubeConfigurationFactory;
+use Zlikavac32\BeanstalkdLib\TubeMapConfigurationFactory;
 use Zlikavac32\BeanstalkdLib\TubeMapJobDispatcher;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createDefaultClient;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createDefaultInterruptHandler;
@@ -46,9 +48,9 @@ class BasicFunctionalityTest extends TestCase {
      */
     private $client;
     /**
-     * @var TubeConfiguration
+     * @var TubeConfigurationFactory
      */
-    private $tubeConfiguration;
+    private $tubeConfigurationFactory;
     /**
      * @var Serializer
      */
@@ -109,11 +111,13 @@ class BasicFunctionalityTest extends TestCase {
 
         $this->serializer = createMutableProxySerializer($mockSerializer);
 
-        $this->tubeConfiguration = new StaticTubeConfiguration(
-            1, 2, 3, 4, $this->serializer
-        );
+        $this->tubeConfigurationFactory = new TubeMapConfigurationFactory(new Map([
+            'bar' => new StaticTubeConfiguration(
+                1, 2, 3, 4, $this->serializer
+            )
+        ]));
 
-        $this->client = createDefaultClient($this->protocol, $this->tubeConfiguration);
+        $this->client = createDefaultClient($this->protocol, $this->tubeConfigurationFactory);
 
         purgeProtocol($this->protocol);
 
@@ -161,7 +165,7 @@ class BasicFunctionalityTest extends TestCase {
         unset($this->gracefulExit);
         unset($this->emulateInterruptAlarmHandler);
         unset($this->serializer);
-        unset($this->tubeConfiguration);
+        unset($this->tubeConfigurationFactory);
         unset($this->client);
         unset($this->protocol);
     }

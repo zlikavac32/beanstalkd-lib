@@ -13,22 +13,31 @@ use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\Serializer;
 use Zlikavac32\BeanstalkdLib\TubeConfiguration;
+use Zlikavac32\BeanstalkdLib\TubeConfigurationFactory;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beJobHandleFor;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beMapOfTubes;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beTubeHandleFor;
 
 class DefaultClientSpec extends ObjectBehavior {
 
-    public function let(Protocol $protocol, TubeConfiguration $tubeConfiguration): void {
-        $this->beConstructedWith($protocol, $tubeConfiguration);
+    public function let(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory): void {
+        $this->beConstructedWith($protocol, $tubeConfigurationFactory);
     }
 
     public function it_is_initializable(): void {
         $this->shouldHaveType(DefaultClient::class);
     }
 
-    public function it_should_list_tubes(Protocol $protocol): void {
+    public function it_should_list_tubes(
+        Protocol $protocol,
+        TubeConfigurationFactory $tubeConfigurationFactory,
+        TubeConfiguration $fooTubeConfiguration,
+        TubeConfiguration $barTubeConfiguration
+    ): void {
         $tubes = ['foo', 'bar'];
+
+        $tubeConfigurationFactory->createForTube('foo')->willReturn($fooTubeConfiguration);
+        $tubeConfigurationFactory->createForTube('bar')->willReturn($barTubeConfiguration);
 
         $protocol->listTubes()
             ->willReturn(new Vector($tubes));
@@ -37,7 +46,13 @@ class DefaultClientSpec extends ObjectBehavior {
             ->shouldBeMapOfTubes(new Set($tubes));
     }
 
-    public function it_should_create_new_tube_handle(): void {
+    public function it_should_create_new_tube_handle(
+        TubeConfigurationFactory $tubeConfigurationFactory,
+        TubeConfiguration $tubeConfiguration
+    ): void {
+        $tubeConfigurationFactory->createForTube('foo')
+            ->willReturn($tubeConfiguration);
+
         $this->tube('foo')
             ->shouldBeTubeHandleFor('foo');
     }
@@ -166,6 +181,7 @@ class DefaultClientSpec extends ObjectBehavior {
 
     public function it_should_reserve_job(
         Protocol $protocol,
+        TubeConfigurationFactory $tubeConfigurationFactory,
         TubeConfiguration $tubeConfiguration,
         Serializer $serializer
     ): void {
@@ -175,6 +191,9 @@ class DefaultClientSpec extends ObjectBehavior {
 
         $protocol->reserve()
             ->willReturn($job);
+
+        $tubeConfigurationFactory->createForTube('foo')->willReturn($tubeConfiguration);
+        $protocol->statsJob(32)->willReturn(['tube' => 'foo']);
 
         $deserializedPayload = [1, 2];
 
@@ -190,6 +209,7 @@ class DefaultClientSpec extends ObjectBehavior {
 
     public function it_should_peek_job(
         Protocol $protocol,
+        TubeConfigurationFactory $tubeConfigurationFactory,
         TubeConfiguration $tubeConfiguration,
         Serializer $serializer
     ): void {
@@ -199,6 +219,9 @@ class DefaultClientSpec extends ObjectBehavior {
 
         $protocol->peek(32)
             ->willReturn($job);
+
+        $tubeConfigurationFactory->createForTube('foo')->willReturn($tubeConfiguration);
+        $protocol->statsJob(32)->willReturn(['tube' => 'foo']);
 
         $deserializedPayload = [1, 2];
 
@@ -214,6 +237,7 @@ class DefaultClientSpec extends ObjectBehavior {
 
     public function it_should_reserve_with_timeout(
         Protocol $protocol,
+        TubeConfigurationFactory $tubeConfigurationFactory,
         TubeConfiguration $tubeConfiguration,
         Serializer $serializer
     ): void {
@@ -223,6 +247,9 @@ class DefaultClientSpec extends ObjectBehavior {
 
         $protocol->reserveWithTimeout(18)
             ->willReturn($job);
+
+        $tubeConfigurationFactory->createForTube('foo')->willReturn($tubeConfiguration);
+        $protocol->statsJob(32)->willReturn(['tube' => 'foo']);
 
         $deserializedPayload = [1, 2];
 
