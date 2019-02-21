@@ -9,6 +9,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Zlikavac32\AlarmScheduler\AlarmScheduler;
 use Zlikavac32\BeanstalkdLib\Client;
+use Zlikavac32\BeanstalkdLib\InterruptException;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\JobStats;
 use Zlikavac32\BeanstalkdLib\TouchJobAlarmHandler;
@@ -79,7 +80,15 @@ class TouchJobAlarmHandlerSpec extends ObjectBehavior {
         $this->handle($scheduler);
     }
 
-    public function it_should_ignore_any_throwable(AlarmScheduler $scheduler, Client $client): void {
+    public function it_should_rethrow_interrupt_exception(AlarmScheduler $scheduler, Client $client): void {
+        $e = new InterruptException();
+
+        $client->peek(32)->willThrow($e);
+
+        $this->shouldThrow($e)->duringHandle($scheduler);
+    }
+
+    public function it_should_ignore_any_other_throwable(AlarmScheduler $scheduler, Client $client): void {
         $client->peek(32)->willThrow(new Exception());
 
         $this->handle($scheduler);

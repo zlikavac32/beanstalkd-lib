@@ -6,7 +6,9 @@ namespace spec\Zlikavac32\BeanstalkdLib;
 
 use Exception;
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 use Zlikavac32\BeanstalkdLib\BuryOnExceptionRunner;
+use Zlikavac32\BeanstalkdLib\InterruptException;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\Runner;
 use Zlikavac32\BeanstalkdLib\ThrowableAuthority;
@@ -79,5 +81,39 @@ class BuryOnExceptionRunnerSpec extends ObjectBehavior {
         $jobHandle->bury()->shouldBeCalled();
 
         $this->shouldThrow($e)->duringRun($jobHandle);
+    }
+
+    public function it_should_propagate_interrupt_exception_without_bury_and_without_consulting_throwable_authority(
+        Runner $runner,
+        ThrowableAuthority $throwableAuthority,
+        JobHandle $jobHandle
+    ): void {
+        $e = new InterruptException();
+
+        $throwableAuthority->shouldRethrow(Argument::any())->shouldNotBeCalled();
+
+        $runner->run($jobHandle)->willThrow($e);
+
+        $jobHandle->bury()->shouldNotBeCalled();
+
+        $this->shouldThrow($e)->duringRun($jobHandle);
+    }
+
+    public function it_should_propagate_interrupt_exception_from_bury(
+        Runner $runner,
+        ThrowableAuthority $throwableAuthority,
+        JobHandle $jobHandle
+    ): void {
+        $e = new Exception();
+
+        $throwableAuthority->shouldRethrow(Argument::any())->shouldNotBeCalled();
+
+        $runner->run($jobHandle)->willThrow($e);
+
+        $interruptException = new InterruptException();
+
+        $jobHandle->bury()->willThrow($interruptException);
+
+        $this->shouldThrow($interruptException)->duringRun($jobHandle);
     }
 }

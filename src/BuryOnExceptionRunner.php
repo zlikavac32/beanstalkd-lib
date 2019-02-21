@@ -29,6 +29,8 @@ class BuryOnExceptionRunner implements Runner {
     public function run(JobHandle $jobHandle): void {
         try {
             $this->runner->run($jobHandle);
+        } catch (InterruptException $e) {
+            throw $e;
         } catch (Throwable $e) {
             $this->buryJob($jobHandle);
 
@@ -41,6 +43,10 @@ class BuryOnExceptionRunner implements Runner {
     private function buryJob(JobHandle $job): void {
         try {
             $job->bury();
+        } catch (InterruptException $e) {
+            // although this could overwrite existing exception that was caught, it's in respect to what this interrupt
+            // means, and it means "quit without question" (assuming no catch-all block exists above, it should do so)
+            throw $e;
         } catch (Throwable $e) {
             // ignore, nothing we can do
         }

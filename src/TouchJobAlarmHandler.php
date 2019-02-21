@@ -40,6 +40,8 @@ class TouchJobAlarmHandler implements AlarmHandler {
                 $jobHandle->stats()
                     ->timeLeft()
             );
+        } catch (InterruptException $e) {
+            throw $e;
         } catch (Throwable $e) {
             return;
         }
