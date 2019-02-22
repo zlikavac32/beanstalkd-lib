@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit;
 
+use Throwable;
 use Zlikavac32\AlarmScheduler\AlarmHandler;
 use Zlikavac32\AlarmScheduler\AlarmScheduler;
 use Zlikavac32\BeanstalkdLib\Adapter\NativePHPSocket;
@@ -23,7 +24,7 @@ use Zlikavac32\BeanstalkdLib\ReleaseOnInterruptExceptionRunner;
 use Zlikavac32\BeanstalkdLib\Runner;
 use Zlikavac32\BeanstalkdLib\Serializer;
 use Zlikavac32\BeanstalkdLib\StateAwareProtocol;
-use Zlikavac32\BeanstalkdLib\ThrowAllThrowableAuthority;
+use Zlikavac32\BeanstalkdLib\ThrowableAuthority;
 use Zlikavac32\BeanstalkdLib\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\TubeConfigurationFactory;
 
@@ -101,7 +102,12 @@ function createDefaultRunner(Runner $runner, Client $client, AlarmScheduler $ala
                 $client,
                 $alarmScheduler
             ),
-            new ThrowAllThrowableAuthority()
+            new class implements ThrowableAuthority {
+
+                public function shouldRethrow(Throwable $e): bool {
+                    return true;
+                }
+            }
         )
     );
 }
