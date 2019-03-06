@@ -31,7 +31,7 @@ class InterruptExceptionJobDispatcher implements JobDispatcher, AlarmHandler {
         posix_kill(getmypid(), SIGUSR1);
     }
 
-    public function run(Client $client): void {
+    public function run(Client $client, int $numberOfJobsToRun): void {
         $oldSignalHandler = pcntl_signal_get_handler(SIGUSR1);
 
         pcntl_signal(SIGUSR1, function (): void {
@@ -39,7 +39,7 @@ class InterruptExceptionJobDispatcher implements JobDispatcher, AlarmHandler {
         });
 
         try {
-            $this->jobDispatcher->run($client);
+            $this->jobDispatcher->run($client, $numberOfJobsToRun);
         } finally {
             pcntl_signal(SIGUSR1, $oldSignalHandler);
         }

@@ -11,5 +11,5 @@ interface JobDispatcher {
      *
      * @param Client $client Fresh instance that watches only default tube
      */
-    public function run(Client $client): void;
+    public function run(Client $client, int $numberOfJobsToRun): void;
 }

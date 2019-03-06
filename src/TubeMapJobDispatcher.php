@@ -16,25 +16,19 @@ class TubeMapJobDispatcher implements JobDispatcher {
      */
     private $tubeRunners;
     /**
-     * @var int
-     */
-    private $maxJobs;
-    /**
      * @var GracefulExit
      */
     private $gracefulExit;
 
     public function __construct(
         Map $tubeRunners,
-        GracefulExit $gracefulExit,
-        int $maxJobs = PHP_INT_MAX
+        GracefulExit $gracefulExit
     ) {
         $this->tubeRunners = $tubeRunners;
-        $this->maxJobs = $maxJobs;
         $this->gracefulExit = $gracefulExit;
     }
 
-    public function run(Client $client): void {
+    public function run(Client $client, int $numberOfJobsToRun): void {
         $tubeNames = $this->tubeRunners->keys();
 
         foreach ($tubeNames as $tubeName) {
@@ -45,12 +39,10 @@ class TubeMapJobDispatcher implements JobDispatcher {
             $client->ignoreDefaultTube();
         }
 
-        $left = $this->maxJobs;
-
-        while (!$this->gracefulExit->inProgress() && $left > 0) {
+        while (!$this->gracefulExit->inProgress() && $numberOfJobsToRun > 0) {
             $this->reserveAndRun($client);
 
-            $left--;
+            $numberOfJobsToRun--;
         }
     }
 
