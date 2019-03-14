@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
+use Ds\Set;
 use Zlikavac32\AlarmScheduler\AlarmHandler;
 use Zlikavac32\AlarmScheduler\AlarmScheduler;
 
@@ -31,7 +32,7 @@ class InterruptExceptionJobDispatcher implements JobDispatcher, AlarmHandler {
         posix_kill(getmypid(), SIGUSR1);
     }
 
-    public function run(Client $client, int $numberOfJobsToRun): void {
+    public function run(Client $client, Set $tubesToWatch, int $numberOfJobsToRun): void {
         $oldSignalHandler = pcntl_signal_get_handler(SIGUSR1);
 
         pcntl_signal(SIGUSR1, function (): void {
@@ -39,7 +40,7 @@ class InterruptExceptionJobDispatcher implements JobDispatcher, AlarmHandler {
         });
 
         try {
-            $this->jobDispatcher->run($client, $numberOfJobsToRun);
+            $this->jobDispatcher->run($client, $tubesToWatch, $numberOfJobsToRun);
         } finally {
             pcntl_signal(SIGUSR1, $oldSignalHandler);
         }

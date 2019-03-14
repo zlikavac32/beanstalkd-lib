@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zlikavac32\BeanstalkdLib\Tests\Integration\JobDispatcher;
 
 use Ds\Map;
+use Ds\Set;
 use PHPUnit\Framework\TestCase;
 use Zlikavac32\AlarmScheduler\AlarmHandler;
 use Zlikavac32\AlarmScheduler\AlarmScheduler;
@@ -179,7 +180,7 @@ class BasicFunctionalityTest extends TestCase {
 
         $this->barTubeRunner->changeRunnerTo(createRunnerThatSleepsAndThenBuriesJob(6));
 
-        $this->jobDispatcher->run($this->client, 1);
+        $this->jobDispatcher->run($this->client, new Set(['bar']), 1);
 
         self::assertThat($createdJob->id(), new JobIdIsInState($this->protocol, JobState::BURIED()));
     }
@@ -195,7 +196,7 @@ class BasicFunctionalityTest extends TestCase {
 
         $this->alarmScheduler->schedule(1, $this->emulateInterruptAlarmHandler);
 
-        $this->jobDispatcher->run($this->client, 3);
+        $this->jobDispatcher->run($this->client, new Set(['bar']), 3);
 
         self::assertThat($firstCreatedJob->id(), new JobIdIsInState($this->protocol, JobState::BURIED()));
         self::assertThat($secondCreatedJob->id(), new JobIdIsInState($this->protocol, JobState::READY()));
@@ -214,7 +215,7 @@ class BasicFunctionalityTest extends TestCase {
         $this->alarmScheduler->schedule(2, $this->emulateInterruptAlarmHandler);
 
         try {
-            $this->jobDispatcher->run($this->client, 1);
+            $this->jobDispatcher->run($this->client, new Set(['bar']), 1);
         } catch (InterruptException $e) {
             self::assertThat($createdJob->id(), new JobIdIsInState($this->protocol, JobState::DELAYED()));
 
@@ -234,7 +235,7 @@ class BasicFunctionalityTest extends TestCase {
         $this->alarmScheduler->schedule(1, $this->emulateInterruptAlarmHandler);
 
         try {
-            $this->jobDispatcher->run($this->client, 1);
+            $this->jobDispatcher->run($this->client, new Set(['bar']), 1);
         } catch (InterruptException $e) {
             self::assertThat($createdJob->id(), new JobIdIsInState($this->protocol, JobState::DELAYED()));
 

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Zlikavac32\BeanstalkdLib;
 
 use Ds\Map;
+use Ds\Set;
+use LogicException;
 
 /**
  * Implementation with predefined map of tubes and their job runners.
@@ -28,14 +30,18 @@ class TubeMapJobDispatcher implements JobDispatcher {
         $this->gracefulExit = $gracefulExit;
     }
 
-    public function run(Client $client, int $numberOfJobsToRun): void {
-        $tubeNames = $this->tubeRunners->keys();
+    public function run(Client $client, Set $tubesToWatch, int $numberOfJobsToRun): void {
+        $knownTubeNames = $this->tubeRunners->keys();
 
-        foreach ($tubeNames as $tubeName) {
+        foreach ($tubesToWatch as $tubeName) {
+            if (!$knownTubeNames->contains($tubeName)) {
+                throw new LogicException(sprintf('Tube %s is not known by this runner. Known tubes are [%s]', $tubeName, $knownTubeNames->join(', ')));
+            }
+
             $client->watch($tubeName);
         }
 
-        if (!$tubeNames->contains('default')) {
+        if (!$tubesToWatch->contains('default')) {
             $client->ignoreDefaultTube();
         }
 
