@@ -42,4 +42,55 @@ class CompositeJobObserverSpec extends ObjectBehavior {
 
         $this->failed($jobHandle, $e, 5.2);
     }
+
+    public function it_should_have_injected_observers(JobObserver $firstObserver, JobObserver $secondObserver): void {
+        $this->has($firstObserver)->shouldReturn(true);
+        $this->has($secondObserver)->shouldReturn(true);
+    }
+
+    public function it_should_append_observer_on_empty_composite(JobHandle $jobHandle, JobObserver $observer): void {
+        $this->beConstructedWith();
+
+        $this->append($observer);
+
+        $observer->starting($jobHandle)->shouldBeCalled();
+
+        $this->starting($jobHandle);
+    }
+
+    public function it_should_have_appended_observer(JobHandle $jobHandle, JobObserver $observer): void {
+        $this->has($observer)->shouldReturn(false);
+
+        $this->append($observer);
+
+        $this->has($observer)->shouldReturn(true);
+
+        $observer->starting($jobHandle)->shouldBeCalled();
+
+        $this->starting($jobHandle);
+    }
+
+    public function it_should_remove_observer(JobObserver $observer): void {
+        $this->append($observer);
+
+        $this->has($observer)->shouldReturn(true);
+
+        $this->remove($observer);
+
+        $this->has($observer)->shouldReturn(false);
+    }
+
+    public function it_should_allow_to_add_again_same_observer(JobObserver $observer): void {
+        $this->append($observer);
+
+        $this->has($observer)->shouldReturn(true);
+
+        $this->remove($observer);
+
+        $this->has($observer)->shouldReturn(false);
+
+        $this->append($observer);
+
+        $this->has($observer)->shouldReturn(true);
+    }
 }
