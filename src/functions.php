@@ -9,7 +9,8 @@ function microTimeToHuman(float $time): string {
     $fraction = (int) (($time - $sec) * 1e6);
 
     $parts = [
-        [(int) ($sec / 60), 'min'],
+        [(int) ($sec / 3600), 'h'],
+        [(int) (($sec % 3600) / 60), 'min'],
         [$sec % 60, 's'],
         [(int) ($fraction / 1000), 'ms'],
         [$fraction % 1000, 'us']

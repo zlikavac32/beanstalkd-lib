@@ -12,6 +12,20 @@ class functionsTest extends TestCase {
     /**
      * @test
      */
+    public function micro_time_to_human_formats_just_hours_when_minutes_iz_zero(): void {
+        self::assertSame('10 h', microTimeToHuman(10 * 3600 + 1));
+    }
+
+    /**
+     * @test
+     */
+    public function micro_time_to_human_formats_hours_and_minutes(): void {
+        self::assertSame('33 h 44 min', microTimeToHuman(33 * 3600 + 44 * 60 + 1));
+    }
+
+    /**
+     * @test
+     */
     public function micro_time_to_human_formats_just_minutes_when_seconds_iz_zero(): void {
         self::assertSame('10 min', microTimeToHuman(10 * 60 + .1));
     }
