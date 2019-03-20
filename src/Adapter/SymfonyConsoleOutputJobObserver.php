@@ -23,7 +23,7 @@ class SymfonyConsoleOutputJobObserver implements JobObserver {
     }
 
     public function starting(JobHandle $jobHandle): void {
-        $this->output->writeln(sprintf('Starting job %d', $jobHandle->id()));
+        $this->output->writeln(sprintf('Starting job %d (tube %s)', $jobHandle->id(), $jobHandle->stats()->tubeName()));
     }
 
     public function finished(JobHandle $jobHandle, float $duration): void {
