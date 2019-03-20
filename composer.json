@@ -13,7 +13,10 @@
     "autoload": {
         "psr-4": {
             "Zlikavac32\\BeanstalkdLib\\": "src/"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     },
     "autoload-dev":  {
         "files": [
@@ -48,6 +51,7 @@
         "phpspec/phpspec": "^5.1",
         "symfony/yaml": "^4.2",
         "ext-sockets": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "symfony/console": "^4.2"
     }
 }
