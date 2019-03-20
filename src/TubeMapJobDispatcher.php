@@ -72,4 +72,11 @@ class TubeMapJobDispatcher implements JobDispatcher {
 
         $runner->run($job);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function knownTubes(): Set {
+        return $this->tubeRunners->keys();
+    }
 }

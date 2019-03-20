@@ -45,4 +45,11 @@ class InterruptExceptionJobDispatcher implements JobDispatcher, AlarmHandler {
             pcntl_signal(SIGUSR1, $oldSignalHandler);
         }
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function knownTubes(): Set {
+        return $this->jobDispatcher->knownTubes();
+    }
 }
