@@ -45,8 +45,7 @@ class SymfonyConsoleOutputJobObserverSpec extends ObjectBehavior
 
     public function it_should_output_finished_event(
         OutputInterface $output,
-        JobHandle $jobHandle,
-        JobStats $jobStats
+        JobHandle $jobHandle
     ): void {
         $jobHandle->id()
             ->willReturn(32);
