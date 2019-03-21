@@ -8,9 +8,9 @@ use PhpSpec\ObjectBehavior;
 use Zlikavac32\AlarmScheduler\AlarmScheduler;
 use Zlikavac32\BeanstalkdLib\Client;
 use Zlikavac32\BeanstalkdLib\Runner;
-use Zlikavac32\BeanstalkdLib\Runner\AutoTouchJobRunner;
+use Zlikavac32\BeanstalkdLib\Runner\AutoTouchRunner;
 
-class AutoTouchJobRunnerSpec extends ObjectBehavior
+class AutoTouchRunnerSpec extends ObjectBehavior
 {
 
     public function let(Runner $runner, Client $client, AlarmScheduler $scheduler): void
@@ -20,7 +20,7 @@ class AutoTouchJobRunnerSpec extends ObjectBehavior
 
     public function it_is_initializable(): void
     {
-        $this->shouldHaveType(AutoTouchJobRunner::class);
+        $this->shouldHaveType(AutoTouchRunner::class);
     }
 
     // @todo: what with new?

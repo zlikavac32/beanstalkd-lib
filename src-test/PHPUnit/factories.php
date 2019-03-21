@@ -23,7 +23,7 @@ use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\Protocol\ProtocolOverSocket;
 use Zlikavac32\BeanstalkdLib\Protocol\StateAwareProtocol;
 use Zlikavac32\BeanstalkdLib\Runner;
-use Zlikavac32\BeanstalkdLib\Runner\AutoTouchJobRunner;
+use Zlikavac32\BeanstalkdLib\Runner\AutoTouchRunner;
 use Zlikavac32\BeanstalkdLib\Runner\BuryOnExceptionRunner;
 use Zlikavac32\BeanstalkdLib\Runner\ReleaseOnInterruptExceptionRunner;
 use Zlikavac32\BeanstalkdLib\Runner\ThrowableAuthority;
@@ -118,7 +118,7 @@ function createDefaultRunner(Runner $runner, Client $client, AlarmScheduler $ala
 {
     return new ReleaseOnInterruptExceptionRunner(
         new BuryOnExceptionRunner(
-            new AutoTouchJobRunner(
+            new AutoTouchRunner(
                 $runner,
                 $client,
                 $alarmScheduler

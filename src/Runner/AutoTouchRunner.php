@@ -15,7 +15,7 @@ use Zlikavac32\BeanstalkdLib\Runner;
  * Runner that initializes auto-touch functionality. Slightly before job is to be
  * expired, touch will be called from the signal handler.
  */
-class AutoTouchJobRunner implements Runner
+class AutoTouchRunner implements Runner
 {
 
     /**
