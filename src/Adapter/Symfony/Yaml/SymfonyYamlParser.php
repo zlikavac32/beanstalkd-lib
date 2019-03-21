@@ -9,7 +9,8 @@ use Symfony\Component\Yaml\Yaml;
 use Zlikavac32\BeanstalkdLib\YamlParseException;
 use Zlikavac32\BeanstalkdLib\YamlParser;
 
-class SymfonyYamlParser implements YamlParser {
+class SymfonyYamlParser implements YamlParser
+{
 
     /**
      * @param string $content
@@ -18,7 +19,8 @@ class SymfonyYamlParser implements YamlParser {
      *
      * @throws YamlParseException
      */
-    public function parse(string $content): array {
+    public function parse(string $content): array
+    {
         try {
             $ret = Yaml::parse($content, Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
         } catch (ParseException $e) {

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
-class ServerMetrics {
+class ServerMetrics
+{
 
     /**
      * @var int
@@ -89,55 +90,68 @@ class ServerMetrics {
         $this->cumulativeNumberOfConnections = $cumulativeNumberOfConnections;
     }
 
-    public function numberOfUrgentJobs(): int {
+    public function numberOfUrgentJobs(): int
+    {
         return $this->numberOfUrgentJobs;
     }
 
-    public function numberOfReadyJobs(): int {
+    public function numberOfReadyJobs(): int
+    {
         return $this->numberOfReadyJobs;
     }
 
-    public function numberOfReservedJobs(): int {
+    public function numberOfReservedJobs(): int
+    {
         return $this->numberOfReservedJobs;
     }
 
-    public function numberOfDelayedJobs(): int {
+    public function numberOfDelayedJobs(): int
+    {
         return $this->numberOfDelayedJobs;
     }
 
-    public function numberOfBuriedJobs(): int {
+    public function numberOfBuriedJobs(): int
+    {
         return $this->numberOfBuriedJobs;
     }
 
-    public function numberOfTubes(): int {
+    public function numberOfTubes(): int
+    {
         return $this->numberOfTubes;
     }
 
-    public function numberOfConnections(): int {
+    public function numberOfConnections(): int
+    {
         return $this->numberOfConnections;
     }
 
-    public function numberOfProduces(): int {
+    public function numberOfProduces(): int
+    {
         return $this->numberOfProduces;
     }
 
-    public function numberOfWorkers(): int {
+    public function numberOfWorkers(): int
+    {
         return $this->numberOfWorkers;
     }
 
-    public function numberOfClientsWaiting(): int {
+    public function numberOfClientsWaiting(): int
+    {
         return $this->numberOfClientsWaiting;
     }
 
-    public function cumulativeNumberOfTimedOutJobs(): int {
+    public function cumulativeNumberOfTimedOutJobs(): int
+    {
         return $this->cumulativeNumberOfTimedOutJobs;
     }
 
-    public function cumulativeNumberOfJobs(): int {
+    public function cumulativeNumberOfJobs(): int
+    {
         return $this->cumulativeNumberOfJobs;
     }
 
-    public function cumulativeNumberOfConnections(): int {
+    public function cumulativeNumberOfConnections(): int
+    {
         return $this->cumulativeNumberOfConnections;
     }
 }

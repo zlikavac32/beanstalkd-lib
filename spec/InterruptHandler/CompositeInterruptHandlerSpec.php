@@ -8,13 +8,16 @@ use PhpSpec\ObjectBehavior;
 use Zlikavac32\BeanstalkdLib\InterruptHandler;
 use Zlikavac32\BeanstalkdLib\InterruptHandler\CompositeInterruptHandler;
 
-class CompositeInterruptHandlerSpec extends ObjectBehavior {
+class CompositeInterruptHandlerSpec extends ObjectBehavior
+{
 
-    public function let(InterruptHandler $firstInterruptHandler, InterruptHandler $secondInterruptHandler) {
+    public function let(InterruptHandler $firstInterruptHandler, InterruptHandler $secondInterruptHandler)
+    {
         $this->beConstructedWith($firstInterruptHandler, $secondInterruptHandler);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(CompositeInterruptHandler::class);
     }
 

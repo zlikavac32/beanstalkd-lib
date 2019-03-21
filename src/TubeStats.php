@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
-class TubeStats {
+class TubeStats
+{
 
     /**
      * @var string
@@ -35,19 +36,23 @@ class TubeStats {
         $this->metrics = $metrics;
     }
 
-    public function tubeName(): string {
+    public function tubeName(): string
+    {
         return $this->tubeName;
     }
 
-    public function pauseDuration(): int {
+    public function pauseDuration(): int
+    {
         return $this->pauseDuration;
     }
 
-    public function remainingPauseTime(): int {
+    public function remainingPauseTime(): int
+    {
         return $this->remainingPauseTime;
     }
 
-    public function metrics(): TubeMetrics {
+    public function metrics(): TubeMetrics
+    {
         return $this->metrics;
     }
 }

@@ -13,17 +13,21 @@ use Zlikavac32\BeanstalkdLib\Runner;
 use Zlikavac32\BeanstalkdLib\Runner\BuryOnExceptionRunner;
 use Zlikavac32\BeanstalkdLib\Runner\ThrowableAuthority;
 
-class BuryOnExceptionRunnerSpec extends ObjectBehavior {
+class BuryOnExceptionRunnerSpec extends ObjectBehavior
+{
 
-    public function let(Runner $runner, ThrowableAuthority $throwableAuthority): void {
+    public function let(Runner $runner, ThrowableAuthority $throwableAuthority): void
+    {
         $this->beConstructedWith($runner, $throwableAuthority);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(BuryOnExceptionRunner::class);
     }
 
-    public function it_should_not_bury_job_when_everything_ok(Runner $runner, JobHandle $jobHandle): void {
+    public function it_should_not_bury_job_when_everything_ok(Runner $runner, JobHandle $jobHandle): void
+    {
         $runner->run($jobHandle)
             ->shouldBecalled();
         $jobHandle->bury()
@@ -42,9 +46,11 @@ class BuryOnExceptionRunnerSpec extends ObjectBehavior {
         $throwableAuthority->shouldRethrow($e)
             ->willReturn(false);
 
-        $runner->run($jobHandle)->willThrow($e);
+        $runner->run($jobHandle)
+            ->willThrow($e);
 
-        $jobHandle->bury()->shouldBeCalled();
+        $jobHandle->bury()
+            ->shouldBeCalled();
 
         $this->run($jobHandle);
     }
@@ -59,9 +65,12 @@ class BuryOnExceptionRunnerSpec extends ObjectBehavior {
         $throwableAuthority->shouldRethrow($e)
             ->willReturn(false);
 
-        $runner->run($jobHandle)->willThrow($e);
+        $runner->run($jobHandle)
+            ->willThrow($e);
 
-        $jobHandle->bury()->shouldBeCalled()->willThrow(new Exception('bar'));
+        $jobHandle->bury()
+            ->shouldBeCalled()
+            ->willThrow(new Exception('bar'));
 
         $this->run($jobHandle);
     }
@@ -76,11 +85,14 @@ class BuryOnExceptionRunnerSpec extends ObjectBehavior {
         $throwableAuthority->shouldRethrow($e)
             ->willReturn(true);
 
-        $runner->run($jobHandle)->willThrow($e);
+        $runner->run($jobHandle)
+            ->willThrow($e);
 
-        $jobHandle->bury()->shouldBeCalled();
+        $jobHandle->bury()
+            ->shouldBeCalled();
 
-        $this->shouldThrow($e)->duringRun($jobHandle);
+        $this->shouldThrow($e)
+            ->duringRun($jobHandle);
     }
 
     public function it_should_propagate_interrupt_exception_without_bury_and_without_consulting_throwable_authority(
@@ -90,13 +102,17 @@ class BuryOnExceptionRunnerSpec extends ObjectBehavior {
     ): void {
         $e = new InterruptException();
 
-        $throwableAuthority->shouldRethrow(Argument::any())->shouldNotBeCalled();
+        $throwableAuthority->shouldRethrow(Argument::any())
+            ->shouldNotBeCalled();
 
-        $runner->run($jobHandle)->willThrow($e);
+        $runner->run($jobHandle)
+            ->willThrow($e);
 
-        $jobHandle->bury()->shouldNotBeCalled();
+        $jobHandle->bury()
+            ->shouldNotBeCalled();
 
-        $this->shouldThrow($e)->duringRun($jobHandle);
+        $this->shouldThrow($e)
+            ->duringRun($jobHandle);
     }
 
     public function it_should_propagate_interrupt_exception_from_bury(
@@ -106,14 +122,18 @@ class BuryOnExceptionRunnerSpec extends ObjectBehavior {
     ): void {
         $e = new Exception();
 
-        $throwableAuthority->shouldRethrow(Argument::any())->shouldNotBeCalled();
+        $throwableAuthority->shouldRethrow(Argument::any())
+            ->shouldNotBeCalled();
 
-        $runner->run($jobHandle)->willThrow($e);
+        $runner->run($jobHandle)
+            ->willThrow($e);
 
         $interruptException = new InterruptException();
 
-        $jobHandle->bury()->willThrow($interruptException);
+        $jobHandle->bury()
+            ->willThrow($interruptException);
 
-        $this->shouldThrow($interruptException)->duringRun($jobHandle);
+        $this->shouldThrow($interruptException)
+            ->duringRun($jobHandle);
     }
 }

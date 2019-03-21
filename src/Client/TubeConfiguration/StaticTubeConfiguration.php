@@ -6,7 +6,8 @@ namespace Zlikavac32\BeanstalkdLib\Client\TubeConfiguration;
 
 use Zlikavac32\BeanstalkdLib\Serializer;
 
-class StaticTubeConfiguration implements TubeConfiguration {
+class StaticTubeConfiguration implements TubeConfiguration
+{
 
     /**
      * @var int
@@ -43,23 +44,28 @@ class StaticTubeConfiguration implements TubeConfiguration {
         $this->serializer = $serializer;
     }
 
-    public function defaultDelay(): int {
+    public function defaultDelay(): int
+    {
         return $this->defaultDelay;
     }
 
-    public function defaultPriority(): int {
+    public function defaultPriority(): int
+    {
         return $this->defaultPriority;
     }
 
-    public function defaultTimeToRun(): int {
+    public function defaultTimeToRun(): int
+    {
         return $this->defaultTimeToRun;
     }
 
-    public function defaultTubePauseDelay(): int {
+    public function defaultTubePauseDelay(): int
+    {
         return $this->defaultTubePauseDelay;
     }
 
-    public function serializer(): Serializer {
+    public function serializer(): Serializer
+    {
         return $this->serializer;
     }
 }

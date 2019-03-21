@@ -10,18 +10,23 @@ use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\Runner;
 use Zlikavac32\BeanstalkdLib\Runner\DeleteJobOnSuccessRunner;
 
-class DeleteJobOnSuccessRunnerSpec extends ObjectBehavior {
+class DeleteJobOnSuccessRunnerSpec extends ObjectBehavior
+{
 
-    public function let(Runner $runner): void {
+    public function let(Runner $runner): void
+    {
         $this->beConstructedWith($runner);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(DeleteJobOnSuccessRunner::class);
     }
 
-    public function it_should_delete_job_when_no_exception_is_thrown(Runner $runner, JobHandle $jobHandle): void {
-        $runner->run($jobHandle)->shouldBeCalled();
+    public function it_should_delete_job_when_no_exception_is_thrown(Runner $runner, JobHandle $jobHandle): void
+    {
+        $runner->run($jobHandle)
+            ->shouldBeCalled();
 
         $jobHandle->delete()
             ->shouldBeCalled();
@@ -29,14 +34,17 @@ class DeleteJobOnSuccessRunnerSpec extends ObjectBehavior {
         $this->run($jobHandle);
     }
 
-    public function it_should_not_delete_job_when_exception_is_thrown(Runner $runner, JobHandle $jobHandle): void {
+    public function it_should_not_delete_job_when_exception_is_thrown(Runner $runner, JobHandle $jobHandle): void
+    {
         $e = new Exception();
 
-        $runner->run($jobHandle)->willThrow($e);
+        $runner->run($jobHandle)
+            ->willThrow($e);
 
         $jobHandle->delete()
             ->shouldNotBeCalled();
 
-        $this->shouldThrow($e)->duringRun($jobHandle);
+        $this->shouldThrow($e)
+            ->duringRun($jobHandle);
     }
 }

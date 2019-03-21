@@ -20,22 +20,26 @@ use Zlikavac32\BeanstalkdLib\JobDispatcher;
  * Before method is finished, previous signal handler for SIGUSR1 is
  * reinstalled.
  */
-class InterruptExceptionJobDispatcher implements JobDispatcher, AlarmHandler {
+class InterruptExceptionJobDispatcher implements JobDispatcher, AlarmHandler
+{
 
     /**
      * @var JobDispatcher
      */
     private $jobDispatcher;
 
-    public function __construct(JobDispatcher $jobDispatcher) {
+    public function __construct(JobDispatcher $jobDispatcher)
+    {
         $this->jobDispatcher = $jobDispatcher;
     }
 
-    public function handle(AlarmScheduler $scheduler): void {
+    public function handle(AlarmScheduler $scheduler): void
+    {
         posix_kill(getmypid(), SIGUSR1);
     }
 
-    public function run(Client $client, Set $tubesToWatch, int $numberOfJobsToRun): void {
+    public function run(Client $client, Set $tubesToWatch, int $numberOfJobsToRun): void
+    {
         $oldSignalHandler = pcntl_signal_get_handler(SIGUSR1);
 
         pcntl_signal(SIGUSR1, function (): void {
@@ -52,7 +56,8 @@ class InterruptExceptionJobDispatcher implements JobDispatcher, AlarmHandler {
     /**
      * @inheritdoc
      */
-    public function knownTubes(): Set {
+    public function knownTubes(): Set
+    {
         return $this->jobDispatcher->knownTubes();
     }
 }

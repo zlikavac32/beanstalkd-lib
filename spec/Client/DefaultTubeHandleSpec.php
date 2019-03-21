@@ -13,22 +13,27 @@ use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\Serializer;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beJobHandleFor;
 
-class DefaultTubeHandleSpec extends ObjectBehavior {
+class DefaultTubeHandleSpec extends ObjectBehavior
+{
 
-    public function let(Protocol $protocol, TubeConfiguration $tubeConfiguration): void {
+    public function let(Protocol $protocol, TubeConfiguration $tubeConfiguration): void
+    {
         $this->beConstructedWith('foo', $protocol, $tubeConfiguration);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(DefaultTubeHandle::class);
     }
 
-    public function it_should_have_valid_tube_name(): void {
+    public function it_should_have_valid_tube_name(): void
+    {
         $this->tubeName()
             ->shouldReturn('foo');
     }
 
-    public function it_should_kick_n_jobs(Protocol $protocol): void {
+    public function it_should_kick_n_jobs(Protocol $protocol): void
+    {
         $protocol->useTube('foo')
             ->shouldBeCalled();
         $protocol->kick(8)
@@ -91,7 +96,8 @@ class DefaultTubeHandleSpec extends ObjectBehavior {
             );
     }
 
-    public function it_should_return_tube_stats(Protocol $protocol): void {
+    public function it_should_return_tube_stats(Protocol $protocol): void
+    {
         $protocol->statsTube('foo')
             ->willReturn(
                 [
@@ -162,7 +168,8 @@ class DefaultTubeHandleSpec extends ObjectBehavior {
         $this->pause();
     }
 
-    public function it_should_pause_tube_with_custom_delay(Protocol $protocol): void {
+    public function it_should_pause_tube_with_custom_delay(Protocol $protocol): void
+    {
         $protocol->useTube('foo')
             ->shouldBeCalled();
 
@@ -182,9 +189,11 @@ class DefaultTubeHandleSpec extends ObjectBehavior {
         $protocol->peekReady()
             ->willReturn(new Job(32, '[1, 2]'));
 
-        $serializer->deserialize('[1, 2]')->willReturn([1, 2]);
+        $serializer->deserialize('[1, 2]')
+            ->willReturn([1, 2]);
 
-        $tubeConfiguration->serializer()->willReturn($serializer);
+        $tubeConfiguration->serializer()
+            ->willReturn($serializer);
 
         $this->peekReady()
             ->shouldBeJobHandleFor(32, [1, 2]);
@@ -201,9 +210,11 @@ class DefaultTubeHandleSpec extends ObjectBehavior {
         $protocol->peekDelayed()
             ->willReturn(new Job(32, '[1, 2]'));
 
-        $serializer->deserialize('[1, 2]')->willReturn([1, 2]);
+        $serializer->deserialize('[1, 2]')
+            ->willReturn([1, 2]);
 
-        $tubeConfiguration->serializer()->willReturn($serializer);
+        $tubeConfiguration->serializer()
+            ->willReturn($serializer);
 
         $this->peekDelayed()
             ->shouldBeJobHandleFor(32, [1, 2]);
@@ -220,19 +231,22 @@ class DefaultTubeHandleSpec extends ObjectBehavior {
         $protocol->peekBuried()
             ->willReturn(new Job(32, '[1, 2]'));
 
-        $serializer->deserialize('[1, 2]')->willReturn([1, 2]);
+        $serializer->deserialize('[1, 2]')
+            ->willReturn([1, 2]);
 
-        $tubeConfiguration->serializer()->willReturn($serializer);
+        $tubeConfiguration->serializer()
+            ->willReturn($serializer);
 
         $this->peekBuried()
             ->shouldBeJobHandleFor(32, [1, 2]);
     }
 
-    public function getMatchers(): array {
+    public function getMatchers(): array
+    {
         return [
-            'beJobHandleFor'  => function ($subject, int $jobId, $payload): bool {
+            'beJobHandleFor' => function ($subject, int $jobId, $payload): bool {
                 return beJobHandleFor($subject, $jobId, $payload);
-            }
+            },
         ];
     }
 }

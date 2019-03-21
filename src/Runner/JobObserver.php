@@ -7,7 +7,8 @@ namespace Zlikavac32\BeanstalkdLib\Runner;
 use Throwable;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 
-interface JobObserver {
+interface JobObserver
+{
 
     public function starting(JobHandle $jobHandle): void;
 

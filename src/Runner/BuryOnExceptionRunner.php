@@ -13,7 +13,8 @@ use Zlikavac32\BeanstalkdLib\Runner;
  * Runner that buries job when an exception is caught. Whether caught
  * exception should be rethrown is determined by the $throwableAuthority.
  */
-class BuryOnExceptionRunner implements Runner {
+class BuryOnExceptionRunner implements Runner
+{
 
     /**
      * @var Runner
@@ -24,12 +25,14 @@ class BuryOnExceptionRunner implements Runner {
      */
     private $throwableAuthority;
 
-    public function __construct(Runner $runner, ThrowableAuthority $throwableAuthority) {
+    public function __construct(Runner $runner, ThrowableAuthority $throwableAuthority)
+    {
         $this->runner = $runner;
         $this->throwableAuthority = $throwableAuthority;
     }
 
-    public function run(JobHandle $jobHandle): void {
+    public function run(JobHandle $jobHandle): void
+    {
         try {
             $this->runner->run($jobHandle);
         } catch (InterruptException $e) {
@@ -43,7 +46,8 @@ class BuryOnExceptionRunner implements Runner {
         }
     }
 
-    private function buryJob(JobHandle $job): void {
+    private function buryJob(JobHandle $job): void
+    {
         try {
             $job->bury();
         } catch (InterruptException $e) {

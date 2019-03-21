@@ -11,7 +11,8 @@ use Zlikavac32\BeanstalkdLib\JobState;
 use Zlikavac32\BeanstalkdLib\JobStats;
 use Zlikavac32\BeanstalkdLib\Protocol;
 
-class DefaultJobHandle implements JobHandle {
+class DefaultJobHandle implements JobHandle
+{
 
     /**
      * @var int
@@ -40,25 +41,29 @@ class DefaultJobHandle implements JobHandle {
         $this->tubeConfiguration = $tubeConfiguration;
     }
 
-    public function id(): int {
+    public function id(): int
+    {
         return $this->id;
     }
 
-    public function payload() {
+    public function payload()
+    {
         return $this->payload;
     }
 
     /**
      * @inheritdoc
      */
-    public function kick(): void {
+    public function kick(): void
+    {
         $this->protocol->kickJob($this->id);
     }
 
     /**
      * @inheritdoc
      */
-    public function stats(): JobStats {
+    public function stats(): JobStats
+    {
         $stats = $this->protocol->statsJob($this->id);
 
         return new JobStats(
@@ -83,14 +88,16 @@ class DefaultJobHandle implements JobHandle {
     /**
      * @inheritdoc
      */
-    public function delete(): void {
+    public function delete(): void
+    {
         $this->protocol->delete($this->id);
     }
 
     /**
      * @inheritdoc
      */
-    public function release(?int $priority = null, ?int $delay = null): void {
+    public function release(?int $priority = null, ?int $delay = null): void
+    {
         $this->protocol->release(
             $this->id,
             $priority ?? $this->tubeConfiguration->defaultPriority(),
@@ -101,14 +108,16 @@ class DefaultJobHandle implements JobHandle {
     /**
      * @inheritdoc
      */
-    public function bury(?int $priority = null): void {
+    public function bury(?int $priority = null): void
+    {
         $this->protocol->bury($this->id, $priority ?? $this->tubeConfiguration->defaultPriority());
     }
 
     /**
      * @inheritdoc
      */
-    public function touch(): void {
+    public function touch(): void
+    {
         $this->protocol->touch($this->id);
     }
 }

@@ -15,7 +15,8 @@ use Zlikavac32\BeanstalkdLib\ReserveInterruptedException;
 /**
  * Implementation with predefined map of tubes and their job runners.
  */
-class TubeMapJobDispatcher implements JobDispatcher {
+class TubeMapJobDispatcher implements JobDispatcher
+{
 
     /**
      * @var Map|\Zlikavac32\BeanstalkdLib\Runner[]
@@ -34,12 +35,14 @@ class TubeMapJobDispatcher implements JobDispatcher {
         $this->gracefulExit = $gracefulExit;
     }
 
-    public function run(Client $client, Set $tubesToWatch, int $numberOfJobsToRun): void {
+    public function run(Client $client, Set $tubesToWatch, int $numberOfJobsToRun): void
+    {
         $knownTubeNames = $this->tubeRunners->keys();
 
         foreach ($tubesToWatch as $tubeName) {
             if (!$knownTubeNames->contains($tubeName)) {
-                throw new LogicException(sprintf('Tube %s is not known by this runner. Known tubes are [%s]', $tubeName, $knownTubeNames->join(', ')));
+                throw new LogicException(sprintf('Tube %s is not known by this runner. Known tubes are [%s]', $tubeName,
+                    $knownTubeNames->join(', ')));
             }
 
             $client->watch($tubeName);
@@ -56,7 +59,8 @@ class TubeMapJobDispatcher implements JobDispatcher {
         }
     }
 
-    private function reserveAndRun(Client $client): void {
+    private function reserveAndRun(Client $client): void
+    {
         try {
             $job = $client->reserve();
         } catch (ReserveInterruptedException $e) {
@@ -80,7 +84,8 @@ class TubeMapJobDispatcher implements JobDispatcher {
     /**
      * @inheritdoc
      */
-    public function knownTubes(): Set {
+    public function knownTubes(): Set
+    {
         return $this->tubeRunners->keys();
     }
 }

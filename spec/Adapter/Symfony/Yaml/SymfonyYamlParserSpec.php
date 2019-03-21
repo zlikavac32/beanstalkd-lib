@@ -9,13 +9,16 @@ use Symfony\Component\Yaml\Exception\ParseException;
 use Zlikavac32\BeanstalkdLib\Adapter\Symfony\Yaml\SymfonyYamlParser;
 use Zlikavac32\BeanstalkdLib\YamlParseException;
 
-class SymfonyYamlParserSpec extends ObjectBehavior {
+class SymfonyYamlParserSpec extends ObjectBehavior
+{
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(SymfonyYamlParser::class);
     }
 
-    public function it_should_throw_exception_on_invalid_yaml(): void {
+    public function it_should_throw_exception_on_invalid_yaml(): void
+    {
         $content = ' -';
 
         $this->shouldThrow(
@@ -24,7 +27,8 @@ class SymfonyYamlParserSpec extends ObjectBehavior {
             ->duringParse($content);
     }
 
-    public function it_should_throw_exception_if_parsed_result_is_not_array(): void {
+    public function it_should_throw_exception_if_parsed_result_is_not_array(): void
+    {
         $content = '123';
 
         $this->shouldThrow(
@@ -33,11 +37,13 @@ class SymfonyYamlParserSpec extends ObjectBehavior {
             ->duringParse($content);
     }
 
-    public function it_should_parse_content(): void {
+    public function it_should_parse_content(): void
+    {
         $content = <<<'YAML'
 [123, 345]
 YAML;
 
-        $this->parse($content)->shouldReturn([123, 345]);
+        $this->parse($content)
+            ->shouldReturn([123, 345]);
     }
 }

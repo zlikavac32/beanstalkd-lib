@@ -6,7 +6,8 @@ namespace Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit;
 
 use LogicException;
 
-function assertEnvExists(string $key): void {
+function assertEnvExists(string $key): void
+{
     if (isset($_ENV[$key])) {
         return;
     }

@@ -17,7 +17,8 @@ use Zlikavac32\BeanstalkdLib\ServerMetrics;
 use Zlikavac32\BeanstalkdLib\ServerStats;
 use Zlikavac32\BeanstalkdLib\TubeHandle;
 
-class DefaultClient implements Client {
+class DefaultClient implements Client
+{
 
     /**
      * @var Protocol
@@ -28,7 +29,8 @@ class DefaultClient implements Client {
      */
     private $tubeConfigurationFactory;
 
-    public function __construct(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory) {
+    public function __construct(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory)
+    {
         $this->protocol = $protocol;
         $this->tubeConfigurationFactory = $tubeConfigurationFactory;
     }
@@ -36,7 +38,8 @@ class DefaultClient implements Client {
     /**
      * @inheritdoc
      */
-    public function tubes(): Map {
+    public function tubes(): Map
+    {
         $allTubes = $this->protocol->listTubes();
 
         $map = new Map();
@@ -51,7 +54,8 @@ class DefaultClient implements Client {
     /**
      * @inheritdoc
      */
-    public function tube(string $tubeName): TubeHandle {
+    public function tube(string $tubeName): TubeHandle
+    {
         return new DefaultTubeHandle(
             $tubeName,
             $this->protocol,
@@ -62,7 +66,8 @@ class DefaultClient implements Client {
     /**
      * @inheritdoc
      */
-    public function stats(): ServerStats {
+    public function stats(): ServerStats
+    {
         $stats = $this->protocol->stats();
 
         $commandMetricsMap = new Map();
@@ -78,7 +83,7 @@ class DefaultClient implements Client {
 
         return new ServerStats(
             $stats['hostname'],
-            (string) $stats['version'],
+            (string)$stats['version'],
             $stats['pid'],
             $stats['uptime'],
             $stats['max-job-size'],
@@ -106,7 +111,8 @@ class DefaultClient implements Client {
     /**
      * @inheritdoc
      */
-    public function reserve(): JobHandle {
+    public function reserve(): JobHandle
+    {
         return $this->createJobHandleFromJob(
             $this->protocol->reserve()
         );
@@ -115,7 +121,8 @@ class DefaultClient implements Client {
     /**
      * @inheritdoc
      */
-    public function peek(int $jobId): JobHandle {
+    public function peek(int $jobId): JobHandle
+    {
         return $this->createJobHandleFromJob(
             $this->protocol->peek($jobId)
         );
@@ -124,7 +131,8 @@ class DefaultClient implements Client {
     /**
      * @inheritdoc
      */
-    public function reserveWithTimeout(int $timeout): JobHandle {
+    public function reserveWithTimeout(int $timeout): JobHandle
+    {
         return $this->createJobHandleFromJob(
             $this->protocol->reserveWithTimeout($timeout)
         );
@@ -133,32 +141,37 @@ class DefaultClient implements Client {
     /**
      * @inheritdoc
      */
-    public function watch(string $tubeName): int {
+    public function watch(string $tubeName): int
+    {
         return $this->protocol->watch($tubeName);
     }
 
     /**
      * @inheritdoc
      */
-    public function ignoreDefaultTube(): int {
+    public function ignoreDefaultTube(): int
+    {
         return $this->protocol->ignore('default');
     }
 
     /**
      * @inheritdoc
      */
-    public function ignore(string $tubeName): int {
+    public function ignore(string $tubeName): int
+    {
         return $this->protocol->ignore($tubeName);
     }
 
     /**
      * @inheritdoc
      */
-    public function watchedTubeNames(): Set {
+    public function watchedTubeNames(): Set
+    {
         return $this->protocol->listTubesWatched();
     }
 
-    private function createJobHandleFromJob(Job $job): JobHandle {
+    private function createJobHandleFromJob(Job $job): JobHandle
+    {
         $tubeName = $this->protocol->statsJob($job->id())['tube'];
 
         $tubeConfiguration = $this->tubeConfigurationFactory->createForTube($tubeName);

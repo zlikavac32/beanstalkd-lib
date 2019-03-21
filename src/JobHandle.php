@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
-interface JobHandle {
+interface JobHandle
+{
 
     public function id(): int;
 

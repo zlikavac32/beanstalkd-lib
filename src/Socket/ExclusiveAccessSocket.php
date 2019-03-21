@@ -15,21 +15,24 @@ use Zlikavac32\BeanstalkdLib\SocketHandle;
  *
  * Thrown code is SOCKET_EUSERS.
  */
-class ExclusiveAccessSocket implements Socket {
+class ExclusiveAccessSocket implements Socket
+{
 
     /**
      * @var Socket
      */
     private $socket;
 
-    public function __construct(Socket $socket) {
+    public function __construct(Socket $socket)
+    {
         $this->socket = $socket;
     }
 
     /**
      * @throws SocketException
      */
-    public function open(string $ip, int $port): SocketHandle {
+    public function open(string $ip, int $port): SocketHandle
+    {
         return new ExclusiveAccessSocketHandle(
             $this->socket->open($ip, $port)
         );

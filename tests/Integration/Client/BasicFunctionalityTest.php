@@ -37,7 +37,8 @@ use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createMockSerializer;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createMutableProxySerializer;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\purgeProtocol;
 
-class BasicFunctionalityTest extends TestCase {
+class BasicFunctionalityTest extends TestCase
+{
 
     /**
      * @var Protocol
@@ -56,7 +57,8 @@ class BasicFunctionalityTest extends TestCase {
      */
     private $serializer;
 
-    protected function setUp() {
+    protected function setUp()
+    {
         $this->protocol = createDefaultProtocol();
 
         $mockSerializer = createMockSerializer();
@@ -67,15 +69,15 @@ class BasicFunctionalityTest extends TestCase {
             'default' => new StaticTubeConfiguration(
                 1, 2, 3, 4, $this->serializer
             ),
-            'bar' => new StaticTubeConfiguration(
+            'bar'     => new StaticTubeConfiguration(
                 1, 2, 3, 4, $this->serializer
             ),
-            'foo' => new StaticTubeConfiguration(
+            'foo'     => new StaticTubeConfiguration(
                 1, 2, 3, 4, $this->serializer
             ),
-            'baz' => new StaticTubeConfiguration(
+            'baz'     => new StaticTubeConfiguration(
                 1, 2, 3, 4, $this->serializer
-            )
+            ),
         ]));
 
         $this->client = createDefaultClient($this->protocol, $this->tubeConfigurationFactory);
@@ -83,7 +85,8 @@ class BasicFunctionalityTest extends TestCase {
         purgeProtocol($this->protocol);
     }
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
         unset($this->serializer);
         unset($this->tubeConfigurationFactory);
         unset($this->client);
@@ -93,7 +96,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_can_be_placed_in_tube(): void {
+    public function job_can_be_placed_in_tube(): void
+    {
         self::assertThat(
             $this->client->tube('default')
                 ->put('some-payload')
@@ -105,7 +109,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_can_be_reserved(): void {
+    public function job_can_be_reserved(): void
+    {
         $createdJob = createJob($this->protocol);
 
         self::assertThat($this->client->reserve(), new JobHandleIsForJob($createdJob));
@@ -114,7 +119,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_priority_is_respected(): void {
+    public function job_priority_is_respected(): void
+    {
         $firstCreatedJob = createJobWithPriority($this->protocol, 5);
         $secondCreatedJob = createJobWithPriority($this->protocol, 2);
 
@@ -125,7 +131,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_delay_is_respected(): void {
+    public function job_delay_is_respected(): void
+    {
         $createdJob = createJobWithDelay($this->protocol, 2);
 
         try {
@@ -144,7 +151,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function multiple_tubes_can_be_used(): void {
+    public function multiple_tubes_can_be_used(): void
+    {
         $barTubeJob = createJobInTube($this->protocol, 'bar');
         $bazTubeJob = createJobInTube($this->protocol, 'baz');
 
@@ -165,7 +173,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_can_be_buried(): void {
+    public function job_can_be_buried(): void
+    {
         $createdJob = createJob($this->protocol);
 
         $reservedJob = $this->client->reserve();
@@ -186,7 +195,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_can_be_buried_priority_from_tube_configraution(): void {
+    public function job_can_be_buried_priority_from_tube_configraution(): void
+    {
         $createdJob = createJob($this->protocol);
 
         $reservedJob = $this->client->reserve();
@@ -207,7 +217,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_can_be_peeked(): void {
+    public function job_can_be_peeked(): void
+    {
         $job = createJob($this->protocol);
 
         $jobHandle = $this->client->peek($job->id());
@@ -221,7 +232,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_stats_can_be_retrieved(): void {
+    public function job_stats_can_be_retrieved(): void
+    {
         $job = createJob($this->protocol);
 
         $jobHandle = $this->client->peek($job->id());
@@ -235,7 +247,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function tube_stats_can_be_retrieved(): void {
+    public function tube_stats_can_be_retrieved(): void
+    {
         $this->assertThat(
             $this->client->tube('default')
                 ->stats(),
@@ -246,7 +259,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function server_stats_can_be_retrieved(): void {
+    public function server_stats_can_be_retrieved(): void
+    {
         $this->assertThat(
             $this->client->stats(),
             new ServerStatsIsForServer($this->protocol)
@@ -256,7 +270,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function ready_job_can_be_peeked(): void {
+    public function ready_job_can_be_peeked(): void
+    {
         $createdJob = createJob($this->protocol);
 
         $peekedJob = $this->client->tube('default')
@@ -271,7 +286,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_can_be_kicked(): void {
+    public function job_can_be_kicked(): void
+    {
         $createdJob = createJob($this->protocol);
 
         $jobHandle = $this->client->reserve();
@@ -295,7 +311,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function multiple_jobs_can_be_kicked(): void {
+    public function multiple_jobs_can_be_kicked(): void
+    {
         $firstCreatedJob = createJob($this->protocol);
         $secondCreatedJob = createJob($this->protocol);
 
@@ -327,7 +344,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_can_be_released(): void {
+    public function job_can_be_released(): void
+    {
         $createdJob = createJob($this->protocol);
 
         $this->client->reserve()
@@ -355,7 +373,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function job_can_be_released_with_default_values_from_tube_configuration(): void {
+    public function job_can_be_released_with_default_values_from_tube_configuration(): void
+    {
         $createdJob = createJob($this->protocol);
 
         $this->client->reserve()
@@ -383,7 +402,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function buried_job_can_be_peeked(): void {
+    public function buried_job_can_be_peeked(): void
+    {
         $createdJob = createJob($this->protocol);
 
         $this->client->reserve()
@@ -406,7 +426,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function watched_tubes_can_be_listed(): void {
+    public function watched_tubes_can_be_listed(): void
+    {
         $this->client->watch('foo');
         $this->client->watch('bar');
         $this->client->watch('baz');
@@ -422,7 +443,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function tubes_can_be_listed(): void {
+    public function tubes_can_be_listed(): void
+    {
         $this->client->watch('foo');
         $this->client->watch('bar');
 
@@ -437,10 +459,12 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function tube_can_be_paused(): void {
+    public function tube_can_be_paused(): void
+    {
         $createdJob = createJob($this->protocol);
 
-        $this->client->tube('default')->pause(10);
+        $this->client->tube('default')
+            ->pause(10);
 
         try {
             $this->protocol->reserveWithTimeout(1);
@@ -463,7 +487,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function long_running_job_can_be_touched(): void {
+    public function long_running_job_can_be_touched(): void
+    {
         createJobWithTimeToRun($this->protocol, 2);
 
         $reservedJobHandle = $this->client->reserve();
@@ -485,10 +510,12 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function proper_serialization_should_be_performed(): void {
+    public function proper_serialization_should_be_performed(): void
+    {
         $this->serializer->changeSerializerTo(new NativePHPJsonSerializer(true));
 
-        $jobHandle = $this->client->tube('default')->put([1, 2]);
+        $jobHandle = $this->client->tube('default')
+            ->put([1, 2]);
 
         self::assertThat($jobHandle->id(), new JobIdHasPayload($this->protocol, '[1,2]'));
 

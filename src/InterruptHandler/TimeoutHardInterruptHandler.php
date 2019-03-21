@@ -11,7 +11,8 @@ use Zlikavac32\BeanstalkdLib\InterruptHandler;
 /**
  * Schedules alarm handler that should perform hard async interrupt.
  */
-class TimeoutHardInterruptHandler implements InterruptHandler {
+class TimeoutHardInterruptHandler implements InterruptHandler
+{
 
     /**
      * @var int
@@ -26,13 +27,15 @@ class TimeoutHardInterruptHandler implements InterruptHandler {
      */
     private $alarmHandler;
 
-    public function __construct(AlarmScheduler $scheduler, AlarmHandler $alarmHandler, int $timeout) {
+    public function __construct(AlarmScheduler $scheduler, AlarmHandler $alarmHandler, int $timeout)
+    {
         $this->timeout = $timeout;
         $this->scheduler = $scheduler;
         $this->alarmHandler = $alarmHandler;
     }
 
-    public function handle(): void {
+    public function handle(): void
+    {
         $this->scheduler->schedule($this->timeout, $this->alarmHandler);
     }
 }

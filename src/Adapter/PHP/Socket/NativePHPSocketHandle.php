@@ -10,14 +10,16 @@ use Zlikavac32\BeanstalkdLib\SocketException;
 use Zlikavac32\BeanstalkdLib\SocketHandle;
 use Zlikavac32\BeanstalkdLib\TryAgainSocketException;
 
-class NativePHPSocketHandle implements SocketHandle {
+class NativePHPSocketHandle implements SocketHandle
+{
 
     /**
      * @var resource
      */
     private $socket;
 
-    public function __construct($socket) {
+    public function __construct($socket)
+    {
         if (!\is_resource($socket)) {
             throw new LogicException('Expected socket to be resource');
         }
@@ -28,7 +30,8 @@ class NativePHPSocketHandle implements SocketHandle {
     /**
      * @throws SocketException
      */
-    public function write(string $buffer): void {
+    public function write(string $buffer): void
+    {
         $this->ensureSocketNotClosed();
 
         $leftToWrite = \strlen($buffer);
@@ -60,7 +63,8 @@ class NativePHPSocketHandle implements SocketHandle {
     /**
      * @throws SocketException
      */
-    public function read(int $len, bool $interruptible = false): string {
+    public function read(int $len, bool $interruptible = false): string
+    {
         $this->ensureSocketNotClosed();
 
         $buffer = '';
@@ -91,7 +95,8 @@ class NativePHPSocketHandle implements SocketHandle {
         throw $this->createExceptionForCurrentSocket(socket_last_error($this->socket));
     }
 
-    public function readLine(int $minimumLength = 0, bool $interruptible = false): string {
+    public function readLine(int $minimumLength = 0, bool $interruptible = false): string
+    {
         $minimumLength += 2;
 
         $line = $this->read($minimumLength, $interruptible);
@@ -111,7 +116,8 @@ class NativePHPSocketHandle implements SocketHandle {
     /**
      * @throws SocketException
      */
-    public function close(): void {
+    public function close(): void
+    {
         if (null === $this->socket) {
             return;
         }
@@ -121,17 +127,20 @@ class NativePHPSocketHandle implements SocketHandle {
         $this->socket = null;
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         $this->close();
     }
 
-    private function ensureSocketNotClosed(): void {
+    private function ensureSocketNotClosed(): void
+    {
         if (null === $this->socket) {
             throw new LogicException('Socket closed');
         }
     }
 
-    private function createExceptionForCurrentSocket(int $lastError): SocketException {
+    private function createExceptionForCurrentSocket(int $lastError): SocketException
+    {
         switch ($lastError) {
             case 0:
                 throw new LogicException('No error occurred. Why did you call this method?');

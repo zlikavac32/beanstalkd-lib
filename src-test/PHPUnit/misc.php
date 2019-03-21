@@ -8,15 +8,18 @@ use Ds\Set;
 use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\ProtocolTubePurger\DefaultProtocolTubePurger;
 
-function purgeTube(Protocol $protocol, string $tubeName): void {
+function purgeTube(Protocol $protocol, string $tubeName): void
+{
     (new DefaultProtocolTubePurger())->purge($protocol, $tubeName);
 }
 
-function purgeDefaultTube(Protocol $protocol): void {
+function purgeDefaultTube(Protocol $protocol): void
+{
     purgeTube($protocol, 'default');
 }
 
-function purgeProtocol(Protocol $protocol): void {
+function purgeProtocol(Protocol $protocol): void
+{
     $protocol->useTube('default');
 
     $protocol->watch('default');
@@ -49,14 +52,16 @@ function sleepWithoutInterrupt(int $sleep): void
     } while ($now < $end);
 }
 
-function hostIpFromEnv(): string {
+function hostIpFromEnv(): string
+{
     assertEnvExists('BEANSTALKD_HOST');
 
     return $_ENV['BEANSTALKD_HOST'];
 }
 
-function hostPortFromEnv(): int {
+function hostPortFromEnv(): int
+{
     assertEnvExists('BEANSTALKD_PORT');
 
-    return (int) $_ENV['BEANSTALKD_PORT'];
+    return (int)$_ENV['BEANSTALKD_PORT'];
 }

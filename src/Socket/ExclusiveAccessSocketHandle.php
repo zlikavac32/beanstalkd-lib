@@ -14,7 +14,8 @@ use Zlikavac32\BeanstalkdLib\SocketHandle;
  *
  * Thrown code is SOCKET_EUSERS.
  */
-class ExclusiveAccessSocketHandle implements SocketHandle {
+class ExclusiveAccessSocketHandle implements SocketHandle
+{
 
     /**
      * @var SocketHandle
@@ -23,11 +24,13 @@ class ExclusiveAccessSocketHandle implements SocketHandle {
 
     private $inProgress = false;
 
-    public function __construct(SocketHandle $socketHandle) {
+    public function __construct(SocketHandle $socketHandle)
+    {
         $this->socketHandle = $socketHandle;
     }
 
-    public function write(string $buffer): void {
+    public function write(string $buffer): void
+    {
         $this->assertNotInProgress();
 
         try {
@@ -38,29 +41,34 @@ class ExclusiveAccessSocketHandle implements SocketHandle {
         }
     }
 
-    public function read(int $len, bool $interruptible = false): string {
+    public function read(int $len, bool $interruptible = false): string
+    {
         $this->assertNotInProgress();
 
         try {
             $this->inProgress = true;
+
             return $this->socketHandle->read($len, $interruptible);
         } finally {
             $this->inProgress = false;
         }
     }
 
-    public function readLine(int $minimumLength = 0, bool $interruptible = false): string {
+    public function readLine(int $minimumLength = 0, bool $interruptible = false): string
+    {
         $this->assertNotInProgress();
 
         try {
             $this->inProgress = true;
+
             return $this->socketHandle->readLine($minimumLength, $interruptible);
         } finally {
             $this->inProgress = false;
         }
     }
 
-    public function close(): void {
+    public function close(): void
+    {
         $this->assertNotInProgress();
 
         try {
@@ -71,7 +79,8 @@ class ExclusiveAccessSocketHandle implements SocketHandle {
         }
     }
 
-    private function assertNotInProgress(): void {
+    private function assertNotInProgress(): void
+    {
         if ($this->inProgress) {
             throw new SocketException(SOCKET_EUSERS);
         }

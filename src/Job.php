@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
-class Job {
+class Job
+{
 
     /**
      * @var int
@@ -15,16 +16,19 @@ class Job {
      */
     private $payload;
 
-    public function __construct(int $id, string $payload) {
+    public function __construct(int $id, string $payload)
+    {
         $this->id = $id;
         $this->payload = $payload;
     }
 
-    public function id(): int {
+    public function id(): int
+    {
         return $this->id;
     }
 
-    public function payload(): string {
+    public function payload(): string
+    {
         return $this->payload;
     }
 }

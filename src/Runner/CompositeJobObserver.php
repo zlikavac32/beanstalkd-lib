@@ -8,7 +8,8 @@ use SplObjectStorage;
 use Throwable;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 
-class CompositeJobObserver implements JobObserver {
+class CompositeJobObserver implements JobObserver
+{
 
     /**
      * @var JobObserver[]
@@ -23,7 +24,8 @@ class CompositeJobObserver implements JobObserver {
      */
     private $observerStorage;
 
-    public function __construct(JobObserver ...$jobObservers) {
+    public function __construct(JobObserver ...$jobObservers)
+    {
         $this->jobObservers = $jobObservers;
         $this->observerStorage = new SplObjectStorage();
 
@@ -34,37 +36,43 @@ class CompositeJobObserver implements JobObserver {
         $this->nextIndex = count($jobObservers);
     }
 
-    public function starting(JobHandle $jobHandle): void {
+    public function starting(JobHandle $jobHandle): void
+    {
         foreach ($this->jobObservers as $jobObserver) {
             $jobObserver->starting($jobHandle);
         }
     }
 
-    public function finished(JobHandle $jobHandle, float $duration): void {
+    public function finished(JobHandle $jobHandle, float $duration): void
+    {
         foreach ($this->jobObservers as $jobObserver) {
             $jobObserver->finished($jobHandle, $duration);
         }
     }
 
-    public function failed(JobHandle $jobHandle, Throwable $cause, float $duration): void {
+    public function failed(JobHandle $jobHandle, Throwable $cause, float $duration): void
+    {
         foreach ($this->jobObservers as $jobObserver) {
             $jobObserver->failed($jobHandle, $cause, $duration);
         }
     }
 
-    public function append(JobObserver $observer): void {
+    public function append(JobObserver $observer): void
+    {
         $this->jobObservers[$this->nextIndex] = $observer;
         $this->observerStorage->attach($observer, $this->nextIndex);
         $this->nextIndex++;
     }
 
-    public function has(JobObserver $observer): bool {
+    public function has(JobObserver $observer): bool
+    {
         return $this->observerStorage->contains($observer);
     }
 
-    public function remove(JobObserver $observer): void {
+    public function remove(JobObserver $observer): void
+    {
         if (!$this->has($observer)) {
-            return ;
+            return;
         }
 
         unset($this->jobObservers[$this->observerStorage->offsetGet($observer)]);

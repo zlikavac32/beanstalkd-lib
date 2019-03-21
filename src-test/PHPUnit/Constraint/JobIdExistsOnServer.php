@@ -8,20 +8,23 @@ use PHPUnit\Framework\Constraint\Constraint;
 use Zlikavac32\BeanstalkdLib\JobNotFoundException;
 use Zlikavac32\BeanstalkdLib\Protocol;
 
-class JobIdExistsOnServer extends Constraint {
+class JobIdExistsOnServer extends Constraint
+{
 
     /**
      * @var Protocol
      */
     private $protocol;
 
-    public function __construct(Protocol $protocol) {
+    public function __construct(Protocol $protocol)
+    {
         parent::__construct();
 
         $this->protocol = $protocol;
     }
 
-    protected function matches($other): bool {
+    protected function matches($other): bool
+    {
         if (!is_int($other)) {
             return false;
         }
@@ -35,11 +38,13 @@ class JobIdExistsOnServer extends Constraint {
         return true;
     }
 
-    protected function failureDescription($other): string {
+    protected function failureDescription($other): string
+    {
         return sprintf('%s is job ID on server', $this->exporter->export($other));
     }
 
-    public function toString(): string {
+    public function toString(): string
+    {
         return 'is valid job ID on server';
     }
 }

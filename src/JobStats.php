@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
-class JobStats {
+class JobStats
+{
 
     /**
      * @var int
@@ -65,39 +66,48 @@ class JobStats {
         $this->priority = $priority;
     }
 
-    public function id(): int {
+    public function id(): int
+    {
         return $this->id;
     }
 
-    public function tubeName(): string {
+    public function tubeName(): string
+    {
         return $this->tubeName;
     }
 
-    public function state(): JobState {
+    public function state(): JobState
+    {
         return $this->state;
     }
 
-    public function priority(): int {
+    public function priority(): int
+    {
         return $this->priority;
     }
 
-    public function age(): int {
+    public function age(): int
+    {
         return $this->age;
     }
 
-    public function delay(): int {
+    public function delay(): int
+    {
         return $this->delay;
     }
 
-    public function timeToRun(): int {
+    public function timeToRun(): int
+    {
         return $this->timeToRun;
     }
 
-    public function timeLeft(): int {
+    public function timeLeft(): int
+    {
         return $this->timeLeft;
     }
 
-    public function metrics(): JobMetrics {
+    public function metrics(): JobMetrics
+    {
         return $this->metrics;
     }
 }

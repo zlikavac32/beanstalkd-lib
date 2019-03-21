@@ -6,9 +6,11 @@ namespace Zlikavac32\BeanstalkdLib\InterruptHandler;
 
 use Zlikavac32\BeanstalkdLib\InterruptHandler;
 
-class DoNothingInterruptHandler implements InterruptHandler {
+class DoNothingInterruptHandler implements InterruptHandler
+{
 
-    public function handle(): void {
+    public function handle(): void
+    {
 
     }
 }

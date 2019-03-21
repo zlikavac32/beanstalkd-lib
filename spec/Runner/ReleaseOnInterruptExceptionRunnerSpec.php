@@ -11,18 +11,23 @@ use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\Runner;
 use Zlikavac32\BeanstalkdLib\Runner\ReleaseOnInterruptExceptionRunner;
 
-class ReleaseOnInterruptExceptionRunnerSpec extends ObjectBehavior {
+class ReleaseOnInterruptExceptionRunnerSpec extends ObjectBehavior
+{
 
-    public function let(Runner $runner): void {
+    public function let(Runner $runner): void
+    {
         $this->beConstructedWith($runner);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(ReleaseOnInterruptExceptionRunner::class);
     }
 
-    public function it_should_not_release_job_when_no_exception_is_caught(Runner $runner, JobHandle $jobHandle): void {
-        $runner->run($jobHandle)->shouldBeCalled();
+    public function it_should_not_release_job_when_no_exception_is_caught(Runner $runner, JobHandle $jobHandle): void
+    {
+        $runner->run($jobHandle)
+            ->shouldBeCalled();
 
         $jobHandle->release()
             ->shouldNotBeCalled();
@@ -36,12 +41,14 @@ class ReleaseOnInterruptExceptionRunnerSpec extends ObjectBehavior {
     ): void {
         $e = new Exception();
 
-        $runner->run($jobHandle)->willThrow($e);
+        $runner->run($jobHandle)
+            ->willThrow($e);
 
         $jobHandle->release()
             ->shouldNotBeCalled();
 
-        $this->shouldThrow($e)->duringRun($jobHandle);
+        $this->shouldThrow($e)
+            ->duringRun($jobHandle);
     }
 
     public function it_should_release_job_when_interrupt_exception_is_caught(
@@ -50,11 +57,13 @@ class ReleaseOnInterruptExceptionRunnerSpec extends ObjectBehavior {
     ): void {
         $e = new InterruptException();
 
-        $runner->run($jobHandle)->willThrow($e);
+        $runner->run($jobHandle)
+            ->willThrow($e);
 
         $jobHandle->release()
             ->shouldBeCalled();
 
-        $this->shouldThrow($e)->duringRun($jobHandle);
+        $this->shouldThrow($e)
+            ->duringRun($jobHandle);
     }
 }

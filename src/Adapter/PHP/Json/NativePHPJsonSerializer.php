@@ -8,7 +8,8 @@ use Zlikavac32\BeanstalkdLib\DeserializeException;
 use Zlikavac32\BeanstalkdLib\SerializeException;
 use Zlikavac32\BeanstalkdLib\Serializer;
 
-class NativePHPJsonSerializer implements Serializer {
+class NativePHPJsonSerializer implements Serializer
+{
 
     /**
      * @var int
@@ -39,7 +40,8 @@ class NativePHPJsonSerializer implements Serializer {
         $this->decodeDepth = $decodeDepth;
     }
 
-    public function serialize($payload): string {
+    public function serialize($payload): string
+    {
         try {
             return \json_encode($payload, $this->encodeOptions);
         } finally {
@@ -49,7 +51,8 @@ class NativePHPJsonSerializer implements Serializer {
         }
     }
 
-    public function deserialize(string $payload) {
+    public function deserialize(string $payload)
+    {
         try {
             return \json_decode($payload, $this->decodeObjectAsArray, $this->decodeDepth, $this->decodeOptions);
         } finally {

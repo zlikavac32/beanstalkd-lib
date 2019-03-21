@@ -7,7 +7,8 @@ namespace Zlikavac32\BeanstalkdLib;
 /**
  * Parser for Beasntalkd YAML response
  */
-interface YamlParser {
+interface YamlParser
+{
 
     /**
      * @param string $content

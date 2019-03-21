@@ -10,17 +10,21 @@ use Zlikavac32\BeanstalkdLib\Adapter\PHP\Json\NativePHPJsonSerializer;
 use Zlikavac32\BeanstalkdLib\DeserializeException;
 use Zlikavac32\BeanstalkdLib\SerializeException;
 
-class NativePHPJsonSerializerSpec extends ObjectBehavior {
+class NativePHPJsonSerializerSpec extends ObjectBehavior
+{
 
-    public function let(): void {
+    public function let(): void
+    {
         $this->beConstructedWith(true);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(NativePHPJsonSerializer::class);
     }
 
-    public function it_should_throw_error_on_serialize_error(): void {
+    public function it_should_throw_error_on_serialize_error(): void
+    {
         $resource = \fopen('php://memory', 'r');
 
         $payload = [$resource];
@@ -38,7 +42,8 @@ class NativePHPJsonSerializerSpec extends ObjectBehavior {
         }
     }
 
-    public function it_should_throw_error_on_deserialize_error(): void {
+    public function it_should_throw_error_on_deserialize_error(): void
+    {
         $payload = '[';
         $this->shouldThrow(
             new DeserializeException('Syntax error', $payload)
@@ -46,18 +51,21 @@ class NativePHPJsonSerializerSpec extends ObjectBehavior {
             ->duringDeserialize($payload);
     }
 
-    public function it_should_decode_object_as_array(): void {
+    public function it_should_decode_object_as_array(): void
+    {
         $this->deserialize('{}')
             ->shouldReturn([]);
     }
 
-    public function it_should_decode_object_as_object(): void {
+    public function it_should_decode_object_as_object(): void
+    {
         $this->beConstructedWith(false);
         $this->deserialize('{}')
             ->shouldBeLike(new stdClass());
     }
 
-    public function it_should_allow_changing_of_encode_options(): void {
+    public function it_should_allow_changing_of_encode_options(): void
+    {
         $this->beConstructedWith(true, JSON_PRETTY_PRINT);
 
         $this->serialize(['foo' => 1])
@@ -70,7 +78,8 @@ JSON
             );
     }
 
-    public function it_should_allow_changing_of_decode_options(): void {
+    public function it_should_allow_changing_of_decode_options(): void
+    {
         $this->beConstructedWith(true, 0, JSON_BIGINT_AS_STRING);
 
         $this->deserialize('12345678912345767891234')

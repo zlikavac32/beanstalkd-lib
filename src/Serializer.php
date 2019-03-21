@@ -7,7 +7,8 @@ namespace Zlikavac32\BeanstalkdLib;
 /**
  * Used to serialize/deserialize job payload.
  */
-interface Serializer {
+interface Serializer
+{
 
     /**
      * @param mixed $payload

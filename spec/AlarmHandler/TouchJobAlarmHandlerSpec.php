@@ -14,17 +14,21 @@ use Zlikavac32\BeanstalkdLib\InterruptException;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\JobStats;
 
-class TouchJobAlarmHandlerSpec extends ObjectBehavior {
+class TouchJobAlarmHandlerSpec extends ObjectBehavior
+{
 
-    public function let(Client $client): void {
+    public function let(Client $client): void
+    {
         $this->beConstructedWith($client, 32);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(TouchJobAlarmHandler::class);
     }
 
-    public function it_should_schedule_if_enough_time_is_left(AlarmScheduler $scheduler): void {
+    public function it_should_schedule_if_enough_time_is_left(AlarmScheduler $scheduler): void
+    {
         $scheduler->schedule(2, $this)
             ->shouldBeCalled();
 
@@ -32,7 +36,8 @@ class TouchJobAlarmHandlerSpec extends ObjectBehavior {
             ->shouldReturn(true);
     }
 
-    public function it_should_not_schedule_if_not_enough_time_is_left(AlarmScheduler $scheduler): void {
+    public function it_should_not_schedule_if_not_enough_time_is_left(AlarmScheduler $scheduler): void
+    {
         $scheduler->schedule(Argument::any(), Argument::any())
             ->shouldNotBeCalled();
 
@@ -49,13 +54,17 @@ class TouchJobAlarmHandlerSpec extends ObjectBehavior {
         $scheduler->schedule(2, $this)
             ->shouldBeCalled();
 
-        $jobHandle->touch()->shouldBeCalled();
+        $jobHandle->touch()
+            ->shouldBeCalled();
 
-        $client->peek(32)->willReturn($jobHandle);
+        $client->peek(32)
+            ->willReturn($jobHandle);
 
-        $jobHandle->stats()->willReturn($jobStats);
+        $jobHandle->stats()
+            ->willReturn($jobStats);
 
-        $jobStats->timeLeft()->willReturn(4);
+        $jobStats->timeLeft()
+            ->willReturn(4);
 
         $this->handle($scheduler);
     }
@@ -69,27 +78,36 @@ class TouchJobAlarmHandlerSpec extends ObjectBehavior {
         $scheduler->schedule(2, $this)
             ->shouldNotBeCalled();
 
-        $jobHandle->touch()->shouldBeCalled();
+        $jobHandle->touch()
+            ->shouldBeCalled();
 
-        $client->peek(32)->willReturn($jobHandle);
+        $client->peek(32)
+            ->willReturn($jobHandle);
 
-        $jobHandle->stats()->willReturn($jobStats);
+        $jobHandle->stats()
+            ->willReturn($jobStats);
 
-        $jobStats->timeLeft()->willReturn(2);
+        $jobStats->timeLeft()
+            ->willReturn(2);
 
         $this->handle($scheduler);
     }
 
-    public function it_should_rethrow_interrupt_exception(AlarmScheduler $scheduler, Client $client): void {
+    public function it_should_rethrow_interrupt_exception(AlarmScheduler $scheduler, Client $client): void
+    {
         $e = new InterruptException();
 
-        $client->peek(32)->willThrow($e);
+        $client->peek(32)
+            ->willThrow($e);
 
-        $this->shouldThrow($e)->duringHandle($scheduler);
+        $this->shouldThrow($e)
+            ->duringHandle($scheduler);
     }
 
-    public function it_should_ignore_any_other_throwable(AlarmScheduler $scheduler, Client $client): void {
-        $client->peek(32)->willThrow(new Exception());
+    public function it_should_ignore_any_other_throwable(AlarmScheduler $scheduler, Client $client): void
+    {
+        $client->peek(32)
+            ->willThrow(new Exception());
 
         $this->handle($scheduler);
     }

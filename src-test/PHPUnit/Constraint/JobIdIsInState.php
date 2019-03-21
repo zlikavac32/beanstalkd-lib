@@ -8,7 +8,8 @@ use PHPUnit\Framework\Constraint\Constraint;
 use Zlikavac32\BeanstalkdLib\JobState;
 use Zlikavac32\BeanstalkdLib\Protocol;
 
-class JobIdIsInState extends Constraint {
+class JobIdIsInState extends Constraint
+{
 
     /**
      * @var Protocol
@@ -19,14 +20,16 @@ class JobIdIsInState extends Constraint {
      */
     private $jobState;
 
-    public function __construct(Protocol $protocol, JobState $jobState) {
+    public function __construct(Protocol $protocol, JobState $jobState)
+    {
         parent::__construct();
 
         $this->protocol = $protocol;
         $this->jobState = $jobState;
     }
 
-    protected function matches($other): bool {
+    protected function matches($other): bool
+    {
         if (!is_int($other)) {
             return false;
         }
@@ -34,7 +37,8 @@ class JobIdIsInState extends Constraint {
         return $this->currentState($other) === $this->jobState;
     }
 
-    protected function failureDescription($other): string {
+    protected function failureDescription($other): string
+    {
         assert(is_int($other));
 
         return sprintf(
@@ -45,11 +49,13 @@ class JobIdIsInState extends Constraint {
         );
     }
 
-    private function currentState(int $jobId): JobState {
+    private function currentState(int $jobId): JobState
+    {
         return JobState::valueOf(strtoupper($this->protocol->statsJob($jobId)['state']));
     }
 
-    public function toString(): string {
+    public function toString(): string
+    {
         return sprintf(
             'job is %s',
             $this->jobState

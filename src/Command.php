@@ -28,9 +28,11 @@ use Zlikavac32\Enum\Enum;
  * @method static Command LIST_TUBES_WATCHED
  * @method static Command PAUSE_TUBE
  */
-abstract class Command extends Enum {
+abstract class Command extends Enum
+{
 
-    protected static function enumerate(): array {
+    protected static function enumerate(): array
+    {
         return [
             'PUT',
             'PEEK',

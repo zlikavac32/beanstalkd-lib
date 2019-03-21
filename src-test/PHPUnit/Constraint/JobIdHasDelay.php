@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\Constraint;
 
 use PHPUnit\Framework\Constraint\Constraint;
-use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\Protocol;
 
-class JobIdHasDelay extends Constraint {
+class JobIdHasDelay extends Constraint
+{
 
     /**
      * @var Protocol
@@ -19,14 +19,16 @@ class JobIdHasDelay extends Constraint {
      */
     private $delay;
 
-    public function __construct(Protocol $protocol, int $delay) {
+    public function __construct(Protocol $protocol, int $delay)
+    {
         parent::__construct();
 
         $this->protocol = $protocol;
         $this->delay = $delay;
     }
 
-    protected function matches($other): bool {
+    protected function matches($other): bool
+    {
         if (!is_int($other)) {
             return false;
         }
@@ -34,7 +36,8 @@ class JobIdHasDelay extends Constraint {
         return $this->delay === $this->protocol->statsJob($other)['delay'];
     }
 
-    protected function failureDescription($other): string {
+    protected function failureDescription($other): string
+    {
         assert(is_int($other));
 
         return sprintf(
@@ -45,7 +48,8 @@ class JobIdHasDelay extends Constraint {
         );
     }
 
-    public function toString(): string {
+    public function toString(): string
+    {
         return sprintf('job has delay %d', $this->delay);
     }
 }

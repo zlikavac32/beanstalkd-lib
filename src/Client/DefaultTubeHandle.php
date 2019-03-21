@@ -12,7 +12,8 @@ use Zlikavac32\BeanstalkdLib\TubeHandle;
 use Zlikavac32\BeanstalkdLib\TubeMetrics;
 use Zlikavac32\BeanstalkdLib\TubeStats;
 
-class DefaultTubeHandle implements TubeHandle {
+class DefaultTubeHandle implements TubeHandle
+{
 
     /**
      * @var string
@@ -27,20 +28,23 @@ class DefaultTubeHandle implements TubeHandle {
      */
     private $tubeConfiguration;
 
-    public function __construct(string $tubeName, Protocol $protocol, TubeConfiguration $tubeConfiguration) {
+    public function __construct(string $tubeName, Protocol $protocol, TubeConfiguration $tubeConfiguration)
+    {
         $this->tubeName = $tubeName;
         $this->protocol = $protocol;
         $this->tubeConfiguration = $tubeConfiguration;
     }
 
-    public function tubeName(): string {
+    public function tubeName(): string
+    {
         return $this->tubeName;
     }
 
     /**
      * @inheritdoc
      */
-    public function kick(int $numberOfJobs): int {
+    public function kick(int $numberOfJobs): int
+    {
         $this->protocol->useTube($this->tubeName);
 
         return $this->protocol->kick($numberOfJobs);
@@ -49,7 +53,8 @@ class DefaultTubeHandle implements TubeHandle {
     /**
      * @inheritdoc
      */
-    public function put($payload, ?int $priority = null, ?int $delay = null, ?int $timeToRun = null): JobHandle {
+    public function put($payload, ?int $priority = null, ?int $delay = null, ?int $timeToRun = null): JobHandle
+    {
         $this->protocol->useTube($this->tubeName);
 
         return new DefaultJobHandle(
@@ -69,7 +74,8 @@ class DefaultTubeHandle implements TubeHandle {
     /**
      * @inheritdoc
      */
-    public function stats(): TubeStats {
+    public function stats(): TubeStats
+    {
         $stats = $this->protocol->statsTube($this->tubeName);
 
         return new TubeStats(
@@ -95,7 +101,8 @@ class DefaultTubeHandle implements TubeHandle {
     /**
      * @inheritdoc
      */
-    public function pause(?int $delay = null): void {
+    public function pause(?int $delay = null): void
+    {
         $this->protocol->useTube($this->tubeName);
 
         $this->protocol->pauseTube($this->tubeName, $delay ?? $this->tubeConfiguration->defaultTubePauseDelay());
@@ -104,7 +111,8 @@ class DefaultTubeHandle implements TubeHandle {
     /**
      * @inheritdoc
      */
-    public function peekReady(): JobHandle {
+    public function peekReady(): JobHandle
+    {
         $this->protocol->useTube($this->tubeName);
 
         return $this->createJobHandleFromJob($this->protocol->peekReady());
@@ -113,7 +121,8 @@ class DefaultTubeHandle implements TubeHandle {
     /**
      * @inheritdoc
      */
-    public function peekDelayed(): JobHandle {
+    public function peekDelayed(): JobHandle
+    {
         $this->protocol->useTube($this->tubeName);
 
         return $this->createJobHandleFromJob($this->protocol->peekDelayed());
@@ -122,13 +131,15 @@ class DefaultTubeHandle implements TubeHandle {
     /**
      * @inheritdoc
      */
-    public function peekBuried(): JobHandle {
+    public function peekBuried(): JobHandle
+    {
         $this->protocol->useTube($this->tubeName);
 
         return $this->createJobHandleFromJob($this->protocol->peekBuried());
     }
 
-    private function createJobHandleFromJob(Job $job): JobHandle {
+    private function createJobHandleFromJob(Job $job): JobHandle
+    {
         return new DefaultJobHandle(
             $job->id(),
             $this->tubeConfiguration->serializer()

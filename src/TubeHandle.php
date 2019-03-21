@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
-interface TubeHandle {
+interface TubeHandle
+{
 
     public function tubeName(): string;
 

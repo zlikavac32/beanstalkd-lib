@@ -10,34 +10,41 @@ use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\JobState;
 use Zlikavac32\BeanstalkdLib\Protocol;
 
-class DefaultJobHandleSpec extends ObjectBehavior {
+class DefaultJobHandleSpec extends ObjectBehavior
+{
 
-    public function let(Protocol $protocol, TubeConfiguration $tubeConfiguration): void {
+    public function let(Protocol $protocol, TubeConfiguration $tubeConfiguration): void
+    {
         $this->beConstructedWith(32, [1, 2], $protocol, $tubeConfiguration);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(DefaultJobHandle::class);
     }
 
-    public function it_should_have_id(): void {
+    public function it_should_have_id(): void
+    {
         $this->id()
             ->shouldReturn(32);
     }
 
-    public function it_should_have_payload(): void {
+    public function it_should_have_payload(): void
+    {
         $this->payload()
             ->shouldReturn([1, 2]);
     }
 
-    public function it_should_kick_job(Protocol $protocol): void {
+    public function it_should_kick_job(Protocol $protocol): void
+    {
         $protocol->kickJob(32)
             ->shouldBeCalled();
 
         $this->kick();
     }
 
-    public function it_should_return_job_stats(Protocol $protocol): void {
+    public function it_should_return_job_stats(Protocol $protocol): void
+    {
         $protocol->statsJob(32)
             ->willReturn(
                 [
@@ -90,43 +97,56 @@ class DefaultJobHandleSpec extends ObjectBehavior {
             ->shouldReturn(14);
     }
 
-    public function it_should_delete_job(Protocol $protocol): void {
+    public function it_should_delete_job(Protocol $protocol): void
+    {
         $protocol->delete(32)
             ->shouldBeCalled();
 
         $this->delete();
     }
 
-    public function it_should_release_with_tube_defaults(Protocol $protocol, TubeConfiguration $tubeConfiguration): void {
-        $tubeConfiguration->defaultPriority()->willReturn(64);
-        $tubeConfiguration->defaultDelay()->willReturn(128);
+    public function it_should_release_with_tube_defaults(Protocol $protocol, TubeConfiguration $tubeConfiguration): void
+    {
+        $tubeConfiguration->defaultPriority()
+            ->willReturn(64);
+        $tubeConfiguration->defaultDelay()
+            ->willReturn(128);
 
-        $protocol->release(32, 64, 128)->shouldBeCalled();
+        $protocol->release(32, 64, 128)
+            ->shouldBeCalled();
 
         $this->release();
     }
 
-    public function it_should_release_with_custom_delay_and_priority(Protocol $protocol): void {
-        $protocol->release(32, 64, 128)->shouldBeCalled();
+    public function it_should_release_with_custom_delay_and_priority(Protocol $protocol): void
+    {
+        $protocol->release(32, 64, 128)
+            ->shouldBeCalled();
 
         $this->release(64, 128);
     }
 
-    public function it_should_bury_with_tube_defaults(Protocol $protocol, TubeConfiguration $tubeConfiguration): void {
-        $tubeConfiguration->defaultPriority()->willReturn(64);
+    public function it_should_bury_with_tube_defaults(Protocol $protocol, TubeConfiguration $tubeConfiguration): void
+    {
+        $tubeConfiguration->defaultPriority()
+            ->willReturn(64);
 
-        $protocol->bury(32, 64)->shouldBeCalled();
+        $protocol->bury(32, 64)
+            ->shouldBeCalled();
 
         $this->bury();
     }
 
-    public function it_should_bury_with_custom_priority(Protocol $protocol): void {
-        $protocol->bury(32, 64)->shouldBeCalled();
+    public function it_should_bury_with_custom_priority(Protocol $protocol): void
+    {
+        $protocol->bury(32, 64)
+            ->shouldBeCalled();
 
         $this->bury(64);
     }
 
-    public function it_should_touch_job(Protocol $protocol): void {
+    public function it_should_touch_job(Protocol $protocol): void
+    {
         $protocol->touch(32)
             ->shouldBeCalled();
 

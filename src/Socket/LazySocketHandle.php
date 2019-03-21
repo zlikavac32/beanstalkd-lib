@@ -11,7 +11,8 @@ use Zlikavac32\BeanstalkdLib\SocketHandle;
 /**
  * Socket handle that is opened only when it's needed.
  */
-class LazySocketHandle implements SocketHandle {
+class LazySocketHandle implements SocketHandle
+{
 
     /**
      * @var Socket
@@ -31,7 +32,8 @@ class LazySocketHandle implements SocketHandle {
      */
     private $socketHandle;
 
-    public function __construct(Socket $socket, string $ip, int $port) {
+    public function __construct(Socket $socket, string $ip, int $port)
+    {
         $this->socket = $socket;
         $this->ip = $ip;
         $this->port = $port;
@@ -40,7 +42,8 @@ class LazySocketHandle implements SocketHandle {
     /**
      * @throws SocketException
      */
-    public function write(string $buffer): void {
+    public function write(string $buffer): void
+    {
         $this->ensureSocketOpen();
 
         $this->socketHandle->write($buffer);
@@ -49,13 +52,15 @@ class LazySocketHandle implements SocketHandle {
     /**
      * @throws SocketException
      */
-    public function read(int $len, bool $interruptible = false): string {
+    public function read(int $len, bool $interruptible = false): string
+    {
         $this->ensureSocketOpen();
 
         return $this->socketHandle->read($len, $interruptible);
     }
 
-    public function readLine(int $minimumLength = 0, bool $interruptible = false): string {
+    public function readLine(int $minimumLength = 0, bool $interruptible = false): string
+    {
         $this->ensureSocketOpen();
 
         return $this->socketHandle->readLine($minimumLength, $interruptible);
@@ -64,17 +69,19 @@ class LazySocketHandle implements SocketHandle {
     /**
      * @throws SocketException
      */
-    public function close(): void {
+    public function close(): void
+    {
         if (null === $this->socketHandle) {
-            return ;
+            return;
         }
 
         $this->socketHandle->close();
     }
 
-    private function ensureSocketOpen(): void {
+    private function ensureSocketOpen(): void
+    {
         if (null !== $this->socketHandle) {
-            return ;
+            return;
         }
 
         $this->socketHandle = $this->socket->open(

@@ -12,7 +12,9 @@ use Zlikavac32\BeanstalkdLib\SocketHandle;
 
 class ExclusiveAccessSocketSpec extends ObjectBehavior
 {
-    public function let(Socket $socket): void {
+
+    public function let(Socket $socket): void
+    {
         $this->beConstructedWith($socket);
     }
 
@@ -21,8 +23,10 @@ class ExclusiveAccessSocketSpec extends ObjectBehavior
         $this->shouldHaveType(ExclusiveAccessSocket::class);
     }
 
-    public function it_should_create_wrapped_handle(Socket $socket, SocketHandle $socketHandle): void {
-        $socket->open('127.0.0.1', 11300)->willReturn($socketHandle);
+    public function it_should_create_wrapped_handle(Socket $socket, SocketHandle $socketHandle): void
+    {
+        $socket->open('127.0.0.1', 11300)
+            ->willReturn($socketHandle);
 
         $this->open('127.0.0.1', 11300)
             ->shouldBeLike(new ExclusiveAccessSocketHandle(

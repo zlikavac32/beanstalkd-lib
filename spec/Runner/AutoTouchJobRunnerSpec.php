@@ -10,13 +10,16 @@ use Zlikavac32\BeanstalkdLib\Client;
 use Zlikavac32\BeanstalkdLib\Runner;
 use Zlikavac32\BeanstalkdLib\Runner\AutoTouchJobRunner;
 
-class AutoTouchJobRunnerSpec extends ObjectBehavior {
+class AutoTouchJobRunnerSpec extends ObjectBehavior
+{
 
-    public function let(Runner $runner, Client $client, AlarmScheduler $scheduler): void {
+    public function let(Runner $runner, Client $client, AlarmScheduler $scheduler): void
+    {
         $this->beConstructedWith($runner, $client, $scheduler);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(AutoTouchJobRunner::class);
     }
 

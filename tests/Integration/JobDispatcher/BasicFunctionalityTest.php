@@ -38,7 +38,8 @@ use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createMutableProxySeria
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createRunnerThatSleepsAndThenBuriesJob;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\purgeProtocol;
 
-class BasicFunctionalityTest extends TestCase {
+class BasicFunctionalityTest extends TestCase
+{
 
     /**
      * @var Protocol
@@ -85,23 +86,28 @@ class BasicFunctionalityTest extends TestCase {
 
     private static $previousSignalHandler;
 
-    public static function setUpBeforeClass(): void {
+    public static function setUpBeforeClass(): void
+    {
         self::$previousAsyncSignals = pcntl_async_signals(true);
         self::$previousSignalHandler = pcntl_signal_get_handler(SIGUSR2);
     }
 
-    public static function tearDownAfterClass(): void {
+    public static function tearDownAfterClass(): void
+    {
         pcntl_async_signals(self::$previousAsyncSignals);
         pcntl_signal(SIGUSR2, self::$previousSignalHandler);
     }
 
-    protected function setUp() {
+    protected function setUp()
+    {
         $this->alarmScheduler = new NaiveAlarmScheduler();
         $this->alarmScheduler->start();
 
-        $this->emulateInterruptAlarmHandler = new class implements AlarmHandler {
+        $this->emulateInterruptAlarmHandler = new class implements AlarmHandler
+        {
 
-            public function handle(AlarmScheduler $scheduler): void {
+            public function handle(AlarmScheduler $scheduler): void
+            {
                 posix_kill(getmypid(), SIGUSR2);
             }
         };
@@ -115,7 +121,7 @@ class BasicFunctionalityTest extends TestCase {
         $this->tubeConfigurationFactory = new TubeMapConfigurationFactory(new Map([
             'bar' => new StaticTubeConfiguration(
                 1, 2, 3, 4, $this->serializer
-            )
+            ),
         ]));
 
         $this->client = createDefaultClient($this->protocol, $this->tubeConfigurationFactory);
@@ -154,7 +160,8 @@ class BasicFunctionalityTest extends TestCase {
         );
     }
 
-    protected function tearDown() {
+    protected function tearDown()
+    {
         pcntl_signal(SIGUSR2, SIG_IGN);
 
         $this->alarmScheduler->finish();
@@ -174,7 +181,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function log_running_job_is_auto_touched(): void {
+    public function log_running_job_is_auto_touched(): void
+    {
         $createdJob = createJob($this->protocol, 'foo', 1024, 0, 6, 'bar');
 
         $this->barTubeRunner->changeRunnerTo(createRunnerThatSleepsAndThenBuriesJob(6));
@@ -187,7 +195,8 @@ class BasicFunctionalityTest extends TestCase {
     /**
      * @test
      */
-    public function runner_should_exit_gracefully_after_interrupt_is_caught(): void {
+    public function runner_should_exit_gracefully_after_interrupt_is_caught(): void
+    {
         $firstCreatedJob = createJobInTube($this->protocol, 'bar');
         $secondCreatedJob = createJobInTube($this->protocol, 'bar');
 
@@ -205,7 +214,8 @@ class BasicFunctionalityTest extends TestCase {
      * @expectedException \Zlikavac32\BeanstalkdLib\InterruptException
      * @test
      */
-    public function runner_should_perform_hard_interrupt_on_second_signal(): void {
+    public function runner_should_perform_hard_interrupt_on_second_signal(): void
+    {
         $createdJob = createJobInTube($this->protocol, 'bar');
 
         $this->barTubeRunner->changeRunnerTo(createRunnerThatSleepsAndThenBuriesJob(4));
@@ -226,7 +236,8 @@ class BasicFunctionalityTest extends TestCase {
      * @expectedException \Zlikavac32\BeanstalkdLib\InterruptException
      * @test
      */
-    public function runner_should_perform_delayed_hard_interrupt(): void {
+    public function runner_should_perform_delayed_hard_interrupt(): void
+    {
         $createdJob = createJobInTube($this->protocol, 'bar');
 
         $this->barTubeRunner->changeRunnerTo(createRunnerThatSleepsAndThenBuriesJob(8));

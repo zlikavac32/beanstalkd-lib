@@ -10,9 +10,11 @@ use PhpSpec\ObjectBehavior;
 use Zlikavac32\BeanstalkdLib\Command;
 use Zlikavac32\BeanstalkdLib\CommandMetrics;
 
-class CommandMetricsSpec extends ObjectBehavior {
+class CommandMetricsSpec extends ObjectBehavior
+{
 
-    public function let(): void {
+    public function let(): void
+    {
         $map = new Map();
 
         foreach (Command::values() as $item) {
@@ -22,18 +24,21 @@ class CommandMetricsSpec extends ObjectBehavior {
         $this->beConstructedWith($map);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(CommandMetrics::class);
     }
 
-    public function it_should_throw_exception_if_map_has_missing_elements(): void {
+    public function it_should_throw_exception_if_map_has_missing_elements(): void
+    {
         $this->beConstructedWith(new Map());
 
         $this->shouldThrow(new LogicException('Stats for command "PUT" are missing'))
             ->duringInstantiation();
     }
 
-    public function it_should_proper_values(): void {
+    public function it_should_proper_values(): void
+    {
         foreach (Command::values() as $command) {
             $this->numberOf($command)
                 ->shouldReturn($command->ordinal());

@@ -15,7 +15,8 @@ use Zlikavac32\BeanstalkdLib\Runner;
  * Runner that initializes auto-touch functionality. Slightly before job is to be
  * expired, touch will be called from the signal handler.
  */
-class AutoTouchJobRunner implements Runner {
+class AutoTouchJobRunner implements Runner
+{
 
     /**
      * @var Runner
@@ -34,13 +35,15 @@ class AutoTouchJobRunner implements Runner {
      */
     private $scheduler;
 
-    public function __construct(Runner $runner, Client $client, AlarmScheduler $scheduler) {
+    public function __construct(Runner $runner, Client $client, AlarmScheduler $scheduler)
+    {
         $this->runner = $runner;
         $this->client = $client;
         $this->scheduler = $scheduler;
     }
 
-    public function run(JobHandle $jobHandle): void {
+    public function run(JobHandle $jobHandle): void
+    {
         $this->scheduleAlarmHandlerIfPossible($jobHandle);
 
         try {
@@ -50,12 +53,14 @@ class AutoTouchJobRunner implements Runner {
         }
     }
 
-    private function scheduleAlarmHandlerIfPossible(JobHandle $jobHandle): void {
+    private function scheduleAlarmHandlerIfPossible(JobHandle $jobHandle): void
+    {
         $this->scheduledHandler = null;
 
         $handler = new TouchJobAlarmHandler($this->client, $jobHandle->id());
 
-        if (!$handler->scheduled($this->scheduler, $jobHandle->stats()->timeLeft())) {
+        if (!$handler->scheduled($this->scheduler, $jobHandle->stats()
+            ->timeLeft())) {
             // nothing we can do
             return;
         }
@@ -63,7 +68,8 @@ class AutoTouchJobRunner implements Runner {
         $this->scheduledHandler = $handler;
     }
 
-    private function clearAnySchedules(): void {
+    private function clearAnySchedules(): void
+    {
         if (null === $this->scheduledHandler) {
             return;
         }

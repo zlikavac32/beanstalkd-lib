@@ -12,9 +12,11 @@ use Zlikavac32\Enum\Enum;
  * @method static JobState DELAYED
  * @method static JobState RESERVED
  */
-abstract class JobState extends Enum {
+abstract class JobState extends Enum
+{
 
-    protected static function enumerate(): array {
+    protected static function enumerate(): array
+    {
         return ['READY', 'BURIED', 'DELAYED', 'RESERVED'];
     }
 }

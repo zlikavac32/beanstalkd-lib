@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
-function microTimeToHuman(float $time): string {
-    $sec = (int) $time;
-    $fraction = (int) (($time - $sec) * 1e6);
+function microTimeToHuman(float $time): string
+{
+    $sec = (int)$time;
+    $fraction = (int)(($time - $sec) * 1e6);
 
     $parts = [
-        [(int) ($sec / 3600), 'h'],
-        [(int) (($sec % 3600) / 60), 'min'],
+        [(int)($sec / 3600), 'h'],
+        [(int)(($sec % 3600) / 60), 'min'],
         [$sec % 60, 's'],
-        [(int) ($fraction / 1000), 'ms'],
-        [$fraction % 1000, 'us']
+        [(int)($fraction / 1000), 'ms'],
+        [$fraction % 1000, 'us'],
     ];
 
     $str = '';
@@ -22,12 +23,12 @@ function microTimeToHuman(float $time): string {
         [$value, $unit] = $parts[$i];
 
         if ($value === 0) {
-            continue ;
+            continue;
         }
 
         $str = $value . ' ' . $unit;
 
-        break ;
+        break;
     }
 
     $i++;

@@ -16,7 +16,8 @@ use Zlikavac32\BeanstalkdLib\InterruptException;
  * Do note that it's run from the signal handler, so
  * use of shared socket must be safe.
  */
-class TouchJobAlarmHandler implements AlarmHandler {
+class TouchJobAlarmHandler implements AlarmHandler
+{
 
     /**
      * @var Client
@@ -27,12 +28,14 @@ class TouchJobAlarmHandler implements AlarmHandler {
      */
     private $jobId;
 
-    public function __construct(Client $client, int $jobId) {
+    public function __construct(Client $client, int $jobId)
+    {
         $this->client = $client;
         $this->jobId = $jobId;
     }
 
-    public function handle(AlarmScheduler $scheduler): void {
+    public function handle(AlarmScheduler $scheduler): void
+    {
         try {
             $jobHandle = $this->client->peek($this->jobId);
 
@@ -58,7 +61,8 @@ class TouchJobAlarmHandler implements AlarmHandler {
      *
      * @return bool True if handler was scheduled, false if not
      */
-    public function scheduled(AlarmScheduler $scheduler, int $timeLeft): bool {
+    public function scheduled(AlarmScheduler $scheduler, int $timeLeft): bool
+    {
         // (1 + 1 + 1) => (minimum sleep + beanstalkd server + precision of sleep)
         if ($timeLeft < 3) {
             return false;

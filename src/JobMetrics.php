@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
-class JobMetrics {
+class JobMetrics
+{
 
     /**
      * @var int
@@ -41,23 +42,28 @@ class JobMetrics {
         $this->numberOfKicks = $numberOfKicks;
     }
 
-    public function numberOfReserves(): int {
+    public function numberOfReserves(): int
+    {
         return $this->numberOfReserves;
     }
 
-    public function numberOfTimeouts(): int {
+    public function numberOfTimeouts(): int
+    {
         return $this->numberOfTimeouts;
     }
 
-    public function numberOfReleases(): int {
+    public function numberOfReleases(): int
+    {
         return $this->numberOfReleases;
     }
 
-    public function numberOfBuries(): int {
+    public function numberOfBuries(): int
+    {
         return $this->numberOfBuries;
     }
 
-    public function numberOfKicks(): int {
+    public function numberOfKicks(): int
+    {
         return $this->numberOfKicks;
     }
 }

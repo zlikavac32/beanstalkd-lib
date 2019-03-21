@@ -10,7 +10,8 @@ use PhpSpec\Exception\Example\FailureException;
 use Zlikavac32\BeanstalkdLib\Client\DefaultJobHandle;
 use Zlikavac32\BeanstalkdLib\Client\DefaultTubeHandle;
 
-function beJobHandleFor($subject, int $jobId, $payload): bool {
+function beJobHandleFor($subject, int $jobId, $payload): bool
+{
     if (!$subject instanceof DefaultJobHandle) {
         throw new FailureException(sprintf('Expected instance of %s', DefaultTubeHandle::class));
     }
@@ -24,15 +25,19 @@ function beJobHandleFor($subject, int $jobId, $payload): bool {
     }
 
     return true;
-};
+}
 
-function beTubeHandleFor($subject, string $tubeName): bool {
+;
+
+function beTubeHandleFor($subject, string $tubeName): bool
+{
     assertSubjectIsValidTubeHandle($subject, $tubeName);
 
     return true;
 }
 
-function beMapOfTubes($subject, Set $expectedTubes): bool {
+function beMapOfTubes($subject, Set $expectedTubes): bool
+{
     if (!$subject instanceof Map) {
         throw new FailureException(sprintf('Expected instance of %s', Map::class));
     }

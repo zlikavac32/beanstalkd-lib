@@ -6,7 +6,8 @@ namespace Zlikavac32\BeanstalkdLib\Runner;
 
 use Throwable;
 
-interface ThrowableAuthority {
+interface ThrowableAuthority
+{
 
     public function shouldRethrow(Throwable $e): bool;
 }

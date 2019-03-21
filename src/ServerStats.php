@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
-class ServerStats {
+class ServerStats
+{
 
     /**
      * @var string
@@ -65,39 +66,48 @@ class ServerStats {
         $this->commandMetrics = $commandMetrics;
     }
 
-    public function hostname(): string {
+    public function hostname(): string
+    {
         return $this->hostname;
     }
 
-    public function version(): string {
+    public function version(): string
+    {
         return $this->version;
     }
 
-    public function processId(): int {
+    public function processId(): int
+    {
         return $this->processId;
     }
 
-    public function upTime(): int {
+    public function upTime(): int
+    {
         return $this->upTime;
     }
 
-    public function maxJobSize(): int {
+    public function maxJobSize(): int
+    {
         return $this->maxJobSize;
     }
 
-    public function cpuUserTime(): float {
+    public function cpuUserTime(): float
+    {
         return $this->cpuUserTime;
     }
 
-    public function cpuSystemTime(): float {
+    public function cpuSystemTime(): float
+    {
         return $this->cpuSystemTime;
     }
 
-    public function serverMetrics(): ServerMetrics {
+    public function serverMetrics(): ServerMetrics
+    {
         return $this->serverMetrics;
     }
 
-    public function commandMetrics(): CommandMetrics {
+    public function commandMetrics(): CommandMetrics
+    {
         return $this->commandMetrics;
     }
 }

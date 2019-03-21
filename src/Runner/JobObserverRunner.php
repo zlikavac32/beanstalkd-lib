@@ -8,7 +8,8 @@ use Throwable;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\Runner;
 
-class JobObserverRunner implements Runner {
+class JobObserverRunner implements Runner
+{
 
     /**
      * @var Runner
@@ -23,12 +24,14 @@ class JobObserverRunner implements Runner {
      */
     private $jobStartedAt;
 
-    public function __construct(Runner $runner, JobObserver $jobObserver) {
+    public function __construct(Runner $runner, JobObserver $jobObserver)
+    {
         $this->runner = $runner;
         $this->jobObserver = $jobObserver;
     }
 
-    public function run(JobHandle $jobHandle): void {
+    public function run(JobHandle $jobHandle): void
+    {
         $this->jobObserver->starting($jobHandle);
 
         $this->jobStartedAt = microtime(true);

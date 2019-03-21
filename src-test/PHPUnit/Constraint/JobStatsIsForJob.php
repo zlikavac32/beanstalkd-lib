@@ -9,7 +9,8 @@ use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\JobStats;
 use Zlikavac32\BeanstalkdLib\Protocol;
 
-class JobStatsIsForJob extends Constraint {
+class JobStatsIsForJob extends Constraint
+{
 
     /**
      * @var Job
@@ -20,18 +21,21 @@ class JobStatsIsForJob extends Constraint {
      */
     private $protocol;
 
-    public function __construct(Protocol $protocol, Job $job) {
+    public function __construct(Protocol $protocol, Job $job)
+    {
         parent::__construct();
 
         $this->job = $job;
         $this->protocol = $protocol;
     }
 
-    protected function matches($other): bool {
+    protected function matches($other): bool
+    {
         return $other instanceof JobStats;
     }
 
-    protected function failureDescription($other): string {
+    protected function failureDescription($other): string
+    {
         return sprintf(
             '%s is job stats for %d',
             $this->exporter->export($other),
@@ -39,7 +43,8 @@ class JobStatsIsForJob extends Constraint {
         );
     }
 
-    public function toString(): string {
+    public function toString(): string
+    {
         return sprintf('is job stats for %d', $this->job->id());
     }
 }

@@ -30,7 +30,8 @@ use Zlikavac32\BeanstalkdLib\TubeNotFoundException;
 use Zlikavac32\BeanstalkdLib\YamlParseException;
 use Zlikavac32\BeanstalkdLib\YamlParser;
 
-class ProtocolOverSocket implements Protocol {
+class ProtocolOverSocket implements Protocol
+{
 
     private const T_INSERTED = "INSERTED";
     private const T_BURIED = "BURIED";
@@ -65,7 +66,8 @@ class ProtocolOverSocket implements Protocol {
      */
     private $gracefulExit;
 
-    public function __construct(SocketHandle $socketHandle, GracefulExit $gracefulExit, YamlParser $yamlParser) {
+    public function __construct(SocketHandle $socketHandle, GracefulExit $gracefulExit, YamlParser $yamlParser)
+    {
         $this->socketHandle = $socketHandle;
         $this->gracefulExit = $gracefulExit;
         $this->yamlParser = $yamlParser;
@@ -74,7 +76,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function put(int $priority, int $delay, int $timeToRun, string $payload): int {
+    public function put(int $priority, int $delay, int $timeToRun, string $payload): int
+    {
         $this->writeToSocket(\sprintf("put %d %d %d %d\r\n", $priority, $delay, $timeToRun, \strlen($payload)));
         $this->writeToSocket($payload);
         $this->writeToSocket("\r\n");
@@ -119,7 +122,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function useTube(string $tube): void {
+    public function useTube(string $tube): void
+    {
         $this->writeToSocket(\sprintf("use %s\r\n", $tube));
 
         $this->parseLineFromSocket(
@@ -138,7 +142,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function reserve(): Job {
+    public function reserve(): Job
+    {
         $this->writeToSocket("reserve\r\n");
 
         return $this->parseLineFromSocket(
@@ -164,7 +169,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function reserveWithTimeout(int $timeout): Job {
+    public function reserveWithTimeout(int $timeout): Job
+    {
         $this->writeToSocket(\sprintf("reserve-with-timeout %d\r\n", $timeout));
 
         return $this->parseLineFromSocket(
@@ -196,7 +202,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function delete(int $id): void {
+    public function delete(int $id): void
+    {
         $this->writeToSocket(\sprintf("delete %d\r\n", $id));
 
         $this->parseLineFromSocket(
@@ -221,7 +228,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function release(int $id, int $priority, int $delay): void {
+    public function release(int $id, int $priority, int $delay): void
+    {
         $this->writeToSocket(\sprintf("release %d %d %d\r\n", $id, $priority, $delay));
 
         $this->parseLineFromSocket(
@@ -252,7 +260,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function bury(int $id, int $priority): void {
+    public function bury(int $id, int $priority): void
+    {
         $this->writeToSocket(\sprintf("bury %d %d\r\n", $id, $priority));
 
         $this->parseLineFromSocket(
@@ -277,7 +286,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function touch(int $id): void {
+    public function touch(int $id): void
+    {
         $this->writeToSocket(\sprintf("touch %d\r\n", $id));
 
         $this->parseLineFromSocket(
@@ -302,7 +312,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function watch(string $tube): int {
+    public function watch(string $tube): int
+    {
         $this->writeToSocket(\sprintf("watch %s\r\n", $tube));
 
         return $this->parseLineFromSocket(
@@ -321,7 +332,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function ignore(string $tube): int {
+    public function ignore(string $tube): int
+    {
         $this->writeToSocket(\sprintf("ignore %s\r\n", $tube));
 
         return $this->parseLineFromSocket(
@@ -346,7 +358,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function peek(int $id): Job {
+    public function peek(int $id): Job
+    {
         return $this->peekInternal(
             \sprintf("peek %d\r\n", $id),
             function () use ($id): void {
@@ -358,7 +371,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function peekReady(): Job {
+    public function peekReady(): Job
+    {
         return $this->peekInternal(
             "peek-ready\r\n",
             function (): void {
@@ -370,7 +384,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function peekDelayed(): Job {
+    public function peekDelayed(): Job
+    {
         return $this->peekInternal(
             "peek-delayed\r\n",
             function (): void {
@@ -382,7 +397,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function peekBuried(): Job {
+    public function peekBuried(): Job
+    {
         return $this->peekInternal(
             "peek-buried\r\n",
             function (): void {
@@ -391,7 +407,8 @@ class ProtocolOverSocket implements Protocol {
         );
     }
 
-    private function peekInternal(string $command, callable $notFoundCallback): Job {
+    private function peekInternal(string $command, callable $notFoundCallback): Job
+    {
         $this->writeToSocket($command);
 
         return $this->parseLineFromSocket(
@@ -414,7 +431,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function kick(int $numberOfJobs): int {
+    public function kick(int $numberOfJobs): int
+    {
         $this->writeToSocket(\sprintf("kick %d\r\n", $numberOfJobs));
 
         return $this->parseLineFromSocket(
@@ -433,7 +451,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function kickJob(int $id): void {
+    public function kickJob(int $id): void
+    {
         $this->writeToSocket(\sprintf("kick-job %d\r\n", $id));
 
         $this->parseLineFromSocket(
@@ -458,7 +477,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function statsJob(int $id): array {
+    public function statsJob(int $id): array
+    {
         $this->writeToSocket(\sprintf("stats-job %d\r\n", $id));
 
         return $this->parseLineFromSocket(
@@ -483,7 +503,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function statsTube(string $tube): array {
+    public function statsTube(string $tube): array
+    {
         $this->writeToSocket(\sprintf("stats-tube %s\r\n", $tube));
 
         return $this->parseLineFromSocket(
@@ -508,7 +529,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function stats(): array {
+    public function stats(): array
+    {
         $this->writeToSocket("stats\r\n");
 
         return $this->parseLineFromSocket(
@@ -527,7 +549,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function listTubes(): Sequence {
+    public function listTubes(): Sequence
+    {
         $this->writeToSocket("list-tubes\r\n");
 
         return new Vector(
@@ -548,7 +571,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function listTubeUsed(): string {
+    public function listTubeUsed(): string
+    {
         $this->writeToSocket("list-tube-used\r\n");
 
         return $this->parseLineFromSocket(
@@ -567,7 +591,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function listTubesWatched(): Set {
+    public function listTubesWatched(): Set
+    {
         $this->writeToSocket("list-tubes-watched\r\n");
 
         return new Set(
@@ -588,7 +613,8 @@ class ProtocolOverSocket implements Protocol {
     /**
      * @inheritdoc
      */
-    public function pauseTube(string $tube, int $delay): void {
+    public function pauseTube(string $tube, int $delay): void
+    {
         $this->writeToSocket(\sprintf("pause-tube %s %d\r\n", $tube, $delay));
 
         $this->parseLineFromSocket(
@@ -610,7 +636,8 @@ class ProtocolOverSocket implements Protocol {
         );
     }
 
-    private function writeToSocket(string $buffer): void {
+    private function writeToSocket(string $buffer): void
+    {
         try {
             $this->socketHandle->write($buffer);
         } catch (SocketException $e) {
@@ -618,7 +645,8 @@ class ProtocolOverSocket implements Protocol {
         }
     }
 
-    private function readLineFromSocket(int $minimumLength, bool $interruptible): string {
+    private function readLineFromSocket(int $minimumLength, bool $interruptible): string
+    {
         while (true) {
             try {
                 return $this->socketHandle->readLine($minimumLength, $interruptible);
@@ -634,7 +662,8 @@ class ProtocolOverSocket implements Protocol {
         }
     }
 
-    private function readFromSocket(int $length): string {
+    private function readFromSocket(int $length): string
+    {
         try {
             return $this->socketHandle->read($length);
         } catch (SocketException $e) {
@@ -642,11 +671,13 @@ class ProtocolOverSocket implements Protocol {
         }
     }
 
-    private function wrapSocketException(SocketException $e): BeanstalkdLibException {
+    private function wrapSocketException(SocketException $e): BeanstalkdLibException
+    {
         return new BeanstalkdLibException(\sprintf('Unexpected socket exception: %s', $e->getMessage()), $e);
     }
 
-    private function parseLineFromSocket(int $minimumLineLength, array $matchers, bool $interruptible = false) {
+    private function parseLineFromSocket(int $minimumLineLength, array $matchers, bool $interruptible = false)
+    {
         $line = $this->readLineFromSocket($minimumLineLength, $interruptible);
 
         $lineParts = \explode(' ', $line);
@@ -673,7 +704,7 @@ class ProtocolOverSocket implements Protocol {
                         $this->throwUnexpectedLineException($line);
                     }
 
-                    $normalizedArgs[] = (int) $lineParts[$i];
+                    $normalizedArgs[] = (int)$lineParts[$i];
 
                     break;
                 case 'pass':
@@ -690,7 +721,8 @@ class ProtocolOverSocket implements Protocol {
         return $callback(...$normalizedArgs);
     }
 
-    private function readPayload(int $size): string {
+    private function readPayload(int $size): string
+    {
         $payload = $this->readFromSocket($size);
 
         if ("\r\n" !== $this->readFromSocket(2)) {
@@ -700,7 +732,8 @@ class ProtocolOverSocket implements Protocol {
         return $payload;
     }
 
-    private function readYamlPayload(int $size): array {
+    private function readYamlPayload(int $size): array
+    {
         $payload = $this->readPayload($size);
 
         try {
@@ -710,7 +743,8 @@ class ProtocolOverSocket implements Protocol {
         }
     }
 
-    private function throwUnexpectedLineException(string $line): void {
+    private function throwUnexpectedLineException(string $line): void
+    {
         throw new BeanstalkdLibException(\sprintf('Unexpected line from server: "%s"', $line));
     }
 }

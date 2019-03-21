@@ -18,13 +18,16 @@ use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beJobHandleFor;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beMapOfTubes;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beTubeHandleFor;
 
-class DefaultClientSpec extends ObjectBehavior {
+class DefaultClientSpec extends ObjectBehavior
+{
 
-    public function let(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory): void {
+    public function let(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory): void
+    {
         $this->beConstructedWith($protocol, $tubeConfigurationFactory);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(DefaultClient::class);
     }
 
@@ -36,8 +39,10 @@ class DefaultClientSpec extends ObjectBehavior {
     ): void {
         $tubes = ['foo', 'bar'];
 
-        $tubeConfigurationFactory->createForTube('foo')->willReturn($fooTubeConfiguration);
-        $tubeConfigurationFactory->createForTube('bar')->willReturn($barTubeConfiguration);
+        $tubeConfigurationFactory->createForTube('foo')
+            ->willReturn($fooTubeConfiguration);
+        $tubeConfigurationFactory->createForTube('bar')
+            ->willReturn($barTubeConfiguration);
 
         $protocol->listTubes()
             ->willReturn(new Vector($tubes));
@@ -57,7 +62,8 @@ class DefaultClientSpec extends ObjectBehavior {
             ->shouldBeTubeHandleFor('foo');
     }
 
-    public function it_should_return_server_stats(Protocol $protocol): void {
+    public function it_should_return_server_stats(Protocol $protocol): void
+    {
         $protocol->stats()
             ->willReturn(
                 [
@@ -192,8 +198,10 @@ class DefaultClientSpec extends ObjectBehavior {
         $protocol->reserve()
             ->willReturn($job);
 
-        $tubeConfigurationFactory->createForTube('foo')->willReturn($tubeConfiguration);
-        $protocol->statsJob(32)->willReturn(['tube' => 'foo']);
+        $tubeConfigurationFactory->createForTube('foo')
+            ->willReturn($tubeConfiguration);
+        $protocol->statsJob(32)
+            ->willReturn(['tube' => 'foo']);
 
         $deserializedPayload = [1, 2];
 
@@ -220,8 +228,10 @@ class DefaultClientSpec extends ObjectBehavior {
         $protocol->peek(32)
             ->willReturn($job);
 
-        $tubeConfigurationFactory->createForTube('foo')->willReturn($tubeConfiguration);
-        $protocol->statsJob(32)->willReturn(['tube' => 'foo']);
+        $tubeConfigurationFactory->createForTube('foo')
+            ->willReturn($tubeConfiguration);
+        $protocol->statsJob(32)
+            ->willReturn(['tube' => 'foo']);
 
         $deserializedPayload = [1, 2];
 
@@ -248,8 +258,10 @@ class DefaultClientSpec extends ObjectBehavior {
         $protocol->reserveWithTimeout(18)
             ->willReturn($job);
 
-        $tubeConfigurationFactory->createForTube('foo')->willReturn($tubeConfiguration);
-        $protocol->statsJob(32)->willReturn(['tube' => 'foo']);
+        $tubeConfigurationFactory->createForTube('foo')
+            ->willReturn($tubeConfiguration);
+        $protocol->statsJob(32)
+            ->willReturn(['tube' => 'foo']);
 
         $deserializedPayload = [1, 2];
 
@@ -263,33 +275,46 @@ class DefaultClientSpec extends ObjectBehavior {
             ->shouldBeJobHandleFor(32, $deserializedPayload);
     }
 
-    public function it_should_watch_tube(Protocol $protocol): void {
-        $protocol->watch('foo')->willReturn(2);
+    public function it_should_watch_tube(Protocol $protocol): void
+    {
+        $protocol->watch('foo')
+            ->willReturn(2);
 
-        $this->watch('foo')->shouldReturn(2);
+        $this->watch('foo')
+            ->shouldReturn(2);
     }
 
-    public function it_should_ignore_default_tube(Protocol $protocol): void {
-        $protocol->ignore('default')->willReturn(1);
+    public function it_should_ignore_default_tube(Protocol $protocol): void
+    {
+        $protocol->ignore('default')
+            ->willReturn(1);
 
-        $this->ignoreDefaultTube()->shouldReturn(1);
+        $this->ignoreDefaultTube()
+            ->shouldReturn(1);
     }
 
-    public function it_should_ignore_tube(Protocol $protocol): void {
-        $protocol->ignore('foo')->willReturn(2);
+    public function it_should_ignore_tube(Protocol $protocol): void
+    {
+        $protocol->ignore('foo')
+            ->willReturn(2);
 
-        $this->ignore('foo')->shouldReturn(2);
+        $this->ignore('foo')
+            ->shouldReturn(2);
     }
 
-    public function it_should_return_list_of_watched_tubes(Protocol $protocol): void {
+    public function it_should_return_list_of_watched_tubes(Protocol $protocol): void
+    {
         $list = new Set();
 
-        $protocol->listTubesWatched()->willReturn($list);
+        $protocol->listTubesWatched()
+            ->willReturn($list);
 
-        $this->watchedTubeNames()->shouldReturn($list);
+        $this->watchedTubeNames()
+            ->shouldReturn($list);
     }
 
-    public function getMatchers(): array {
+    public function getMatchers(): array
+    {
         return [
             'beJobHandleFor'  => function ($subject, int $jobId, $payload): bool {
                 return beJobHandleFor($subject, $jobId, $payload);

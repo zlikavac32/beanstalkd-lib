@@ -12,18 +12,21 @@ use Zlikavac32\BeanstalkdLib\Runner;
 /**
  * Runner that releases job when an interrupt exception is caught.
  */
-class ReleaseOnInterruptExceptionRunner implements Runner {
+class ReleaseOnInterruptExceptionRunner implements Runner
+{
 
     /**
      * @var Runner
      */
     private $runner;
 
-    public function __construct(Runner $runner) {
+    public function __construct(Runner $runner)
+    {
         $this->runner = $runner;
     }
 
-    public function run(JobHandle $jobHandle): void {
+    public function run(JobHandle $jobHandle): void
+    {
         try {
             $this->runner->run($jobHandle);
         } catch (InterruptException $e) {
@@ -33,7 +36,8 @@ class ReleaseOnInterruptExceptionRunner implements Runner {
         }
     }
 
-    private function releaseJob(JobHandle $job): void {
+    private function releaseJob(JobHandle $job): void
+    {
         try {
             $job->release();
         } catch (Throwable $e) {

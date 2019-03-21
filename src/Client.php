@@ -7,7 +7,8 @@ namespace Zlikavac32\BeanstalkdLib;
 use Ds\Map;
 use Ds\Set;
 
-interface Client {
+interface Client
+{
 
     /**
      * @return TubeHandle[]|Map

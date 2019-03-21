@@ -7,7 +7,8 @@ namespace Zlikavac32\BeanstalkdLib;
 use RuntimeException;
 use Throwable;
 
-class SerializeException extends RuntimeException {
+class SerializeException extends RuntimeException
+{
 
     /**
      * @var mixed
@@ -17,7 +18,8 @@ class SerializeException extends RuntimeException {
     /**
      * @param mixed $causingPayload
      */
-    public function __construct(string $message, $causingPayload, Throwable $previous = null) {
+    public function __construct(string $message, $causingPayload, Throwable $previous = null)
+    {
         parent::__construct($message, 0, $previous);
         $this->causingPayload = $causingPayload;
     }
@@ -25,7 +27,8 @@ class SerializeException extends RuntimeException {
     /**
      * @return mixed
      */
-    public function causingPayload() {
+    public function causingPayload()
+    {
         return $this->causingPayload;
     }
 }

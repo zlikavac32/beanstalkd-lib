@@ -7,19 +7,22 @@ namespace Zlikavac32\BeanstalkdLib;
 use RuntimeException;
 use Throwable;
 
-class DeserializeException extends RuntimeException {
+class DeserializeException extends RuntimeException
+{
 
     /**
      * @var string
      */
     private $causingPayload;
 
-    public function __construct(string $message, string $causingPayload, Throwable $previous = null) {
+    public function __construct(string $message, string $causingPayload, Throwable $previous = null)
+    {
         parent::__construct($message, 0, $previous);
         $this->causingPayload = $causingPayload;
     }
 
-    public function causingPayload(): string {
+    public function causingPayload(): string
+    {
         return $this->causingPayload;
     }
 }

@@ -28,17 +28,21 @@ use Zlikavac32\BeanstalkdLib\TubeNotFoundException;
 use Zlikavac32\BeanstalkdLib\YamlParseException;
 use Zlikavac32\BeanstalkdLib\YamlParser;
 
-class ProtocolOverSocketSpec extends ObjectBehavior {
+class ProtocolOverSocketSpec extends ObjectBehavior
+{
 
-    public function let(SocketHandle $socketHandle, GracefulExit $gracefulExit, YamlParser $yamlParser): void {
+    public function let(SocketHandle $socketHandle, GracefulExit $gracefulExit, YamlParser $yamlParser): void
+    {
         $this->beConstructedWith($socketHandle, $gracefulExit, $yamlParser);
     }
 
-    public function it_is_initializable(): void {
+    public function it_is_initializable(): void
+    {
         $this->shouldHaveType(ProtocolOverSocket::class);
     }
 
-    public function it_should_put_job_in_tube(SocketHandle $socketHandle): void {
+    public function it_should_put_job_in_tube(SocketHandle $socketHandle): void
+    {
         $payload = '12.3';
 
         $socketHandle->write("put 1 2 3 4\r\n")
@@ -55,7 +59,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldReturn(32);
     }
 
-    public function it_should_throw_buried_exception_on_put(SocketHandle $socketHandle): void {
+    public function it_should_throw_buried_exception_on_put(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(8, false)
@@ -65,7 +70,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringPut(1, 2, 3, '12.3');
     }
 
-    public function it_should_throw_expected_crlf_exception_on_put(SocketHandle $socketHandle): void {
+    public function it_should_throw_expected_crlf_exception_on_put(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(8, false)
@@ -75,7 +81,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringPut(1, 2, 3, '12.3');
     }
 
-    public function it_should_throw_job_to_big_exception_on_put(SocketHandle $socketHandle): void {
+    public function it_should_throw_job_to_big_exception_on_put(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(8, false)
@@ -85,7 +92,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringPut(1, 2, 3, '12.3');
     }
 
-    public function it_should_throw_draining_exception_on_put(SocketHandle $socketHandle): void {
+    public function it_should_throw_draining_exception_on_put(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(8, false)
@@ -95,7 +103,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringPut(1, 2, 3, '12.3');
     }
 
-    public function it_should_use_tube(SocketHandle $socketHandle): void {
+    public function it_should_use_tube(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("use foo\r\n")
             ->shouldBeCalled();
 
@@ -106,7 +115,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
         $this->useTube('foo');
     }
 
-    public function it_should_reserve_job(SocketHandle $socketHandle): void {
+    public function it_should_reserve_job(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("reserve\r\n")
             ->shouldBeCalled();
 
@@ -122,7 +132,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldBeLike(new Job(32, '12.4'));
     }
 
-    public function it_should_throw_deadline_soon_exception_on_reserve(SocketHandle $socketHandle): void {
+    public function it_should_throw_deadline_soon_exception_on_reserve(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(10, true)
@@ -132,7 +143,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringReserve();
     }
 
-    public function it_should_reserve_job_with_timeout(SocketHandle $socketHandle): void {
+    public function it_should_reserve_job_with_timeout(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("reserve-with-timeout 64\r\n")
             ->shouldBeCalled();
 
@@ -148,7 +160,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldBeLike(new Job(32, '12.4'));
     }
 
-    public function it_should_throw_timed_out_exception_on_reserve_with_timeout(SocketHandle $socketHandle): void {
+    public function it_should_throw_timed_out_exception_on_reserve_with_timeout(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(9, true)
@@ -158,7 +171,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringReserveWithTimeout(64);
     }
 
-    public function it_should_throw_deadline_soon_exception_on_reserve_with_timeout(SocketHandle $socketHandle): void {
+    public function it_should_throw_deadline_soon_exception_on_reserve_with_timeout(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(9, true)
@@ -168,7 +182,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringReserveWithTimeout(64);
     }
 
-    public function it_should_delete(SocketHandle $socketHandle): void {
+    public function it_should_delete(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("delete 32\r\n")
             ->shouldBeCalled();
 
@@ -178,7 +193,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
         $this->delete(32);
     }
 
-    public function it_should_throw_not_found_exception_on_delete(SocketHandle $socketHandle): void {
+    public function it_should_throw_not_found_exception_on_delete(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(7, false)
@@ -188,7 +204,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringDelete(32);
     }
 
-    public function it_should_release(SocketHandle $socketHandle): void {
+    public function it_should_release(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("release 32 1 2\r\n")
             ->shouldBeCalled();
 
@@ -198,7 +215,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
         $this->release(32, 1, 2);
     }
 
-    public function it_should_throw_buried_exception_on_release(SocketHandle $socketHandle): void {
+    public function it_should_throw_buried_exception_on_release(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(6, false)
@@ -208,7 +226,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringRelease(32, 1, 2);
     }
 
-    public function it_should_throw_not_found_exception_on_release(SocketHandle $socketHandle): void {
+    public function it_should_throw_not_found_exception_on_release(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(6, false)
@@ -218,7 +237,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringRelease(32, 1, 2);
     }
 
-    public function it_should_bury(SocketHandle $socketHandle): void {
+    public function it_should_bury(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("bury 32 1\r\n")
             ->shouldBeCalled();
 
@@ -228,7 +248,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
         $this->bury(32, 1);
     }
 
-    public function it_should_throw_not_found_exception_on_bury(SocketHandle $socketHandle): void {
+    public function it_should_throw_not_found_exception_on_bury(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(6, false)
@@ -238,7 +259,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringBury(32, 1);
     }
 
-    public function it_should_touch(SocketHandle $socketHandle): void {
+    public function it_should_touch(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("touch 32\r\n")
             ->shouldBeCalled();
 
@@ -248,7 +270,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
         $this->touch(32);
     }
 
-    public function it_should_throw_not_found_exception_on_touch(SocketHandle $socketHandle): void {
+    public function it_should_throw_not_found_exception_on_touch(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(7, false)
@@ -258,7 +281,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringTouch(32);
     }
 
-    public function it_should_watch(SocketHandle $socketHandle): void {
+    public function it_should_watch(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("watch foo\r\n")
             ->shouldBeCalled();
 
@@ -269,7 +293,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldReturn(32);
     }
 
-    public function it_should_ignore(SocketHandle $socketHandle): void {
+    public function it_should_ignore(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("ignore foo\r\n")
             ->shouldBeCalled();
 
@@ -280,7 +305,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldReturn(32);
     }
 
-    public function it_should_thwo_not_ignored_exception_on_ignore(SocketHandle $socketHandle): void {
+    public function it_should_thwo_not_ignored_exception_on_ignore(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("ignore foo\r\n")
             ->shouldBeCalled();
 
@@ -291,7 +317,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringIgnore('foo');
     }
 
-    public function it_should_peek(SocketHandle $socketHandle): void {
+    public function it_should_peek(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("peek 32\r\n")
             ->shouldBeCalled();
 
@@ -307,7 +334,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldBeLike(new Job(32, '12.3'));
     }
 
-    public function it_should_throw_not_found_on_peek(SocketHandle $socketHandle): void {
+    public function it_should_throw_not_found_on_peek(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(9, false)
@@ -317,7 +345,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringPeek(32);
     }
 
-    public function it_should_peek_ready(SocketHandle $socketHandle): void {
+    public function it_should_peek_ready(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("peek-ready\r\n")
             ->shouldBeCalled();
 
@@ -333,7 +362,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldBeLike(new Job(32, '12.3'));
     }
 
-    public function it_should_throw_not_found_on_peek_ready(SocketHandle $socketHandle): void {
+    public function it_should_throw_not_found_on_peek_ready(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(9, false)
@@ -343,7 +373,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringPeekReady();
     }
 
-    public function it_should_peek_delayed(SocketHandle $socketHandle): void {
+    public function it_should_peek_delayed(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("peek-delayed\r\n")
             ->shouldBeCalled();
 
@@ -359,7 +390,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldBeLike(new Job(32, '12.3'));
     }
 
-    public function it_should_throw_not_found_on_peek_delayed(SocketHandle $socketHandle): void {
+    public function it_should_throw_not_found_on_peek_delayed(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(9, false)
@@ -369,7 +401,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringPeekDelayed();
     }
 
-    public function it_should_peek_buried(SocketHandle $socketHandle): void {
+    public function it_should_peek_buried(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("peek-buried\r\n")
             ->shouldBeCalled();
 
@@ -385,7 +418,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldBeLike(new Job(32, '12.3'));
     }
 
-    public function it_should_throw_not_found_on_peek_buried(SocketHandle $socketHandle): void {
+    public function it_should_throw_not_found_on_peek_buried(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(9, false)
@@ -395,7 +429,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringPeekBuried();
     }
 
-    public function it_should_kick(SocketHandle $socketHandle): void {
+    public function it_should_kick(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("kick 32\r\n")
             ->shouldBeCalled();
 
@@ -406,7 +441,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldReturn(64);
     }
 
-    public function it_should_kick_job(SocketHandle $socketHandle): void {
+    public function it_should_kick_job(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("kick-job 32\r\n")
             ->shouldBeCalled();
 
@@ -416,7 +452,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
         $this->kickJob(32);
     }
 
-    public function it_should_throw_job_not_found_exception_on_kick_job(SocketHandle $socketHandle): void {
+    public function it_should_throw_job_not_found_exception_on_kick_job(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(6, false)
@@ -426,7 +463,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringKickJob(32);
     }
 
-    public function it_should_return_job_stats(SocketHandle $socketHandle, YamlParser $yamlParser): void {
+    public function it_should_return_job_stats(SocketHandle $socketHandle, YamlParser $yamlParser): void
+    {
         $socketHandle->write("stats-job 32\r\n")
             ->shouldBeCalled();
 
@@ -449,7 +487,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldReturn($statsArray);
     }
 
-    public function it_should_throw_job_not_found_exception_on_job_stats(SocketHandle $socketHandle): void {
+    public function it_should_throw_job_not_found_exception_on_job_stats(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(4, false)
@@ -459,7 +498,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringStatsJob(32);
     }
 
-    public function it_should_return_tube_stats(SocketHandle $socketHandle, YamlParser $yamlParser): void {
+    public function it_should_return_tube_stats(SocketHandle $socketHandle, YamlParser $yamlParser): void
+    {
         $socketHandle->write("stats-tube bar\r\n")
             ->shouldBeCalled();
 
@@ -482,7 +522,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldReturn($statsArray);
     }
 
-    public function it_should_throw_job_not_found_exception_on_tube_stats(SocketHandle $socketHandle): void {
+    public function it_should_throw_job_not_found_exception_on_tube_stats(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(4, false)
@@ -492,7 +533,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringStatsTube('foo');
     }
 
-    public function it_should_return_stats(SocketHandle $socketHandle, YamlParser $yamlParser): void {
+    public function it_should_return_stats(SocketHandle $socketHandle, YamlParser $yamlParser): void
+    {
         $socketHandle->write("stats\r\n")
             ->shouldBeCalled();
 
@@ -515,7 +557,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldReturn($statsArray);
     }
 
-    public function it_should_list_tubes(SocketHandle $socketHandle, YamlParser $yamlParser): void {
+    public function it_should_list_tubes(SocketHandle $socketHandle, YamlParser $yamlParser): void
+    {
         $socketHandle->write("list-tubes\r\n")
             ->shouldBeCalled();
 
@@ -539,7 +582,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldReturn($statsArray);
     }
 
-    public function it_should_list_tube_used(SocketHandle $socketHandle): void {
+    public function it_should_list_tube_used(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("list-tube-used\r\n")
             ->shouldBeCalled();
 
@@ -550,7 +594,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldReturn('foo');
     }
 
-    public function it_should_list_tubes_watching(SocketHandle $socketHandle, YamlParser $yamlParser): void {
+    public function it_should_list_tubes_watching(SocketHandle $socketHandle, YamlParser $yamlParser): void
+    {
         $socketHandle->write("list-tubes-watched\r\n")
             ->shouldBeCalled();
 
@@ -574,7 +619,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->shouldReturn($statsArray);
     }
 
-    public function it_should_pause_tube(SocketHandle $socketHandle): void {
+    public function it_should_pause_tube(SocketHandle $socketHandle): void
+    {
         $socketHandle->write("pause-tube foo 32\r\n")
             ->shouldBeCalled();
 
@@ -584,7 +630,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
         $this->pauseTube('foo', 32);
     }
 
-    public function it_should_throw_tube_not_found_exception_on_pause_tube(SocketHandle $socketHandle): void {
+    public function it_should_throw_tube_not_found_exception_on_pause_tube(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any())
             ->shouldBeCalled();
 
@@ -595,7 +642,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringPauseTube('foo', 32);
     }
 
-    public function it_should_wrap_socket_exception_on_write(SocketHandle $socketHandle): void {
+    public function it_should_wrap_socket_exception_on_write(SocketHandle $socketHandle): void
+    {
         $e = new SocketException(SOCKET_ECONNREFUSED);
 
         $socketHandle->write(Argument::any())
@@ -607,7 +655,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringListTubes();
     }
 
-    public function it_should_wrap_socket_exception_on_read_line(SocketHandle $socketHandle): void {
+    public function it_should_wrap_socket_exception_on_read_line(SocketHandle $socketHandle): void
+    {
         $e = new SocketException(SOCKET_ECONNREFUSED);
 
         $socketHandle->write(Argument::any());
@@ -621,7 +670,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringListTubes();
     }
 
-    public function it_should_wrap_socket_exception_on_read(SocketHandle $socketHandle): void {
+    public function it_should_wrap_socket_exception_on_read(SocketHandle $socketHandle): void
+    {
         $e = new SocketException(SOCKET_ECONNREFUSED);
 
         $socketHandle->write(Argument::any());
@@ -638,7 +688,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior {
             ->duringListTubes();
     }
 
-    public function it_should_throw_exception_when_payload_response_is_not_valid(SocketHandle $socketHandle): void {
+    public function it_should_throw_exception_when_payload_response_is_not_valid(SocketHandle $socketHandle): void
+    {
         $socketHandle->write(Argument::any());
 
         $socketHandle->readLine(Argument::any(), false)

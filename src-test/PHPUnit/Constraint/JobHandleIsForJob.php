@@ -8,7 +8,8 @@ use PHPUnit\Framework\Constraint\Constraint;
 use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 
-class JobHandleIsForJob extends Constraint {
+class JobHandleIsForJob extends Constraint
+{
 
     /**
      * @var Job
@@ -19,13 +20,15 @@ class JobHandleIsForJob extends Constraint {
      */
     private $payload;
 
-    public function __construct(Job $job) {
+    public function __construct(Job $job)
+    {
         parent::__construct();
 
         $this->job = $job;
     }
 
-    protected function matches($other): bool {
+    protected function matches($other): bool
+    {
         if (!$other instanceof JobHandle) {
             return false;
         }
@@ -33,7 +36,8 @@ class JobHandleIsForJob extends Constraint {
         return $other->id() === $this->job->id();
     }
 
-    protected function failureDescription($other): string {
+    protected function failureDescription($other): string
+    {
         if (!$other instanceof JobHandle) {
             return sprintf('is instance of %s', JobHandle::class);
         }
@@ -45,7 +49,8 @@ class JobHandleIsForJob extends Constraint {
         );
     }
 
-    public function toString(): string {
+    public function toString(): string
+    {
         return sprintf('is job handle for %d', $this->job->id());
     }
 }

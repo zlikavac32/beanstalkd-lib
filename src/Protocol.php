@@ -7,7 +7,8 @@ namespace Zlikavac32\BeanstalkdLib;
 use Ds\Sequence;
 use Ds\Set;
 
-interface Protocol {
+interface Protocol
+{
 
     /**
      * @return int

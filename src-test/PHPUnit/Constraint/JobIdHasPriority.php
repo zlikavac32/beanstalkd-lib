@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\Constraint;
 
 use PHPUnit\Framework\Constraint\Constraint;
-use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\Protocol;
 
-class JobIdHasPriority extends Constraint {
+class JobIdHasPriority extends Constraint
+{
 
     /**
      * @var Protocol
@@ -19,14 +19,16 @@ class JobIdHasPriority extends Constraint {
      */
     private $priority;
 
-    public function __construct(Protocol $protocol, int $priority) {
+    public function __construct(Protocol $protocol, int $priority)
+    {
         parent::__construct();
 
         $this->protocol = $protocol;
         $this->priority = $priority;
     }
 
-    protected function matches($other): bool {
+    protected function matches($other): bool
+    {
         if (!is_int($other)) {
             return false;
         }
@@ -34,7 +36,8 @@ class JobIdHasPriority extends Constraint {
         return $this->priority === $this->protocol->statsJob($other)['pri'];
     }
 
-    protected function failureDescription($other): string {
+    protected function failureDescription($other): string
+    {
         assert(is_int($other));
 
         return sprintf(
@@ -45,7 +48,8 @@ class JobIdHasPriority extends Constraint {
         );
     }
 
-    public function toString(): string {
+    public function toString(): string
+    {
         return sprintf('job has priority %d', $this->priority);
     }
 }

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
-class TubeMetrics {
+class TubeMetrics
+{
 
     /**
      * @var int
@@ -77,47 +78,58 @@ class TubeMetrics {
         $this->numberOfPauseTubeCommands = $numberOfPauseTubeCommands;
     }
 
-    public function numberOfUrgentJobs(): int {
+    public function numberOfUrgentJobs(): int
+    {
         return $this->numberOfUrgentJobs;
     }
 
-    public function numberOfReadyJobs(): int {
+    public function numberOfReadyJobs(): int
+    {
         return $this->numberOfReadyJobs;
     }
 
-    public function numberOfReservedJobs(): int {
+    public function numberOfReservedJobs(): int
+    {
         return $this->numberOfReservedJobs;
     }
 
-    public function numberOfDelayedJobs(): int {
+    public function numberOfDelayedJobs(): int
+    {
         return $this->numberOfDelayedJobs;
     }
 
-    public function numberOfBuriedJobs(): int {
+    public function numberOfBuriedJobs(): int
+    {
         return $this->numberOfBuriedJobs;
     }
 
-    public function cumulativeNumberOfJobs(): int {
+    public function cumulativeNumberOfJobs(): int
+    {
         return $this->cumulativeNumberOfJobs;
     }
 
-    public function numberOfClientsUsing(): int {
+    public function numberOfClientsUsing(): int
+    {
         return $this->numberOfClientsUsing;
     }
 
-    public function numberOfClientsWaiting(): int {
+    public function numberOfClientsWaiting(): int
+    {
         return $this->numberOfClientsWaiting;
     }
 
-    public function numberOfClientsWatching(): int {
+    public function numberOfClientsWatching(): int
+    {
         return $this->numberOfClientsWatching;
     }
 
-    public function numberOfDeleteCommands(): int {
+    public function numberOfDeleteCommands(): int
+    {
         return $this->numberOfDeleteCommands;
     }
 
-    public function numberOfPauseTubeCommands(): int {
+    public function numberOfPauseTubeCommands(): int
+    {
         return $this->numberOfPauseTubeCommands;
     }
 }

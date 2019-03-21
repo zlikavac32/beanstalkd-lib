@@ -8,7 +8,8 @@ use Zlikavac32\BeanstalkdLib\Socket;
 use Zlikavac32\BeanstalkdLib\SocketException;
 use Zlikavac32\BeanstalkdLib\SocketHandle;
 
-class NativePHPSocket implements Socket {
+class NativePHPSocket implements Socket
+{
 
     /**
      * @var int
@@ -45,7 +46,8 @@ class NativePHPSocket implements Socket {
     /**
      * @throws SocketException
      */
-    public function open(string $ip, int $port): SocketHandle {
+    public function open(string $ip, int $port): SocketHandle
+    {
         $socket = \socket_create($this->domain, $this->type, $this->protocol);
 
         if (false === $socket) {
@@ -58,7 +60,7 @@ class NativePHPSocket implements Socket {
             \SOL_SOCKET,
             \SO_RCVTIMEO,
             [
-                'sec'  => (int) $this->readTimeout / 1000000,
+                'sec'  => (int)$this->readTimeout / 1000000,
                 'usec' => $this->readTimeout % 1000000,
             ]
         );

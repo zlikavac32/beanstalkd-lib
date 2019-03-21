@@ -6,9 +6,11 @@ namespace Zlikavac32\BeanstalkdLib\Runner;
 
 use Throwable;
 
-class ThrowNoneThrowableAuthority implements ThrowableAuthority {
+class ThrowNoneThrowableAuthority implements ThrowableAuthority
+{
 
-    public function shouldRethrow(Throwable $e): bool {
+    public function shouldRethrow(Throwable $e): bool
+    {
         return false;
     }
 }

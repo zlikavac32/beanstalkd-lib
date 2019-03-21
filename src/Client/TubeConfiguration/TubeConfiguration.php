@@ -6,7 +6,8 @@ namespace Zlikavac32\BeanstalkdLib\Client\TubeConfiguration;
 
 use Zlikavac32\BeanstalkdLib\Serializer;
 
-interface TubeConfiguration {
+interface TubeConfiguration
+{
 
     public function defaultDelay(): int;
 
