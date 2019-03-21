@@ -7,13 +7,15 @@ namespace Zlikavac32\BeanstalkdLib\Tests\Integration\Client;
 use Ds\Map;
 use Ds\Set;
 use PHPUnit\Framework\TestCase;
-use Zlikavac32\BeanstalkdLib\Adapter\NativePHPJsonSerializer;
+use Zlikavac32\BeanstalkdLib\Adapter\PHP\Json\NativePHPJsonSerializer;
 use Zlikavac32\BeanstalkdLib\Client;
+use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\StaticTubeConfiguration;
+use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfigurationFactory;
+use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeMapConfigurationFactory;
 use Zlikavac32\BeanstalkdLib\JobState;
 use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\ReserveTimedOutException;
 use Zlikavac32\BeanstalkdLib\Serializer;
-use Zlikavac32\BeanstalkdLib\StaticTubeConfiguration;
 use Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\Constraint\JobHandleIsForJob;
 use Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\Constraint\JobIdExistsOnServer;
 use Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\Constraint\JobIdHasDelay;
@@ -34,8 +36,6 @@ use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createJobWithTimeToRun;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createMockSerializer;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\createMutableProxySerializer;
 use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\purgeProtocol;
-use Zlikavac32\BeanstalkdLib\TubeConfigurationFactory;
-use Zlikavac32\BeanstalkdLib\TubeMapConfigurationFactory;
 
 class BasicFunctionalityTest extends TestCase {
 

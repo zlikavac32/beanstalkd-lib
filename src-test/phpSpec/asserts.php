@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Zlikavac32\BeanstalkdLib\TestHelper\phpSpec;
 
 use PhpSpec\Exception\Example\FailureException;
-use Zlikavac32\BeanstalkdLib\DefaultTubeHandle;
+use Zlikavac32\BeanstalkdLib\Client\DefaultTubeHandle;
 
 function assertSubjectIsValidTubeHandle($tubeHandle, string $tubeName): void {
     if (!$tubeHandle instanceof DefaultTubeHandle) {

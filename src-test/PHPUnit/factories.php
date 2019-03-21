@@ -7,26 +7,28 @@ namespace Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit;
 use Throwable;
 use Zlikavac32\AlarmScheduler\AlarmHandler;
 use Zlikavac32\AlarmScheduler\AlarmScheduler;
-use Zlikavac32\BeanstalkdLib\Adapter\NativePHPSocket;
-use Zlikavac32\BeanstalkdLib\Adapter\SymfonyYamlParser;
-use Zlikavac32\BeanstalkdLib\AutoTouchJobRunner;
-use Zlikavac32\BeanstalkdLib\BuryOnExceptionRunner;
+use Zlikavac32\BeanstalkdLib\Adapter\PHP\Socket\NativePHPSocket;
+use Zlikavac32\BeanstalkdLib\Adapter\Symfony\Yaml\SymfonyYamlParser;
 use Zlikavac32\BeanstalkdLib\Client;
-use Zlikavac32\BeanstalkdLib\DefaultClient;
-use Zlikavac32\BeanstalkdLib\ExclusiveAccessSocket;
+use Zlikavac32\BeanstalkdLib\Client\DefaultClient;
+use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfigurationFactory;
 use Zlikavac32\BeanstalkdLib\GracefulExit;
 use Zlikavac32\BeanstalkdLib\InterruptHandler;
+use Zlikavac32\BeanstalkdLib\InterruptHandler\CompositeInterruptHandler;
+use Zlikavac32\BeanstalkdLib\InterruptHandler\HardInterruptHandler;
+use Zlikavac32\BeanstalkdLib\InterruptHandler\TimeoutHardInterruptHandler;
 use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\Protocol;
-use Zlikavac32\BeanstalkdLib\ProtocolOverSocket;
-use Zlikavac32\BeanstalkdLib\ReleaseOnInterruptExceptionRunner;
+use Zlikavac32\BeanstalkdLib\Protocol\ProtocolOverSocket;
+use Zlikavac32\BeanstalkdLib\Protocol\StateAwareProtocol;
 use Zlikavac32\BeanstalkdLib\Runner;
+use Zlikavac32\BeanstalkdLib\Runner\AutoTouchJobRunner;
+use Zlikavac32\BeanstalkdLib\Runner\BuryOnExceptionRunner;
+use Zlikavac32\BeanstalkdLib\Runner\ReleaseOnInterruptExceptionRunner;
+use Zlikavac32\BeanstalkdLib\Runner\ThrowableAuthority;
 use Zlikavac32\BeanstalkdLib\Serializer;
-use Zlikavac32\BeanstalkdLib\StateAwareProtocol;
-use Zlikavac32\BeanstalkdLib\ThrowableAuthority;
-use Zlikavac32\BeanstalkdLib\TubeConfiguration;
-use Zlikavac32\BeanstalkdLib\TubeConfigurationFactory;
+use Zlikavac32\BeanstalkdLib\Socket\ExclusiveAccessSocket;
 
 function createDefaultProtocol(int $readTimeout = 1500000): Protocol {
     $socket = new ExclusiveAccessSocket(
@@ -87,9 +89,9 @@ function createMutableProxySerializer(Serializer $serializer): Serializer {
 }
 
 function createDefaultInterruptHandler(InterruptHandler $gracefulExitInterruptHandler, AlarmScheduler $alarmScheduler, AlarmHandler $alarmHandler, int $timeout = 3): InterruptHandler {
-    return new \Zlikavac32\BeanstalkdLib\CompositeInterruptHandler(
-        new \Zlikavac32\BeanstalkdLib\TimeoutHardInterruptHandler($alarmScheduler, $alarmHandler, $timeout),
-        new \Zlikavac32\BeanstalkdLib\HardInterruptHandler(),
+    return new CompositeInterruptHandler(
+        new TimeoutHardInterruptHandler($alarmScheduler, $alarmHandler, $timeout),
+        new HardInterruptHandler(),
         $gracefulExitInterruptHandler
     );
 }
