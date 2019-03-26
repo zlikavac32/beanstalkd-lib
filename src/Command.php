@@ -31,29 +31,4 @@ use Zlikavac32\Enum\Enum;
 abstract class Command extends Enum
 {
 
-    protected static function enumerate(): array
-    {
-        return [
-            'PUT',
-            'PEEK',
-            'PEEK_READY',
-            'PEEK_DELAYED',
-            'PEEK_BURIED',
-            'RESERVE',
-            'USE',
-            'WATCH',
-            'IGNORE',
-            'DELETE',
-            'RELEASE',
-            'BURY',
-            'KICK',
-            'STATS',
-            'STATS_JOB',
-            'STATS_TUBE',
-            'LIST_TUBES',
-            'LIST_TUBE_USED',
-            'LIST_TUBES_WATCHED',
-            'PAUSE_TUBE',
-        ];
-    }
 }

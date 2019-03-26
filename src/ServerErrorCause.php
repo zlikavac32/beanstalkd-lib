@@ -13,11 +13,4 @@ use Zlikavac32\Enum\Enum;
 abstract class ServerErrorCause extends Enum
 {
 
-    protected static function enumerate(): array
-    {
-        return [
-            'OUT_OF_MEMORY',
-            'INTERNAL_ERROR',
-        ];
-    }
 }

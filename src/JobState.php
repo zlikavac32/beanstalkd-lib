@@ -15,8 +15,4 @@ use Zlikavac32\Enum\Enum;
 abstract class JobState extends Enum
 {
 
-    protected static function enumerate(): array
-    {
-        return ['READY', 'BURIED', 'DELAYED', 'RESERVED'];
-    }
 }
