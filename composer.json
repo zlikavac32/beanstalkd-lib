@@ -42,10 +42,11 @@
         "psr/log": "^1.1"
     },
     "suggest": {
-        "ext-ds": "Native php-ds implementation",
-        "ext-json": "Native JSON implementation",
-        "ext-sockets": "Native socket implementation",
-        "symfony/yaml": "Symfony YAML parser"
+        "ext-ds": "For better performance with php-ds",
+        "ext-json": "For native JSON serializer adapters",
+        "ext-sockets": "For PHP native socket adapters",
+        "symfony/yaml": "For Symfony YAML parser adapters",
+        "symfony/console": "For Symfony console adapters"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.5",
