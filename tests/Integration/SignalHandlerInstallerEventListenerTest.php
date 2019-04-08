@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Zlikavac32\BeanstalkdLib\Tests\Integration\Adapter\Symfony\Console;
+namespace Zlikavac32\BeanstalkdLib\Tests\Integration;
 
 use Ds\Map;
 use PHPUnit\Framework\TestCase;
-use Zlikavac32\BeanstalkdLib\Adapter\Symfony\Console\SignalHandlerInstallerEventListener;
 use Zlikavac32\BeanstalkdLib\InterruptHandler;
+use Zlikavac32\BeanstalkdLib\SignalHandlerInstaller;
 
 class SignalHandlerInstallerEventListenerTest extends TestCase
 {
@@ -25,7 +25,7 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
      */
     private $interruptHandler;
     /**
-     * @var SignalHandlerInstallerEventListener
+     * @var SignalHandlerInstaller
      */
     private $listener;
     /**
@@ -48,7 +48,7 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
     public function setUp(): void
     {
         $this->interruptHandler = new MockInterruptHandler();
-        $this->listener = new SignalHandlerInstallerEventListener($this->interruptHandler);
+        $this->listener = new SignalHandlerInstaller($this->interruptHandler);
 
         $this->swapCurrentHandlersForStubs();
     }
@@ -84,7 +84,7 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
      */
     public function sigint_should_be_caught(): void
     {
-        $this->listener->onConsoleCommand();
+        $this->listener->install();
 
         $this->killMeWith(SIGINT);
 
@@ -96,7 +96,7 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
      */
     public function sigterm_should_be_caught(): void
     {
-        $this->listener->onConsoleCommand();
+        $this->listener->install();
 
         $this->killMeWith(SIGTERM);
 
@@ -108,7 +108,7 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
      */
     public function sigquit_should_be_caught(): void
     {
-        $this->listener->onConsoleCommand();
+        $this->listener->install();
 
         $this->killMeWith(SIGQUIT);
 
@@ -130,9 +130,9 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
             pcntl_signal($signal, $handler);
         }
 
-        $this->listener->onConsoleCommand();
+        $this->listener->install();
 
-        $this->listener->onConsoleTerminate();
+        $this->listener->uninstall();
 
         foreach ($this->signals as $signal) {
             self::assertSame(

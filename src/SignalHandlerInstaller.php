@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Zlikavac32\BeanstalkdLib\Adapter\Symfony\Console;
+namespace Zlikavac32\BeanstalkdLib;
 
 use Ds\Map;
-use Zlikavac32\BeanstalkdLib\InterruptHandler;
 
-class SignalHandlerInstallerEventListener
+class SignalHandlerInstaller
 {
 
     /**
@@ -25,7 +24,7 @@ class SignalHandlerInstallerEventListener
         $this->previousHandlers = new Map();
     }
 
-    public function onConsoleCommand(): void
+    public function install(): void
     {
         $signals = [SIGINT, SIGTERM, SIGQUIT];
 
@@ -38,7 +37,7 @@ class SignalHandlerInstallerEventListener
         }
     }
 
-    public function onConsoleTerminate(): void
+    public function uninstall(): void
     {
         foreach ($this->previousHandlers as $signal => $previousHandler) {
             pcntl_signal($signal, $previousHandler);
