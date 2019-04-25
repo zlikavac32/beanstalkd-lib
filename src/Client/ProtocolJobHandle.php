@@ -11,7 +11,7 @@ use Zlikavac32\BeanstalkdLib\JobState;
 use Zlikavac32\BeanstalkdLib\JobStats;
 use Zlikavac32\BeanstalkdLib\Protocol;
 
-class DefaultJobHandle implements JobHandle
+class ProtocolJobHandle implements JobHandle
 {
 
     /**

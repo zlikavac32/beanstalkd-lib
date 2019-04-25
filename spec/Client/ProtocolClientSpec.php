@@ -7,7 +7,7 @@ namespace spec\Zlikavac32\BeanstalkdLib\Client;
 use Ds\Set;
 use Ds\Vector;
 use PhpSpec\ObjectBehavior;
-use Zlikavac32\BeanstalkdLib\Client\DefaultClient;
+use Zlikavac32\BeanstalkdLib\Client\ProtocolClient;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfigurationFactory;
 use Zlikavac32\BeanstalkdLib\Command;
@@ -18,7 +18,7 @@ use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beJobHandleFor;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beMapOfTubes;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beTubeHandleFor;
 
-class DefaultClientSpec extends ObjectBehavior
+class ProtocolClientSpec extends ObjectBehavior
 {
 
     public function let(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory): void
@@ -28,7 +28,7 @@ class DefaultClientSpec extends ObjectBehavior
 
     public function it_is_initializable(): void
     {
-        $this->shouldHaveType(DefaultClient::class);
+        $this->shouldHaveType(ProtocolClient::class);
     }
 
     public function it_should_list_tubes(

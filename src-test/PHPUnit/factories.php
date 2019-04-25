@@ -10,7 +10,7 @@ use Zlikavac32\AlarmScheduler\AlarmScheduler;
 use Zlikavac32\BeanstalkdLib\Adapter\PHP\Socket\NativePHPSocket;
 use Zlikavac32\BeanstalkdLib\Adapter\Symfony\Yaml\SymfonyYamlParser;
 use Zlikavac32\BeanstalkdLib\Client;
-use Zlikavac32\BeanstalkdLib\Client\DefaultClient;
+use Zlikavac32\BeanstalkdLib\Client\ProtocolClient;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfigurationFactory;
 use Zlikavac32\BeanstalkdLib\GracefulExit;
 use Zlikavac32\BeanstalkdLib\InterruptHandler;
@@ -200,7 +200,7 @@ function createJustBuryJobRunner(): Runner
 
 function createDefaultClient(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory): Client
 {
-    return new DefaultClient($protocol, $tubeConfigurationFactory);
+    return new ProtocolClient($protocol, $tubeConfigurationFactory);
 }
 
 function createJobInTube(Protocol $protocol, string $tube): Job

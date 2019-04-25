@@ -17,7 +17,7 @@ use Zlikavac32\BeanstalkdLib\ServerMetrics;
 use Zlikavac32\BeanstalkdLib\ServerStats;
 use Zlikavac32\BeanstalkdLib\TubeHandle;
 
-class DefaultClient implements Client
+class ProtocolClient implements Client
 {
 
     /**
@@ -56,7 +56,7 @@ class DefaultClient implements Client
      */
     public function tube(string $tubeName): TubeHandle
     {
-        return new DefaultTubeHandle(
+        return new ProtocolTubeHandle(
             $tubeName,
             $this->protocol,
             $this->tubeConfigurationFactory->createForTube($tubeName)
@@ -176,7 +176,7 @@ class DefaultClient implements Client
 
         $tubeConfiguration = $this->tubeConfigurationFactory->createForTube($tubeName);
 
-        return new DefaultJobHandle(
+        return new ProtocolJobHandle(
             $job->id(),
             $tubeConfiguration->serializer()
                 ->deserialize($job->payload()),

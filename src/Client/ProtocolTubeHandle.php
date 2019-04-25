@@ -12,7 +12,7 @@ use Zlikavac32\BeanstalkdLib\TubeHandle;
 use Zlikavac32\BeanstalkdLib\TubeMetrics;
 use Zlikavac32\BeanstalkdLib\TubeStats;
 
-class DefaultTubeHandle implements TubeHandle
+class ProtocolTubeHandle implements TubeHandle
 {
 
     /**
@@ -57,7 +57,7 @@ class DefaultTubeHandle implements TubeHandle
     {
         $this->protocol->useTube($this->tubeName);
 
-        return new DefaultJobHandle(
+        return new ProtocolJobHandle(
             $this->protocol->put(
                 $priority ?? $this->tubeConfiguration->defaultPriority(),
                 $delay ?? $this->tubeConfiguration->defaultDelay(),
@@ -140,7 +140,7 @@ class DefaultTubeHandle implements TubeHandle
 
     private function createJobHandleFromJob(Job $job): JobHandle
     {
-        return new DefaultJobHandle(
+        return new ProtocolJobHandle(
             $job->id(),
             $this->tubeConfiguration->serializer()
                 ->deserialize($job->payload()),

@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace spec\Zlikavac32\BeanstalkdLib\Client;
 
 use PhpSpec\ObjectBehavior;
-use Zlikavac32\BeanstalkdLib\Client\DefaultJobHandle;
-use Zlikavac32\BeanstalkdLib\Client\DefaultTubeHandle;
+use Zlikavac32\BeanstalkdLib\Client\ProtocolJobHandle;
+use Zlikavac32\BeanstalkdLib\Client\ProtocolTubeHandle;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\Serializer;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beJobHandleFor;
 
-class DefaultTubeHandleSpec extends ObjectBehavior
+class ProtocolTubeHandleSpec extends ObjectBehavior
 {
 
     public function let(Protocol $protocol, TubeConfiguration $tubeConfiguration): void
@@ -23,7 +23,7 @@ class DefaultTubeHandleSpec extends ObjectBehavior
 
     public function it_is_initializable(): void
     {
-        $this->shouldHaveType(DefaultTubeHandle::class);
+        $this->shouldHaveType(ProtocolTubeHandle::class);
     }
 
     public function it_should_have_valid_tube_name(): void
@@ -69,7 +69,7 @@ class DefaultTubeHandleSpec extends ObjectBehavior
 
         $this->put([1, 2])
             ->shouldBeLike(
-                new DefaultJobHandle(32, [1, 2], $protocol->getWrappedObject(), $tubeConfiguration->getWrappedObject())
+                new ProtocolJobHandle(32, [1, 2], $protocol->getWrappedObject(), $tubeConfiguration->getWrappedObject())
             );
     }
 
@@ -92,7 +92,7 @@ class DefaultTubeHandleSpec extends ObjectBehavior
 
         $this->put([1, 2], 1, 2, 3)
             ->shouldBeLike(
-                new DefaultJobHandle(32, [1, 2], $protocol->getWrappedObject(), $tubeConfiguration->getWrappedObject())
+                new ProtocolJobHandle(32, [1, 2], $protocol->getWrappedObject(), $tubeConfiguration->getWrappedObject())
             );
     }
 

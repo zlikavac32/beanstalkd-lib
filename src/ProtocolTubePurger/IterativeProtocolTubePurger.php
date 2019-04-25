@@ -12,7 +12,7 @@ use Zlikavac32\BeanstalkdLib\ProtocolTubePurger;
 /**
  * Removes all ready, delayed and buried jobs.
  */
-class DefaultProtocolTubePurger implements ProtocolTubePurger
+class IterativeProtocolTubePurger implements ProtocolTubePurger
 {
 
     private const ARBITRARY_PAUSE_TIME = 60 * 60 * 24;

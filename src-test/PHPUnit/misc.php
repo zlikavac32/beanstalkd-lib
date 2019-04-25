@@ -6,11 +6,11 @@ namespace Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit;
 
 use Ds\Set;
 use Zlikavac32\BeanstalkdLib\Protocol;
-use Zlikavac32\BeanstalkdLib\ProtocolTubePurger\DefaultProtocolTubePurger;
+use Zlikavac32\BeanstalkdLib\ProtocolTubePurger\IterativeProtocolTubePurger;
 
 function purgeTube(Protocol $protocol, string $tubeName): void
 {
-    (new DefaultProtocolTubePurger())->purge($protocol, $tubeName);
+    (new IterativeProtocolTubePurger())->purge($protocol, $tubeName);
 }
 
 function purgeDefaultTube(Protocol $protocol): void

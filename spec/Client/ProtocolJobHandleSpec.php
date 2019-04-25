@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace spec\Zlikavac32\BeanstalkdLib\Client;
 
 use PhpSpec\ObjectBehavior;
-use Zlikavac32\BeanstalkdLib\Client\DefaultJobHandle;
+use Zlikavac32\BeanstalkdLib\Client\ProtocolJobHandle;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\JobState;
 use Zlikavac32\BeanstalkdLib\Protocol;
 
-class DefaultJobHandleSpec extends ObjectBehavior
+class ProtocolJobHandleSpec extends ObjectBehavior
 {
 
     public function let(Protocol $protocol, TubeConfiguration $tubeConfiguration): void
@@ -20,7 +20,7 @@ class DefaultJobHandleSpec extends ObjectBehavior
 
     public function it_is_initializable(): void
     {
-        $this->shouldHaveType(DefaultJobHandle::class);
+        $this->shouldHaveType(ProtocolJobHandle::class);
     }
 
     public function it_should_have_id(): void

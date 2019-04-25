@@ -7,13 +7,13 @@ namespace Zlikavac32\BeanstalkdLib\TestHelper\phpSpec;
 use Ds\Map;
 use Ds\Set;
 use PhpSpec\Exception\Example\FailureException;
-use Zlikavac32\BeanstalkdLib\Client\DefaultJobHandle;
-use Zlikavac32\BeanstalkdLib\Client\DefaultTubeHandle;
+use Zlikavac32\BeanstalkdLib\Client\ProtocolJobHandle;
+use Zlikavac32\BeanstalkdLib\Client\ProtocolTubeHandle;
 
 function beJobHandleFor($subject, int $jobId, $payload): bool
 {
-    if (!$subject instanceof DefaultJobHandle) {
-        throw new FailureException(sprintf('Expected instance of %s', DefaultTubeHandle::class));
+    if (!$subject instanceof ProtocolJobHandle) {
+        throw new FailureException(sprintf('Expected instance of %s', ProtocolTubeHandle::class));
     }
 
     if ($subject->id() !== $jobId) {
