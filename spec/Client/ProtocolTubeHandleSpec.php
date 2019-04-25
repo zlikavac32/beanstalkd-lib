@@ -163,7 +163,8 @@ class ProtocolTubeHandleSpec extends ObjectBehavior
         $protocol->useTube('foo')
             ->shouldBeCalled();
 
-        $protocol->pauseTube('foo', 13);
+        $protocol->pauseTube('foo', 13)
+            ->shouldBeCalled();
 
         $this->pause();
     }
@@ -173,7 +174,8 @@ class ProtocolTubeHandleSpec extends ObjectBehavior
         $protocol->useTube('foo')
             ->shouldBeCalled();
 
-        $protocol->pauseTube('foo', 13);
+        $protocol->pauseTube('foo', 13)
+            ->shouldBeCalled();
 
         $this->pause(13);
     }
