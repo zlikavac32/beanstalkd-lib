@@ -61,7 +61,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_buried_exception_on_put(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(8, false)
             ->willReturn('BURIED 32');
@@ -72,7 +73,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_expected_crlf_exception_on_put(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(8, false)
             ->willReturn('EXPECTED_CRLF');
@@ -83,7 +85,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_job_to_big_exception_on_put(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(8, false)
             ->willReturn('JOB_TOO_BIG');
@@ -94,7 +97,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_draining_exception_on_put(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(8, false)
             ->willReturn('DRAINING');
@@ -134,7 +138,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_deadline_soon_exception_on_reserve(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(10, true)
             ->willReturn('DEADLINE_SOON');
@@ -162,7 +167,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_timed_out_exception_on_reserve_with_timeout(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(9, true)
             ->willReturn('TIMED_OUT');
@@ -173,7 +179,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_deadline_soon_exception_on_reserve_with_timeout(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(9, true)
             ->willReturn('DEADLINE_SOON');
@@ -195,7 +202,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_not_found_exception_on_delete(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(7, false)
             ->willReturn('NOT_FOUND');
@@ -217,7 +225,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_buried_exception_on_release(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(6, false)
             ->willReturn('BURIED');
@@ -228,7 +237,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_not_found_exception_on_release(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(6, false)
             ->willReturn('NOT_FOUND');
@@ -250,7 +260,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_not_found_exception_on_bury(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(6, false)
             ->willReturn('NOT_FOUND');
@@ -272,7 +283,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_not_found_exception_on_touch(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(7, false)
             ->willReturn('NOT_FOUND');
@@ -336,7 +348,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_not_found_on_peek(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(9, false)
             ->willReturn('NOT_FOUND');
@@ -364,7 +377,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_not_found_on_peek_ready(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(9, false)
             ->willReturn('NOT_FOUND');
@@ -392,7 +406,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_not_found_on_peek_delayed(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(9, false)
             ->willReturn('NOT_FOUND');
@@ -420,7 +435,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_not_found_on_peek_buried(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(9, false)
             ->willReturn('NOT_FOUND');
@@ -454,7 +470,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_job_not_found_exception_on_kick_job(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(6, false)
             ->willReturn('NOT_FOUND');
@@ -489,7 +506,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_job_not_found_exception_on_job_stats(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(4, false)
             ->willReturn('NOT_FOUND');
@@ -524,7 +542,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_job_not_found_exception_on_tube_stats(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(4, false)
             ->willReturn('NOT_FOUND');
@@ -659,7 +678,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
     {
         $e = new SocketException(SOCKET_ECONNREFUSED);
 
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(Argument::any(), false)
             ->willThrow($e);
@@ -674,7 +694,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
     {
         $e = new SocketException(SOCKET_ECONNREFUSED);
 
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(Argument::any(), false)
             ->willReturn('OK 4');
@@ -690,7 +711,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
     public function it_should_throw_exception_when_payload_response_is_not_valid(SocketHandle $socketHandle): void
     {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(Argument::any(), false)
             ->willReturn('OK 4');
@@ -710,7 +732,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
         SocketHandle $socketHandle,
         YamlParser $yamlParser
     ): void {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(Argument::any(), false)
             ->willReturn('OK 4');
@@ -734,7 +757,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
     public function it_should_throw_exception_when_server_returns_invalid_leading_command(
         SocketHandle $socketHandle
     ): void {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(Argument::any(), false)
             ->willReturn('NOPE');
@@ -748,7 +772,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
     public function it_should_throw_exception_when_server_response_line_is_not_valid(
         SocketHandle $socketHandle
     ): void {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(Argument::any(), false)
             ->willReturn('WATCHING');
@@ -762,7 +787,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
     public function it_should_throw_exception_when_number_not_provided_from_server_where_expected(
         SocketHandle $socketHandle
     ): void {
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(Argument::any(), true)
             ->willReturn('RESERVED foo');
@@ -780,7 +806,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
         $gracefulExit->inProgress()
             ->willReturn(false);
 
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $interrupted = false;
 
@@ -813,7 +840,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
         $gracefulExit->inProgress()
             ->willReturn(false);
 
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $interrupted = false;
 
@@ -846,7 +874,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
         $gracefulExit->inProgress()
             ->willReturn(true);
 
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(Argument::any(), true)
             ->willThrow(new InterruptedCallSocketException());
@@ -862,7 +891,8 @@ class ProtocolOverSocketSpec extends ObjectBehavior
         $gracefulExit->inProgress()
             ->willReturn(true);
 
-        $socketHandle->write(Argument::any());
+        $socketHandle->write(Argument::any())
+            ->shouldBeCalled();
 
         $socketHandle->readLine(Argument::any(), true)
             ->willThrow(new TryAgainSocketException());

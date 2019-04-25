@@ -38,7 +38,8 @@ class JobObserverRunnerSpec extends ObjectBehavior
         // miliseconds should be ok
         $jobObserver->finished($jobHandle, Argument::that(function (float $value): bool {
             return $value < 1e-3;
-        }));
+        }))
+            ->shouldBeCalled();
 
         $this->run($jobHandle);
     }
@@ -58,7 +59,8 @@ class JobObserverRunnerSpec extends ObjectBehavior
         // miliseconds should be ok
         $jobObserver->failed($jobHandle, $e, Argument::that(function (float $value): bool {
             return $value < 1e-3;
-        }));
+        }))
+            ->shouldBeCalled();
 
         $this->shouldThrow($e)
             ->duringRun($jobHandle);
