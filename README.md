@@ -1,5 +1,7 @@
 # Beanstalkd lib
 
+[![Build Status](https://travis-ci.org/zlikavac32/beanstalkd-lib.svg?branch=master)](https://travis-ci.org/zlikavac32/beanstalkd-lib)
+
 A different Beanstalkd client library.
 
 ## Table of contents
