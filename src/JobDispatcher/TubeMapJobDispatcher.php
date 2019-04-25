@@ -35,7 +35,7 @@ class TubeMapJobDispatcher implements JobDispatcher
         $this->gracefulExit = $gracefulExit;
     }
 
-    public function run(Client $client, Set $tubesToWatch, int $numberOfJobsToRun): void
+    public function run(Client $client, Set $tubesToWatch, int $numberOfJobsToRun = PHP_INT_MAX): void
     {
         $knownTubeNames = $this->tubeRunners->keys();
 
