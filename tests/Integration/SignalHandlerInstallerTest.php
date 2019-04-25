@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Zlikavac32\BeanstalkdLib\InterruptHandler;
 use Zlikavac32\BeanstalkdLib\SignalHandlerInstaller;
 
-class SignalHandlerInstallerEventListenerTest extends TestCase
+class SignalHandlerInstallerTest extends TestCase
 {
 
     /**
@@ -27,7 +27,7 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
     /**
      * @var SignalHandlerInstaller
      */
-    private $listener;
+    private $signalHandlerInstaller;
     /**
      * @var Map
      */
@@ -48,7 +48,7 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
     public function setUp(): void
     {
         $this->interruptHandler = new MockInterruptHandler();
-        $this->listener = new SignalHandlerInstaller($this->interruptHandler);
+        $this->signalHandlerInstaller = new SignalHandlerInstaller($this->interruptHandler);
 
         $this->swapCurrentHandlersForStubs();
     }
@@ -69,7 +69,7 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
         $this->restoreOriginalHandlers();
 
         $this->interruptHandler = null;
-        $this->listener = null;
+        $this->signalHandlerInstaller = null;
     }
 
     private function restoreOriginalHandlers(): void
@@ -79,12 +79,21 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
         }
     }
 
+    public function async_signals_should_be_turned_on(): void
+    {
+        pcntl_async_signals(false);
+
+        $this->signalHandlerInstaller->install();
+
+        self::assertTrue(pcntl_async_signals(), 'pcntl_async_signals not set to true');
+    }
+
     /**
      * @test
      */
     public function sigint_should_be_caught(): void
     {
-        $this->listener->install();
+        $this->signalHandlerInstaller->install();
 
         $this->killMeWith(SIGINT);
 
@@ -96,7 +105,7 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
      */
     public function sigterm_should_be_caught(): void
     {
-        $this->listener->install();
+        $this->signalHandlerInstaller->install();
 
         $this->killMeWith(SIGTERM);
 
@@ -108,7 +117,7 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
      */
     public function sigquit_should_be_caught(): void
     {
-        $this->listener->install();
+        $this->signalHandlerInstaller->install();
 
         $this->killMeWith(SIGQUIT);
 
@@ -130,9 +139,9 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
             pcntl_signal($signal, $handler);
         }
 
-        $this->listener->install();
+        $this->signalHandlerInstaller->install();
 
-        $this->listener->uninstall();
+        $this->signalHandlerInstaller->uninstall();
 
         foreach ($this->signals as $signal) {
             self::assertSame(
@@ -141,6 +150,17 @@ class SignalHandlerInstallerEventListenerTest extends TestCase
                 sprintf('Signal handlers for %s do not match', self::$signalNames[$signal])
             );
         }
+    }
+
+    public function old_async_signals_value_should_be_restored(): void
+    {
+        pcntl_async_signals(false);
+
+        $this->signalHandlerInstaller->install();
+
+        $this->signalHandlerInstaller->uninstall();
+
+        self::assertFalse(pcntl_async_signals(), 'pcntl_async_signals not restored to false');
     }
 
     private function killMeWith(int $signal): void

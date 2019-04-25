@@ -18,6 +18,8 @@ class SignalHandlerInstaller
      */
     private $previousHandlers;
 
+    private $previousAsyncSignals;
+
     public function __construct(InterruptHandler $interruptHandler)
     {
         $this->interruptHandler = $interruptHandler;
@@ -35,10 +37,14 @@ class SignalHandlerInstaller
                 $this->interruptHandler->handle();
             });
         }
+
+        $this->previousAsyncSignals = pcntl_async_signals(true);
     }
 
     public function uninstall(): void
     {
+        pcntl_async_signals($this->previousAsyncSignals);
+
         foreach ($this->previousHandlers as $signal => $previousHandler) {
             pcntl_signal($signal, $previousHandler);
         }
