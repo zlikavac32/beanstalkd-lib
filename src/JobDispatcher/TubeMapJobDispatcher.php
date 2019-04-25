@@ -53,7 +53,11 @@ class TubeMapJobDispatcher implements JobDispatcher
         }
 
         while (!$this->gracefulExit->inProgress() && $numberOfJobsToRun > 0) {
-            $this->reserveAndRun($client);
+            try {
+                $this->reserveAndRun($client);
+            } catch (ReserveInterruptedException $e) {
+                continue;
+            }
 
             $numberOfJobsToRun--;
         }
@@ -61,11 +65,7 @@ class TubeMapJobDispatcher implements JobDispatcher
 
     private function reserveAndRun(Client $client): void
     {
-        try {
-            $job = $client->reserve();
-        } catch (ReserveInterruptedException $e) {
-            return;
-        }
+        $job = $client->reserve();
 
         $tubeName = $job->stats()
             ->tubeName();
