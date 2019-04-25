@@ -38,7 +38,7 @@ class InterruptExceptionJobDispatcher implements JobDispatcher, AlarmHandler
         posix_kill(getmypid(), SIGUSR1);
     }
 
-    public function run(Client $client, Set $tubesToWatch, int $numberOfJobsToRun): void
+    public function run(Client $client, Set $tubesToWatch, int $numberOfJobsToRun = PHP_INT_MAX): void
     {
         $oldSignalHandler = pcntl_signal_get_handler(SIGUSR1);
 
