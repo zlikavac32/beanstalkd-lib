@@ -11,6 +11,7 @@ use PhpSpec\ObjectBehavior;
 use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\Protocol\TraceableProtocol;
+use Zlikavac32\BeanstalkdLib\Protocol\TraceableProtocol\Trace;
 
 class TraceableProtocolSpec extends ObjectBehavior
 {
@@ -35,16 +36,13 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'put',
-                    'arguments' => [
-                        'priority'  => 1,
-                        'delay'     => 2,
-                        'timeToRun' => 3,
-                        'payload'   => 'foo',
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('put', [
+                    'priority'  => 1,
+                    'delay'     => 2,
+                    'timeToRun' => 3,
+                    'payload'   => 'foo',
+                ]),
             ]);
     }
 
@@ -57,13 +55,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'useTube',
-                    'arguments' => [
-                        'tube' => 'foo',
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('useTube', [
+                    'tube' => 'foo',
+                ]),
             ]);
     }
 
@@ -77,12 +72,7 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'reserve',
-                    'arguments' => [],
-                ],
-            ]);
+            ->shouldBeLike([new Trace('reserve', [])]);
     }
 
     public function it_should_add_trace_for_reserve_with_timeout(Protocol $protocol, Job $job): void
@@ -95,13 +85,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'reserveWithTimeout',
-                    'arguments' => [
-                        'timeout' => 32,
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('reserveWithTimeout', [
+                    'timeout' => 32,
+                ]),
             ]);
     }
 
@@ -114,13 +101,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'delete',
-                    'arguments' => [
-                        'id' => 32,
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('delete', [
+                    'id' => 32,
+                ]),
             ]);
     }
 
@@ -133,15 +117,12 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'release',
-                    'arguments' => [
-                        'id'       => 32,
-                        'priority' => 1,
-                        'delay'    => 2,
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('release', [
+                    'id'       => 32,
+                    'priority' => 1,
+                    'delay'    => 2,
+                ]),
             ]);
     }
 
@@ -154,14 +135,11 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'bury',
-                    'arguments' => [
-                        'id'       => 32,
-                        'priority' => 1,
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('bury', [
+                    'id'       => 32,
+                    'priority' => 1,
+                ]),
             ]);
     }
 
@@ -174,13 +152,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'touch',
-                    'arguments' => [
-                        'id' => 32,
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('touch', [
+                    'id' => 32,
+                ]),
             ]);
     }
 
@@ -194,13 +169,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'watch',
-                    'arguments' => [
-                        'tube' => 'foo',
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('watch', [
+                    'tube' => 'foo',
+                ]),
             ]);
     }
 
@@ -214,13 +186,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'ignore',
-                    'arguments' => [
-                        'tube' => 'foo',
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('ignore', [
+                    'tube' => 'foo',
+                ]),
             ]);
     }
 
@@ -234,13 +203,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'peek',
-                    'arguments' => [
-                        'id' => 32,
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('peek', [
+                    'id' => 32,
+                ]),
             ]);
     }
 
@@ -254,12 +220,7 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'peekReady',
-                    'arguments' => [],
-                ],
-            ]);
+            ->shouldBeLike([new Trace('peekReady', [])]);
     }
 
     public function it_should_add_trace_for_peek_delayed(Protocol $protocol, Job $job): void
@@ -272,12 +233,7 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'peekDelayed',
-                    'arguments' => [],
-                ],
-            ]);
+            ->shouldBeLike([new Trace('peekDelayed', [])]);
     }
 
     public function it_should_add_trace_for_peek_buried(Protocol $protocol, Job $job): void
@@ -290,12 +246,7 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'peekBuried',
-                    'arguments' => [],
-                ],
-            ]);
+            ->shouldBeLike([new Trace('peekBuried', [])]);
     }
 
     public function it_should_add_trace_for_kick(Protocol $protocol): void
@@ -307,13 +258,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'kick',
-                    'arguments' => [
-                        'numberOfJobs' => 32,
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('kick', [
+                    'numberOfJobs' => 32,
+                ]),
             ]);
     }
 
@@ -327,13 +275,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'statsJob',
-                    'arguments' => [
-                        'id' => 32,
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('statsJob', [
+                    'id' => 32,
+                ]),
             ]);
     }
 
@@ -347,13 +292,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'statsTube',
-                    'arguments' => [
-                        'tube' => 'foo',
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('statsTube', [
+                    'tube' => 'foo',
+                ]),
             ]);
     }
 
@@ -367,12 +309,7 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'stats',
-                    'arguments' => [],
-                ],
-            ]);
+            ->shouldBeLike([new Trace('stats', [])]);
     }
 
     public function it_should_add_trace_for_list_tubes(Protocol $protocol, Sequence $sequence): void
@@ -385,12 +322,7 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'listTubes',
-                    'arguments' => [],
-                ],
-            ]);
+            ->shouldBeLike([new Trace('listTubes', [])]);
     }
 
     public function it_should_add_trace_for_list_tube_used(Protocol $protocol): void
@@ -403,12 +335,7 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'listTubeUsed',
-                    'arguments' => [],
-                ],
-            ]);
+            ->shouldBeLike([new Trace('listTubeUsed', [])]);
     }
 
     public function it_should_add_trace_for_list_tubes_watched(Protocol $protocol): void
@@ -423,12 +350,7 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'listTubesWatched',
-                    'arguments' => [],
-                ],
-            ]);
+            ->shouldBeLike([new Trace('listTubesWatched', [])]);
     }
 
     public function it_should_add_trace_for_pause_tube(Protocol $protocol): void
@@ -440,14 +362,11 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                [
-                    'command'   => 'pauseTube',
-                    'arguments' => [
-                        'tube'  => 'foo',
-                        'delay' => 32,
-                    ],
-                ],
+            ->shouldBeLike([
+                new Trace('pauseTube', [
+                    'tube'  => 'foo',
+                    'delay' => 32,
+                ]),
             ]);
     }
 
@@ -477,10 +396,10 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->traces()
             ->toArray()
-            ->shouldReturn([
-                ['command' => 'stats', 'arguments' => []],
-                ['command' => 'listTubes', 'arguments' => []],
-                ['command' => 'stats', 'arguments' => []],
+            ->shouldBeLike([
+                new Trace('stats', []),
+                new Trace('listTubes', []),
+                new Trace('stats', []),
             ]);
     }
 
@@ -497,15 +416,15 @@ class TraceableProtocolSpec extends ObjectBehavior
 
         $this->tracesForCommand('stats')
             ->toArray()
-            ->shouldReturn([
-                ['command' => 'stats', 'arguments' => []],
-                ['command' => 'stats', 'arguments' => []],
+            ->shouldBeLike([
+                new Trace('stats', []),
+                new Trace('stats', []),
             ]);
 
         $this->tracesForCommand('listTubes')
             ->toArray()
-            ->shouldReturn([
-                ['command' => 'listTubes', 'arguments' => []],
+            ->shouldBeLike([
+                new Trace('listTubes', []),
             ]);
     }
 

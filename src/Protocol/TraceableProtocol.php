@@ -11,6 +11,7 @@ use Ds\Vector;
 use LogicException;
 use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\Protocol;
+use Zlikavac32\BeanstalkdLib\Protocol\TraceableProtocol\Trace;
 
 class TraceableProtocol implements Protocol
 {
@@ -20,7 +21,7 @@ class TraceableProtocol implements Protocol
      */
     private $protocol;
     /**
-     * @var Sequence[]|array[]
+     * @var Sequence[]|Trace[]
      */
     private $traces;
     /**
@@ -199,7 +200,7 @@ class TraceableProtocol implements Protocol
 
     private function addTrace(string $command, array $arguments = []): void
     {
-        $this->traces->push(['command' => $command, 'arguments' => $arguments]);
+        $this->traces->push(new Trace($command, $arguments));
 
         if (!$this->commandTraces->hasKey($command)) {
             $this->commandTraces->put($command, new Vector());
@@ -212,7 +213,7 @@ class TraceableProtocol implements Protocol
     }
 
     /**
-     * @return Sequence|array[]
+     * @return Sequence|Trace[]
      */
     public function traces(): Sequence
     {
@@ -225,7 +226,7 @@ class TraceableProtocol implements Protocol
     }
 
     /**
-     * @return Sequence|array[]
+     * @return Sequence|Trace[]
      */
     public function tracesForCommand(string $command): Sequence
     {
@@ -237,7 +238,7 @@ class TraceableProtocol implements Protocol
         $indexes = $this->commandTraces->get($command);
         assert($indexes instanceof Sequence);
 
-        return $indexes->map(function (int $index): array {
+        return $indexes->map(function (int $index): Trace {
             return $this->traces->get($index);
         });
     }
