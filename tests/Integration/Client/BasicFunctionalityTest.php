@@ -10,8 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Zlikavac32\BeanstalkdLib\Adapter\PHP\Json\NativePHPJsonSerializer;
 use Zlikavac32\BeanstalkdLib\Client;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\StaticTubeConfiguration;
-use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfigurationFactory;
-use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeMapConfigurationFactory;
+use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\JobState;
 use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\ReserveTimedOutException;
@@ -49,9 +48,9 @@ class BasicFunctionalityTest extends TestCase
      */
     private $client;
     /**
-     * @var TubeConfigurationFactory
+     * @var Map|TubeConfiguration[]
      */
-    private $tubeConfigurationFactory;
+    private $tubeConfigurations;
     /**
      * @var Serializer
      */
@@ -65,7 +64,7 @@ class BasicFunctionalityTest extends TestCase
 
         $this->serializer = createMutableProxySerializer($mockSerializer);
 
-        $this->tubeConfigurationFactory = new TubeMapConfigurationFactory(new Map([
+        $this->tubeConfigurations = new Map([
             'default' => new StaticTubeConfiguration(
                 1, 2, 3, 4, $this->serializer
             ),
@@ -78,9 +77,9 @@ class BasicFunctionalityTest extends TestCase
             'baz'     => new StaticTubeConfiguration(
                 1, 2, 3, 4, $this->serializer
             ),
-        ]));
+        ]);
 
-        $this->client = createDefaultClient($this->protocol, $this->tubeConfigurationFactory);
+        $this->client = createDefaultClient($this->protocol, $this->tubeConfigurations);
 
         purgeProtocol($this->protocol);
     }
@@ -88,7 +87,7 @@ class BasicFunctionalityTest extends TestCase
     protected function tearDown()
     {
         unset($this->serializer);
-        unset($this->tubeConfigurationFactory);
+        unset($this->tubeConfigurations);
         unset($this->client);
         unset($this->protocol);
     }

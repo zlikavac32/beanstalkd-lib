@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit;
 
+use Ds\Map;
 use Throwable;
 use Zlikavac32\AlarmScheduler\AlarmHandler;
 use Zlikavac32\AlarmScheduler\AlarmScheduler;
@@ -11,7 +12,6 @@ use Zlikavac32\BeanstalkdLib\Adapter\PHP\Socket\NativePHPSocket;
 use Zlikavac32\BeanstalkdLib\Adapter\Symfony\Yaml\SymfonyYamlParser;
 use Zlikavac32\BeanstalkdLib\Client;
 use Zlikavac32\BeanstalkdLib\Client\ProtocolClient;
-use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfigurationFactory;
 use Zlikavac32\BeanstalkdLib\GracefulExit;
 use Zlikavac32\BeanstalkdLib\InterruptHandler;
 use Zlikavac32\BeanstalkdLib\InterruptHandler\CompositeInterruptHandler;
@@ -198,9 +198,9 @@ function createJustBuryJobRunner(): Runner
     };
 }
 
-function createDefaultClient(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory): Client
+function createDefaultClient(Protocol $protocol, Map $tubeConfigurations): Client
 {
-    return new ProtocolClient($protocol, $tubeConfigurationFactory);
+    return new ProtocolClient($protocol, $tubeConfigurations);
 }
 
 function createJobInTube(Protocol $protocol, string $tube): Job

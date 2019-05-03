@@ -150,15 +150,12 @@ $jsonSerializer = new NativePHPJsonSerializer(true);
 $fooTubeConfiguration = new StaticTubeConfiguration(0, 1024, 300, 3600, $jsonSerializer)
 ```
 
-Now we can create our client. Provided client requires factory for tube configurations.
+Now we can create our client. Client requires map of known tube configurations where the key is a tube name and the value is a tube configuration.
 
 ```php
-
-$tubeConfigurationFactory = new TubeMapConfigurationFactory(new Map([
+$client = new ProtocolClient($protocol, new Map([
     'foo' => $fooTubeConfiguration,
 ]));
-
-$client = new ProtocolClient($protocol, $tubeConfigurationFactory);
 ```
 
 ### Producers

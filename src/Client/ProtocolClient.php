@@ -6,8 +6,9 @@ namespace Zlikavac32\BeanstalkdLib\Client;
 
 use Ds\Map;
 use Ds\Set;
+use LogicException;
 use Zlikavac32\BeanstalkdLib\Client;
-use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfigurationFactory;
+use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\Command;
 use Zlikavac32\BeanstalkdLib\CommandMetrics;
 use Zlikavac32\BeanstalkdLib\Job;
@@ -25,14 +26,14 @@ class ProtocolClient implements Client
      */
     private $protocol;
     /**
-     * @var TubeConfigurationFactory
+     * @var Map|TubeConfiguration[]
      */
-    private $tubeConfigurationFactory;
+    private $tubeConfigurations;
 
-    public function __construct(Protocol $protocol, TubeConfigurationFactory $tubeConfigurationFactory)
+    public function __construct(Protocol $protocol, Map $tubeConfigurations)
     {
         $this->protocol = $protocol;
-        $this->tubeConfigurationFactory = $tubeConfigurationFactory;
+        $this->tubeConfigurations = $tubeConfigurations;
     }
 
     /**
@@ -45,6 +46,10 @@ class ProtocolClient implements Client
         $map = new Map();
 
         foreach ($allTubes as $tubeName) {
+            if (!$this->tubeConfigurations->hasKey($tubeName)) {
+                continue;
+            }
+
             $map->put($tubeName, $this->tube($tubeName));
         }
 
@@ -56,10 +61,14 @@ class ProtocolClient implements Client
      */
     public function tube(string $tubeName): TubeHandle
     {
+        if (!$this->tubeConfigurations->hasKey($tubeName)) {
+            throw new LogicException(sprintf('Tube configuration for tube %s not found', $tubeName));
+        }
+
         return new ProtocolTubeHandle(
             $tubeName,
             $this->protocol,
-            $this->tubeConfigurationFactory->createForTube($tubeName)
+            $this->tubeConfigurations->get($tubeName)
         );
     }
 
@@ -174,7 +183,8 @@ class ProtocolClient implements Client
     {
         $tubeName = $this->protocol->statsJob($job->id())['tube'];
 
-        $tubeConfiguration = $this->tubeConfigurationFactory->createForTube($tubeName);
+        $tubeConfiguration = $this->tubeConfigurations->get($tubeName);
+        assert($tubeConfiguration instanceof TubeConfiguration);
 
         return new ProtocolJobHandle(
             $job->id(),

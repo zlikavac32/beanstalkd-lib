@@ -6,7 +6,6 @@ use Ds\Map;
 use Zlikavac32\BeanstalkdLib\Adapter\PHP\Json\NativePHPJsonSerializer;
 use Zlikavac32\BeanstalkdLib\Client\ProtocolClient;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\StaticTubeConfiguration;
-use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeMapConfigurationFactory;
 use Zlikavac32\BeanstalkdLib\ProtocolTubePurger\IterativeProtocolTubePurger;
 
 require_once __DIR__.'/common.php';
@@ -61,14 +60,11 @@ class DomainObjectSerializer implements \Zlikavac32\BeanstalkdLib\Serializer
 
 $domainSerializer = new DomainObjectSerializer();
 
-// Every tube has it's own configuration
-$tubeConfigurationFactory = new TubeMapConfigurationFactory(new Map([
+// Client uses protocol and tube configurations
+$client = new ProtocolClient($protocol, new Map([
     'foo' => new StaticTubeConfiguration(0, 1024, 300, 3600, $jsonSerializer),
     'bar' => new StaticTubeConfiguration(0, 1024, 600, 86400, $domainSerializer),
 ]));
-
-// Client uses protocol and tube configurations
-$client = new ProtocolClient($protocol, $tubeConfigurationFactory);
 
 
 
