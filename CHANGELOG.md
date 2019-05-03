@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* **[CHANGED]** `Zlikavac32\BeanstalkdLib\JobDispatcher\TubeMapJobDispatcher` does not ignore `default` tube if there is no explicitly watched tube
 * **[ADDED]** `Zlikavac32\BeanstalkdLib\Protocol\TraceableProtocol` and `Zlikavac32\BeanstalkdLib\Adapter\PHPUnit\Constraint\OrderedTracesExistInProtocol` to help with testing
 
 ## 0.1.1 (2019-04-26)

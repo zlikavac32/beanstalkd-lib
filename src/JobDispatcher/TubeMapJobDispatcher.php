@@ -48,7 +48,7 @@ class TubeMapJobDispatcher implements JobDispatcher
             $client->watch($tubeName);
         }
 
-        if (!$tubesToWatch->contains('default')) {
+        if (!$tubesToWatch->contains('default') && !$tubesToWatch->isEmpty()) {
             $client->ignoreDefaultTube();
         }
 
