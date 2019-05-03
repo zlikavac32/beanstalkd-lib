@@ -1,6 +1,6 @@
 # Beanstalkd lib
 
-## Unreleased
+## 0.2.0 (2019-05-03)
 
 * **[REMOVED]** `Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfigurationFactory`
 * **[CHANGED]** `Zlikavac32\BeanstalkdLib\JobDispatcher\TubeMapJobDispatcher` does not ignore `default` tube if there is no explicitly watched tube
