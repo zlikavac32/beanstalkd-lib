@@ -10,15 +10,16 @@ use Zlikavac32\BeanstalkdLib\Client\ProtocolTubeHandle;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\Protocol;
+use Zlikavac32\BeanstalkdLib\ProtocolTubePurger;
 use Zlikavac32\BeanstalkdLib\Serializer;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beJobHandleFor;
 
 class ProtocolTubeHandleSpec extends ObjectBehavior
 {
 
-    public function let(Protocol $protocol, TubeConfiguration $tubeConfiguration): void
+    public function let(Protocol $protocol, ProtocolTubePurger $protocolTubePurger, TubeConfiguration $tubeConfiguration): void
     {
-        $this->beConstructedWith('foo', $protocol, $tubeConfiguration);
+        $this->beConstructedWith('foo', $protocol, $protocolTubePurger, $tubeConfiguration);
     }
 
     public function it_is_initializable(): void
@@ -241,6 +242,13 @@ class ProtocolTubeHandleSpec extends ObjectBehavior
 
         $this->peekBuried()
             ->shouldBeJobHandleFor(32, [1, 2]);
+    }
+
+    public function it_should_flush_tube(Protocol $protocol, ProtocolTubePurger $protocolTubePurger): void
+    {
+        $protocolTubePurger->purge($protocol, 'foo')->shouldBeCalled();
+
+        $this->flush();
     }
 
     public function getMatchers(): array

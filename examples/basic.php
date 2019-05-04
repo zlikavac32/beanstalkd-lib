@@ -60,8 +60,10 @@ class DomainObjectSerializer implements \Zlikavac32\BeanstalkdLib\Serializer
 
 $domainSerializer = new DomainObjectSerializer();
 
+$protocolTubePurger = new IterativeProtocolTubePurger();
+
 // Client uses protocol and tube configurations
-$client = new ProtocolClient($protocol, new Map([
+$client = new ProtocolClient($protocol, $protocolTubePurger, new Map([
     'foo' => new StaticTubeConfiguration(0, 1024, 300, 3600, $jsonSerializer),
     'bar' => new StaticTubeConfiguration(0, 1024, 600, 86400, $domainSerializer),
 ]));

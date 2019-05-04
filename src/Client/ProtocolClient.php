@@ -14,6 +14,7 @@ use Zlikavac32\BeanstalkdLib\CommandMetrics;
 use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\Protocol;
+use Zlikavac32\BeanstalkdLib\ProtocolTubePurger;
 use Zlikavac32\BeanstalkdLib\ServerMetrics;
 use Zlikavac32\BeanstalkdLib\ServerStats;
 use Zlikavac32\BeanstalkdLib\TubeHandle;
@@ -29,11 +30,16 @@ class ProtocolClient implements Client
      * @var Map|TubeConfiguration[]
      */
     private $tubeConfigurations;
+    /**
+     * @var ProtocolTubePurger
+     */
+    private $protocolTubePurger;
 
-    public function __construct(Protocol $protocol, Map $tubeConfigurations)
+    public function __construct(Protocol $protocol, ProtocolTubePurger $protocolTubePurger, Map $tubeConfigurations)
     {
         $this->protocol = $protocol;
         $this->tubeConfigurations = $tubeConfigurations;
+        $this->protocolTubePurger = $protocolTubePurger;
     }
 
     /**
@@ -68,6 +74,7 @@ class ProtocolClient implements Client
         return new ProtocolTubeHandle(
             $tubeName,
             $this->protocol,
+            $this->protocolTubePurger,
             $this->tubeConfigurations->get($tubeName)
         );
     }
@@ -193,5 +200,17 @@ class ProtocolClient implements Client
             $this->protocol,
             $tubeConfiguration
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function flush(): void
+    {
+        foreach ($this->tubes() as $tube) {
+            assert($tube instanceof TubeHandle);
+
+            $tube->flush();
+        }
     }
 }

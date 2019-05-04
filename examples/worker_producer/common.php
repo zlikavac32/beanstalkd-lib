@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Ds\Map;
 use Zlikavac32\BeanstalkdLib\Client\ProtocolClient;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\StaticTubeConfiguration;
+use Zlikavac32\BeanstalkdLib\ProtocolTubePurger\IterativeProtocolTubePurger;
 use Zlikavac32\BeanstalkdLib\Serializer;
 
 require_once __DIR__.'/../common.php';
@@ -70,6 +71,8 @@ const TUBE_INDEX_PROJECT_COMMIT = 'index.project_commit';
 
 $serializer = new ProjectCommitSerializer();
 
-$client = new ProtocolClient($protocol, new Map([
+$protocolTubePurger = new IterativeProtocolTubePurger();
+
+$client = new ProtocolClient($protocol, $protocolTubePurger, new Map([
     TUBE_INDEX_PROJECT_COMMIT => new StaticTubeConfiguration(0, 1024, 300, 3600, $serializer),
 ]));

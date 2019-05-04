@@ -14,6 +14,7 @@ use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\Command;
 use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\Protocol;
+use Zlikavac32\BeanstalkdLib\ProtocolTubePurger;
 use Zlikavac32\BeanstalkdLib\Serializer;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beJobHandleFor;
 use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beMapOfTubes;
@@ -21,9 +22,9 @@ use function Zlikavac32\BeanstalkdLib\TestHelper\phpSpec\beTubeHandleFor;
 
 class ProtocolClientSpec extends ObjectBehavior
 {
-    public function let(Protocol $protocol): void
+    public function let(Protocol $protocol, ProtocolTubePurger $protocolTubePurger): void
     {
-        $this->beConstructedWith($protocol, new Map());
+        $this->beConstructedWith($protocol, $protocolTubePurger, new Map());
     }
 
     public function it_is_initializable(): void
@@ -33,10 +34,11 @@ class ProtocolClientSpec extends ObjectBehavior
 
     public function it_should_list_known_tubes(
         Protocol $protocol,
+        ProtocolTubePurger $protocolTubePurger,
         TubeConfiguration $fooTubeConfiguration,
         TubeConfiguration $barTubeConfiguration
     ): void {
-        $this->beConstructedWith($protocol, new Map([
+        $this->beConstructedWith($protocol, $protocolTubePurger, new Map([
             'foo' => $fooTubeConfiguration->getWrappedObject(),
             'bar' => $barTubeConfiguration->getWrappedObject()
         ]));
@@ -52,9 +54,10 @@ class ProtocolClientSpec extends ObjectBehavior
 
     public function it_should_create_new_tube_handle(
         Protocol $protocol,
+        ProtocolTubePurger $protocolTubePurger,
         TubeConfiguration $tubeConfiguration
     ): void {
-        $this->beConstructedWith($protocol, new Map([
+        $this->beConstructedWith($protocol, $protocolTubePurger, new Map([
             'foo' => $tubeConfiguration->getWrappedObject()
         ]));
 
@@ -62,9 +65,11 @@ class ProtocolClientSpec extends ObjectBehavior
             ->shouldBeTubeHandleFor('foo');
     }
 
-    public function it_should_throw_exception_for_unknown_tube(Protocol $protocol): void
-    {
-        $this->beConstructedWith($protocol, new Map());
+    public function it_should_throw_exception_for_unknown_tube(
+        Protocol $protocol,
+        ProtocolTubePurger $protocolTubePurger
+    ): void {
+        $this->beConstructedWith($protocol, $protocolTubePurger, new Map());
 
         $this->shouldThrow(new LogicException('Tube configuration for tube foo not found'))
             ->duringTube('foo');
@@ -195,10 +200,11 @@ class ProtocolClientSpec extends ObjectBehavior
 
     public function it_should_reserve_job(
         Protocol $protocol,
+        ProtocolTubePurger $protocolTubePurger,
         TubeConfiguration $tubeConfiguration,
         Serializer $serializer
     ): void {
-        $this->beConstructedWith($protocol, new Map([
+        $this->beConstructedWith($protocol, $protocolTubePurger, new Map([
             'foo' => $tubeConfiguration->getWrappedObject()
         ]));
 
@@ -226,10 +232,11 @@ class ProtocolClientSpec extends ObjectBehavior
 
     public function it_should_peek_job(
         Protocol $protocol,
+        ProtocolTubePurger $protocolTubePurger,
         TubeConfiguration $tubeConfiguration,
         Serializer $serializer
     ): void {
-        $this->beConstructedWith($protocol, new Map([
+        $this->beConstructedWith($protocol, $protocolTubePurger, new Map([
             'foo' => $tubeConfiguration->getWrappedObject()
         ]));
 
@@ -257,10 +264,11 @@ class ProtocolClientSpec extends ObjectBehavior
 
     public function it_should_reserve_with_timeout(
         Protocol $protocol,
+        ProtocolTubePurger $protocolTubePurger,
         TubeConfiguration $tubeConfiguration,
         Serializer $serializer
     ): void {
-        $this->beConstructedWith($protocol, new Map([
+        $this->beConstructedWith($protocol, $protocolTubePurger, new Map([
             'foo' => $tubeConfiguration->getWrappedObject()
         ]));
 
@@ -322,6 +330,25 @@ class ProtocolClientSpec extends ObjectBehavior
 
         $this->watchedTubeNames()
             ->shouldReturn($list);
+    }
+
+    public function it_should_flush_tubes(
+        Protocol $protocol,
+        ProtocolTubePurger $protocolTubePurger,
+        TubeConfiguration $tubeConfiguration
+    ): void {
+        $this->beConstructedWith($protocol, $protocolTubePurger, new Map([
+            'foo' => $tubeConfiguration->getWrappedObject()
+        ]));
+
+        $tubes = ['foo'];
+
+        $protocol->listTubes()
+            ->willReturn(new Vector($tubes));
+
+        $protocolTubePurger->purge($protocol, 'foo')->shouldBeCalled();
+
+        $this->flush();
     }
 
     public function getMatchers(): array

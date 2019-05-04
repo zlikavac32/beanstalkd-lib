@@ -1,5 +1,9 @@
 # Beanstalkd lib
 
+## Unreleased
+
+* **[CHANGED]** `Zlikavac32\BeanstalkdLib\Client` and `Zlikavac32\BeanstalkdLib\TubeHandle` support `flush` operation
+
 ## 0.2.0 (2019-05-03)
 
 * **[REMOVED]** `Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfigurationFactory`

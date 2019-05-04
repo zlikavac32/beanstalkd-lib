@@ -150,10 +150,12 @@ $jsonSerializer = new NativePHPJsonSerializer(true);
 $fooTubeConfiguration = new StaticTubeConfiguration(0, 1024, 300, 3600, $jsonSerializer)
 ```
 
-Now we can create our client. Client requires map of known tube configurations where the key is a tube name and the value is a tube configuration.
+Now we can create our client. Client requires protocol tube purger instance, and a map of known tube configurations where the key is a tube name and the value is a tube configuration.
 
 ```php
-$client = new ProtocolClient($protocol, new Map([
+$protocolTubePurger = new IterativeProtocolTubePurger();
+
+$client = new ProtocolClient($protocol, $protocolTubePurger, new Map([
     'foo' => $fooTubeConfiguration,
 ]));
 ```

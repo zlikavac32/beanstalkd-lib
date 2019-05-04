@@ -70,4 +70,9 @@ interface Client
      * @throws BeanstalkdLibException
      */
     public function watchedTubeNames(): Set;
+
+    /**
+     * @throws BeanstalkdLibException
+     */
+    public function flush(): void;
 }

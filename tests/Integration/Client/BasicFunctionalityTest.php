@@ -6,6 +6,7 @@ namespace Zlikavac32\BeanstalkdLib\Tests\Integration\Client;
 
 use Ds\Map;
 use Ds\Set;
+use PHPUnit\Framework\Constraint\LogicalNot;
 use PHPUnit\Framework\TestCase;
 use Zlikavac32\BeanstalkdLib\Adapter\PHP\Json\NativePHPJsonSerializer;
 use Zlikavac32\BeanstalkdLib\Client;
@@ -521,5 +522,47 @@ class BasicFunctionalityTest extends TestCase
         $jobHandle = $this->client->peek($jobHandle->id());
 
         self::assertSame([1, 2], $jobHandle->payload());
+    }
+
+    /**
+     * @test
+     */
+    public function single_tube_can_be_flushed(): void
+    {
+        $fooJob1 = createJobInTube($this->protocol, 'foo');
+        $fooJob2 = createJobInTube($this->protocol, 'foo');
+        $fooJob3 = createJobInTube($this->protocol, 'foo');
+        $barJob1 = createJobInTube($this->protocol, 'bar');
+        $barJob2 = createJobInTube($this->protocol, 'bar');
+
+        $this->client->tube('foo')->flush();
+
+        self::assertThat($fooJob1->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
+        self::assertThat($fooJob2->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
+        self::assertThat($fooJob3->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
+
+        self::assertThat($barJob1->id(), new JobIdExistsOnServer($this->protocol));
+        self::assertThat($barJob2->id(), new JobIdExistsOnServer($this->protocol));
+    }
+
+    /**
+     * @test
+     */
+    public function all_tubes_can_be_flushed(): void
+    {
+        $fooJob1 = createJobInTube($this->protocol, 'foo');
+        $fooJob2 = createJobInTube($this->protocol, 'foo');
+        $fooJob3 = createJobInTube($this->protocol, 'foo');
+        $barJob1 = createJobInTube($this->protocol, 'bar');
+        $barJob2 = createJobInTube($this->protocol, 'bar');
+
+        $this->client->flush();
+
+        self::assertThat($fooJob1->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
+        self::assertThat($fooJob2->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
+        self::assertThat($fooJob3->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
+
+        self::assertThat($barJob1->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
+        self::assertThat($barJob2->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
     }
 }

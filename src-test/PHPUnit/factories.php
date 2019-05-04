@@ -22,6 +22,7 @@ use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\Protocol\ProtocolOverSocket;
 use Zlikavac32\BeanstalkdLib\Protocol\StateAwareProtocol;
+use Zlikavac32\BeanstalkdLib\ProtocolTubePurger\IterativeProtocolTubePurger;
 use Zlikavac32\BeanstalkdLib\Runner;
 use Zlikavac32\BeanstalkdLib\Runner\AutoTouchRunner;
 use Zlikavac32\BeanstalkdLib\Runner\BuryOnExceptionRunner;
@@ -200,7 +201,7 @@ function createJustBuryJobRunner(): Runner
 
 function createDefaultClient(Protocol $protocol, Map $tubeConfigurations): Client
 {
-    return new ProtocolClient($protocol, $tubeConfigurations);
+    return new ProtocolClient($protocol, new IterativeProtocolTubePurger(), $tubeConfigurations);
 }
 
 function createJobInTube(Protocol $protocol, string $tube): Job
@@ -231,9 +232,15 @@ function createJob(
     $timeToRun = 60,
     string $tube = 'default'
 ): Job {
+    $currentTube = $protocol->listTubeUsed();
+
     $protocol->useTube($tube);
 
-    $jobId = $protocol->put($priority, $delay, $timeToRun, $payload);
+    try {
+        $jobId = $protocol->put($priority, $delay, $timeToRun, $payload);
+    } finally {
+        $protocol->useTube($currentTube);
+    }
 
     return new Job($jobId, $payload);
 }

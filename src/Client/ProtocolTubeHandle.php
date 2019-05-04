@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib\Client;
 
+use Zlikavac32\BeanstalkdLib\BeanstalkdLibException;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\Job;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\Protocol;
+use Zlikavac32\BeanstalkdLib\ProtocolTubePurger;
 use Zlikavac32\BeanstalkdLib\TubeHandle;
 use Zlikavac32\BeanstalkdLib\TubeMetrics;
 use Zlikavac32\BeanstalkdLib\TubeStats;
@@ -27,12 +29,17 @@ class ProtocolTubeHandle implements TubeHandle
      * @var \Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration
      */
     private $tubeConfiguration;
+    /**
+     * @var ProtocolTubePurger
+     */
+    private $protocolTubePurger;
 
-    public function __construct(string $tubeName, Protocol $protocol, TubeConfiguration $tubeConfiguration)
+    public function __construct(string $tubeName, Protocol $protocol, ProtocolTubePurger $protocolTubePurger, TubeConfiguration $tubeConfiguration)
     {
         $this->tubeName = $tubeName;
         $this->protocol = $protocol;
         $this->tubeConfiguration = $tubeConfiguration;
+        $this->protocolTubePurger = $protocolTubePurger;
     }
 
     public function tubeName(): string
@@ -147,5 +154,13 @@ class ProtocolTubeHandle implements TubeHandle
             $this->protocol,
             $this->tubeConfiguration
         );
+    }
+
+    /**
+     * @throws BeanstalkdLibException
+     */
+    public function flush(): void
+    {
+        $this->protocolTubePurger->purge($this->protocol, $this->tubeName);
     }
 }

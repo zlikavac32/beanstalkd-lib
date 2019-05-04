@@ -54,4 +54,9 @@ interface TubeHandle
      * @throws BeanstalkdLibException
      */
     public function peekBuried(): JobHandle;
+
+    /**
+     * @throws BeanstalkdLibException
+     */
+    public function flush(): void;
 }
