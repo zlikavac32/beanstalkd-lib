@@ -1,5 +1,9 @@
 # Beanstalkd lib
 
+## Unreleased
+
+* **[CHANGED]** `Zlikavac32\BeanstalkdLib\Runner\JobObserverRunner` does not log `Zlikavac32\BeanstalkdLib\InterruptException`
+
 ## 0.3.0 (2019-05-04)
 
 * **[CHANGED]** `Zlikavac32\BeanstalkdLib\Client` and `Zlikavac32\BeanstalkdLib\TubeHandle` support `flush` operation
