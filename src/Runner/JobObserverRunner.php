@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zlikavac32\BeanstalkdLib\Runner;
 
 use Throwable;
+use Zlikavac32\BeanstalkdLib\InterruptException;
 use Zlikavac32\BeanstalkdLib\JobHandle;
 use Zlikavac32\BeanstalkdLib\Runner;
 
@@ -40,6 +41,8 @@ class JobObserverRunner implements Runner
             $this->runner->run($jobHandle);
 
             $this->jobObserver->finished($jobHandle, microtime(true) - $this->jobStartedAt);
+        } catch (InterruptException $e) {
+            throw $e;
         } catch (Throwable $e) {
             $this->jobObserver->failed($jobHandle, $e, microtime(true) - $this->jobStartedAt);
 
