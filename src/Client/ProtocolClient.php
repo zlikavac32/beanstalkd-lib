@@ -205,12 +205,12 @@ class ProtocolClient implements Client
     /**
      * @inheritdoc
      */
-    public function flush(): void
+    public function flush(Set $states): void
     {
         foreach ($this->tubes() as $tube) {
             assert($tube instanceof TubeHandle);
 
-            $tube->flush();
+            $tube->flush($states);
         }
     }
 }

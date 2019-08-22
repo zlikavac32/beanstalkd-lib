@@ -535,7 +535,7 @@ class BasicFunctionalityTest extends TestCase
         $barJob1 = createJobInTube($this->protocol, 'bar');
         $barJob2 = createJobInTube($this->protocol, 'bar');
 
-        $this->client->tube('foo')->flush();
+        $this->client->tube('foo')->flush(new Set([JobState::READY()]));
 
         self::assertThat($fooJob1->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
         self::assertThat($fooJob2->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
@@ -543,6 +543,37 @@ class BasicFunctionalityTest extends TestCase
 
         self::assertThat($barJob1->id(), new JobIdExistsOnServer($this->protocol));
         self::assertThat($barJob2->id(), new JobIdExistsOnServer($this->protocol));
+    }
+
+    /**
+     * @test
+     */
+    public function certain_states_can_be_flushed_in_a_tube(): void
+    {
+        $buriedJob = createJob($this->protocol);
+        $delayedJob = createJobWithDelay($this->protocol, 1000);
+        $readyJob = createJob($this->protocol);
+
+        $this->client->reserve()->bury();
+
+        self::assertThat($buriedJob->id(), new JobIdExistsOnServer($this->protocol));
+        self::assertThat($delayedJob->id(), new JobIdExistsOnServer($this->protocol));
+        self::assertThat($readyJob->id(), new JobIdExistsOnServer($this->protocol));
+
+        $this->client->tube('default')->flush(new Set([JobState::READY()]));
+
+        self::assertThat($buriedJob->id(), new JobIdExistsOnServer($this->protocol));
+        self::assertThat($delayedJob->id(), new JobIdExistsOnServer($this->protocol));
+        self::assertThat($readyJob->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
+
+        $this->client->tube('default')->flush(new Set([JobState::BURIED()]));
+
+        self::assertThat($delayedJob->id(), new JobIdExistsOnServer($this->protocol));
+        self::assertThat($buriedJob->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
+
+        $this->client->tube('default')->flush(new Set([JobState::DELAYED()]));
+
+        self::assertThat($delayedJob->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
     }
 
     /**
@@ -556,7 +587,7 @@ class BasicFunctionalityTest extends TestCase
         $barJob1 = createJobInTube($this->protocol, 'bar');
         $barJob2 = createJobInTube($this->protocol, 'bar');
 
-        $this->client->flush();
+        $this->client->flush(new Set([JobState::READY()]));
 
         self::assertThat($fooJob1->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));
         self::assertThat($fooJob2->id(), new LogicalNot(new JobIdExistsOnServer($this->protocol)));

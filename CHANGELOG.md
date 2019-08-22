@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* **[CHANGED]** Tube purger and client can now accept job states to flush
 * **[CHANGED]** `Zlikavac32\BeanstalkdLib\Runner\JobObserverRunner` does not log `Zlikavac32\BeanstalkdLib\InterruptException`
 
 ## 0.3.0 (2019-05-04)

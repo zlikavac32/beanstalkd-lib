@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib\Client;
 
+use Ds\Set;
+use Ds\Vector;
 use Zlikavac32\BeanstalkdLib\BeanstalkdLibException;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\Job;
@@ -157,10 +159,10 @@ class ProtocolTubeHandle implements TubeHandle
     }
 
     /**
-     * @throws BeanstalkdLibException
+     * @inheritDoc
      */
-    public function flush(): void
+    public function flush(Set $states): void
     {
-        $this->protocolTubePurger->purge($this->protocol, $this->tubeName);
+        $this->protocolTubePurger->purge($this->protocol, new Vector([$this->tubeName]), $states);
     }
 }

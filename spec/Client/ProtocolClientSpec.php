@@ -346,9 +346,11 @@ class ProtocolClientSpec extends ObjectBehavior
         $protocol->listTubes()
             ->willReturn(new Vector($tubes));
 
-        $protocolTubePurger->purge($protocol, 'foo')->shouldBeCalled();
+        $states = new Set();
 
-        $this->flush();
+        $protocolTubePurger->purge($protocol, new Vector(['foo']), $states)->shouldBeCalled();
+
+        $this->flush($states);
     }
 
     public function getMatchers(): array

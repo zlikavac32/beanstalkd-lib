@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zlikavac32\BeanstalkdLib;
 
+use Ds\Set;
+
 interface TubeHandle
 {
 
@@ -56,7 +58,9 @@ interface TubeHandle
     public function peekBuried(): JobHandle;
 
     /**
+     * @param Set|JobState[] $states
+     *
      * @throws BeanstalkdLibException
      */
-    public function flush(): void;
+    public function flush(Set $states): void;
 }
