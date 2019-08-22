@@ -557,7 +557,9 @@ class ProtocolOverSocketSpec extends ObjectBehavior
         $socketHandle->write("stats\r\n")
             ->shouldBeCalled();
 
-        $statsArray = ['foo'];
+        $statsArray = [
+            'hostname' => 'foo'
+        ];
 
         $socketHandle->readLine(4, false)
             ->willReturn('OK 4');
@@ -574,6 +576,32 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
         $this->stats()
             ->shouldReturn($statsArray);
+    }
+
+    public function it_should_cast_hostname_to_string_in_server_stats(SocketHandle $socketHandle, YamlParser $yamlParser): void
+    {
+        $socketHandle->write("stats\r\n")
+            ->shouldBeCalled();
+
+        $socketHandle->readLine(4, false)
+            ->willReturn('OK 4');
+
+        $yamlResponse = 'foo';
+
+        $socketHandle->read(4)
+            ->willReturn($yamlResponse);
+        $socketHandle->read(2)
+            ->willReturn("\r\n");
+
+        $yamlParser->parse($yamlResponse)
+            ->willReturn([
+                'hostname' => 123.4
+            ]);
+
+        $this->stats()
+            ->shouldReturn([
+                'hostname' => '123.4'
+            ]);
     }
 
     public function it_should_list_tubes(SocketHandle $socketHandle, YamlParser $yamlParser): void

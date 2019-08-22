@@ -539,7 +539,11 @@ class ProtocolOverSocket implements Protocol
                 self::T_OK => [
                     ['int'],
                     function (int $payloadSize): array {
-                        return $this->readYamlPayload($payloadSize);
+                        $stats = $this->readYamlPayload($payloadSize);
+
+                        $stats['hostname'] = (string) $stats['hostname'];
+
+                        return $stats;
                     },
                 ],
             ]
