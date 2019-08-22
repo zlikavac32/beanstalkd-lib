@@ -72,7 +72,9 @@ interface Client
     public function watchedTubeNames(): Set;
 
     /**
+     * @param Set|JobState[] $states
+     *
      * @throws BeanstalkdLibException
      */
-    public function flush(): void;
+    public function flush(Set $states): void;
 }

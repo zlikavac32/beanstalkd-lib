@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit;
 
 use Ds\Set;
+use Ds\Vector;
+use Zlikavac32\BeanstalkdLib\JobState;
 use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\ProtocolTubePurger\IterativeProtocolTubePurger;
 
 function purgeTube(Protocol $protocol, string $tubeName): void
 {
-    (new IterativeProtocolTubePurger())->purge($protocol, $tubeName);
+    (new IterativeProtocolTubePurger())->purge($protocol, new Vector([$tubeName]), new Set([JobState::DELAYED(), JobState::BURIED(), JobState::READY()]));
 }
 
 function purgeDefaultTube(Protocol $protocol): void

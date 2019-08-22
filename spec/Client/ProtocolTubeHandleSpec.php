@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace spec\Zlikavac32\BeanstalkdLib\Client;
 
+use Ds\Set;
+use Ds\Vector;
 use PhpSpec\ObjectBehavior;
 use Zlikavac32\BeanstalkdLib\Client\ProtocolJobHandle;
 use Zlikavac32\BeanstalkdLib\Client\ProtocolTubeHandle;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\TubeConfiguration;
 use Zlikavac32\BeanstalkdLib\Job;
+use Zlikavac32\BeanstalkdLib\JobState;
 use Zlikavac32\BeanstalkdLib\Protocol;
 use Zlikavac32\BeanstalkdLib\ProtocolTubePurger;
 use Zlikavac32\BeanstalkdLib\Serializer;
@@ -246,9 +249,11 @@ class ProtocolTubeHandleSpec extends ObjectBehavior
 
     public function it_should_flush_tube(Protocol $protocol, ProtocolTubePurger $protocolTubePurger): void
     {
-        $protocolTubePurger->purge($protocol, 'foo')->shouldBeCalled();
+        $states = new Set();
 
-        $this->flush();
+        $protocolTubePurger->purge($protocol, new Vector(['foo']), $states)->shouldBeCalled();
+
+        $this->flush($states);
     }
 
     public function getMatchers(): array
