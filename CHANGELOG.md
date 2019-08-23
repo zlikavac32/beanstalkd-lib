@@ -1,6 +1,6 @@
 # Beanstalkd lib
 
-## Unreleased
+## 0.4.0 (2019-08-23)
 
 * **[CHANGED]** Tube purger and client can now accept job states to flush
 * **[CHANGED]** `Zlikavac32\BeanstalkdLib\Runner\JobObserverRunner` does not log `Zlikavac32\BeanstalkdLib\InterruptException`
