@@ -11,14 +11,7 @@ use Zlikavac32\BeanstalkdLib\JobHandle;
 class JobHandleIsForJob extends Constraint
 {
 
-    /**
-     * @var Job
-     */
-    private $job;
-    /**
-     * @var mixed
-     */
-    private $payload;
+    private Job $job;
 
     public function __construct(Job $job)
     {

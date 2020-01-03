@@ -40,46 +40,27 @@ use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\purgeProtocol;
 class BasicFunctionalityTest extends TestCase
 {
 
+    private ?Protocol $protocol;
+
+    private ?Client $client;
     /**
-     * @var Protocol
+     * @var TubeConfiguration[]
      */
-    private $protocol;
-    /**
-     * @var Client
-     */
-    private $client;
-    /**
-     * @var Map|TubeConfiguration[]
-     */
-    private $tubeConfigurations;
-    /**
-     * @var Serializer
-     */
-    private $serializer;
-    /**
-     * @var JobDispatcher
-     */
-    private $jobDispatcher;
-    /**
-     * @var AlarmScheduler
-     */
-    private $alarmScheduler;
-    /**
-     * @var Runner
-     */
-    private $barTubeRunner;
-    /**
-     * @var Map
-     */
-    private $tubeRunners;
-    /**
-     * @var GracefulExit
-     */
-    private $gracefulExit;
-    /**
-     * @var AlarmHandler
-     */
-    private $emulateInterruptAlarmHandler;
+    private ?Map $tubeConfigurations;
+
+    private ?Serializer $serializer;
+
+    private ?JobDispatcher $jobDispatcher;
+
+    private ?AlarmScheduler $alarmScheduler;
+
+    private ?Runner $barTubeRunner;
+
+    private ?Map $tubeRunners;
+
+    private ?GracefulExit $gracefulExit;
+
+    private ?AlarmHandler $emulateInterruptAlarmHandler;
 
     private static $previousAsyncSignals;
 
@@ -165,16 +146,16 @@ class BasicFunctionalityTest extends TestCase
 
         $this->alarmScheduler->finish();
 
-        unset($this->jobDispatcher);
-        unset($this->alarmScheduler);
-        unset($this->barTubeRunner);
-        unset($this->tubeRunners);
-        unset($this->gracefulExit);
-        unset($this->emulateInterruptAlarmHandler);
-        unset($this->serializer);
-        unset($this->tubeConfigurations);
-        unset($this->client);
-        unset($this->protocol);
+        $this->jobDispatcher = null;
+        $this->alarmScheduler = null;
+        $this->barTubeRunner = null;
+        $this->tubeRunners = null;
+        $this->gracefulExit = null;
+        $this->emulateInterruptAlarmHandler = null;
+        $this->serializer = null;
+        $this->tubeConfigurations = null;
+        $this->client = null;
+        $this->protocol = null;
     }
 
     /**

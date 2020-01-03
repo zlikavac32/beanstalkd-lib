@@ -10,14 +10,9 @@ use Zlikavac32\BeanstalkdLib\Protocol;
 class JobIdHasPriority extends Constraint
 {
 
-    /**
-     * @var Protocol
-     */
-    private $protocol;
-    /**
-     * @var int
-     */
-    private $priority;
+    private Protocol $protocol;
+
+    private int $priority;
 
     public function __construct(Protocol $protocol, int $priority)
     {

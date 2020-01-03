@@ -11,14 +11,9 @@ use Zlikavac32\BeanstalkdLib\TubeStats;
 class TubeStatsIsForTube extends Constraint
 {
 
-    /**
-     * @var Protocol
-     */
-    private $protocol;
-    /**
-     * @var string
-     */
-    private $tubeName;
+    private Protocol $protocol;
+
+    private string $tubeName;
 
     public function __construct(Protocol $protocol, string $tubeName)
     {

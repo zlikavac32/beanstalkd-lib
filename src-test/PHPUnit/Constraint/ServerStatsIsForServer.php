@@ -11,10 +11,7 @@ use Zlikavac32\BeanstalkdLib\ServerStats;
 class ServerStatsIsForServer extends Constraint
 {
 
-    /**
-     * @var Protocol
-     */
-    private $protocol;
+    private Protocol $protocol;
 
     public function __construct(Protocol $protocol)
     {

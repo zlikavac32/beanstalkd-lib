@@ -10,14 +10,9 @@ use Zlikavac32\BeanstalkdLib\Protocol;
 class JobIdHasDelay extends Constraint
 {
 
-    /**
-     * @var Protocol
-     */
-    private $protocol;
-    /**
-     * @var int
-     */
-    private $delay;
+    private Protocol $protocol;
+
+    private int $delay;
 
     public function __construct(Protocol $protocol, int $delay)
     {

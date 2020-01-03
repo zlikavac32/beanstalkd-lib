@@ -14,14 +14,9 @@ require_once __DIR__.'/../common.php';
 class ProjectCommit
 {
 
-    /**
-     * @var string
-     */
-    private $project;
-    /**
-     * @var string
-     */
-    private $commit;
+    private string $project;
+
+    private string $commit;
 
     public function __construct(string $project, string $commit)
     {

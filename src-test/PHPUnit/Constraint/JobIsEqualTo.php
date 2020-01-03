@@ -10,10 +10,7 @@ use Zlikavac32\BeanstalkdLib\Job;
 class JobIsEqualTo extends Constraint
 {
 
-    /**
-     * @var Job
-     */
-    private $job;
+    private Job $job;
 
     public function __construct(Job $job)
     {

@@ -16,24 +16,16 @@ class SignalHandlerInstallerTest extends TestCase
      * @var bool
      */
     private static $originalUseAsyncSignals;
-    /**
-     * @var array
-     */
-    private static $signalNames = [SIGINT => 'SIGINT', SIGQUIT => 'SIGQUIT', SIGTERM => 'SIGTERM'];
-    /**
-     * @var MockInterruptHandler
-     */
-    private $interruptHandler;
-    /**
-     * @var SignalHandlerInstaller
-     */
-    private $signalHandlerInstaller;
-    /**
-     * @var Map
-     */
-    private $originalHandlers;
 
-    private $signals = [SIGINT, SIGTERM, SIGQUIT];
+    private static array $signalNames = [SIGINT => 'SIGINT', SIGQUIT => 'SIGQUIT', SIGTERM => 'SIGTERM'];
+
+    private ?MockInterruptHandler $interruptHandler;
+
+    private ?SignalHandlerInstaller $signalHandlerInstaller;
+
+    private ?Map $originalHandlers;
+
+    private array $signals = [SIGINT, SIGTERM, SIGQUIT];
 
     public static function setUpBeforeClass(): void
     {

@@ -11,14 +11,9 @@ use Zlikavac32\BeanstalkdLib\Protocol;
 class JobIdIsInState extends Constraint
 {
 
-    /**
-     * @var Protocol
-     */
-    private $protocol;
-    /**
-     * @var JobState
-     */
-    private $jobState;
+    private Protocol $protocol;
+
+    private JobState $jobState;
 
     public function __construct(Protocol $protocol, JobState $jobState)
     {

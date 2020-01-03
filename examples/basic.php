@@ -3,9 +3,12 @@
 declare(strict_types=1);
 
 use Ds\Map;
+use Ds\Set;
+use Ds\Vector;
 use Zlikavac32\BeanstalkdLib\Adapter\PHP\Json\NativePHPJsonSerializer;
 use Zlikavac32\BeanstalkdLib\Client\ProtocolClient;
 use Zlikavac32\BeanstalkdLib\Client\TubeConfiguration\StaticTubeConfiguration;
+use Zlikavac32\BeanstalkdLib\JobState;
 use Zlikavac32\BeanstalkdLib\ProtocolTubePurger\IterativeProtocolTubePurger;
 
 require_once __DIR__.'/common.php';
@@ -18,10 +21,7 @@ $jsonSerializer = new NativePHPJsonSerializer(true);
 class DomainObject
 {
 
-    /**
-     * @var int
-     */
-    private $id;
+    private int $id;
 
     public function __construct(int $id)
     {
@@ -150,7 +150,7 @@ echo 'Jobs in bar: ', $barTube->stats()->metrics()->numberOfReadyJobs(), "\n";
 
 // Simple iterative purger is provided as IterativeProtocolTubePurger
 $protocolPurger = new IterativeProtocolTubePurger();
-$protocolPurger->purge($protocol, 'foo', 'bar');
+$protocolPurger->purge($protocol, new Vector(['foo', 'bar']), new Set([JobState::BURIED(), JobState::DELAYED(), JobState::READY()]));
 
 echo 'After purging', "\n";
 
