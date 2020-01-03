@@ -58,10 +58,7 @@ class IndexProjectCommitRunner implements \Zlikavac32\BeanstalkdLib\Runner
 class GracefulExitIndexProjectCommitRunner implements \Zlikavac32\BeanstalkdLib\Runner
 {
 
-    /**
-     * @var GracefulExit
-     */
-    private $gracefulExit;
+    private GracefulExit $gracefulExit;
 
     public function __construct(GracefulExit $gracefulExit)
     {

@@ -30,10 +30,7 @@ use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\purgeTube;
 class BasicFunctionalityTest extends TestCase
 {
 
-    /**
-     * @var Protocol
-     */
-    private $protocol;
+    private ?Protocol $protocol;
 
     protected function setUp()
     {
@@ -59,7 +56,7 @@ class BasicFunctionalityTest extends TestCase
 
     protected function tearDown()
     {
-        unset($this->protocol);
+        $this->protocol = null;
     }
 
     /**

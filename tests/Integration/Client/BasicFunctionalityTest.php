@@ -40,22 +40,15 @@ use function Zlikavac32\BeanstalkdLib\TestHelper\PHPUnit\purgeProtocol;
 class BasicFunctionalityTest extends TestCase
 {
 
+    private ?Protocol $protocol;
+
+    private ?Client $client;
     /**
-     * @var Protocol
+     * @var TubeConfiguration[]
      */
-    private $protocol;
-    /**
-     * @var Client
-     */
-    private $client;
-    /**
-     * @var Map|TubeConfiguration[]
-     */
-    private $tubeConfigurations;
-    /**
-     * @var Serializer
-     */
-    private $serializer;
+    private ?Map $tubeConfigurations;
+
+    private ?Serializer $serializer;
 
     protected function setUp()
     {
@@ -87,10 +80,10 @@ class BasicFunctionalityTest extends TestCase
 
     protected function tearDown()
     {
-        unset($this->serializer);
-        unset($this->tubeConfigurations);
-        unset($this->client);
-        unset($this->protocol);
+        $this->serializer = null;
+        $this->tubeConfigurations = null;
+        $this->client = null;
+        $this->protocol = null;
     }
 
     /**

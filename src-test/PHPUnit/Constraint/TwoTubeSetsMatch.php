@@ -10,10 +10,7 @@ use PHPUnit\Framework\Constraint\Constraint;
 class TwoTubeSetsMatch extends Constraint
 {
 
-    /**
-     * @var Set
-     */
-    private $tubeWatchList;
+    private Set $tubeWatchList;
 
     public function __construct(Set $tubeWatchList)
     {

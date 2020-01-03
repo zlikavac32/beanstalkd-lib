@@ -1,5 +1,9 @@
 # Beanstalkd lib
 
+## Unreleased
+
+* **[CHANGED]** Typed properties are now used (PHP 7.4 is a minimum version to be used)
+
 ## 0.4.0 (2019-08-23)
 
 * **[CHANGED]** Tube purger and client can now accept job states to flush

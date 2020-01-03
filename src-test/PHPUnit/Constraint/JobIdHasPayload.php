@@ -10,14 +10,9 @@ use Zlikavac32\BeanstalkdLib\Protocol;
 class JobIdHasPayload extends Constraint
 {
 
-    /**
-     * @var Protocol
-     */
-    private $protocol;
-    /**
-     * @var int
-     */
-    private $payload;
+    private Protocol $protocol;
+
+    private string $payload;
 
     public function __construct(Protocol $protocol, string $payload)
     {

@@ -12,14 +12,9 @@ use Zlikavac32\BeanstalkdLib\Protocol;
 class JobStatsIsForJob extends Constraint
 {
 
-    /**
-     * @var Job
-     */
-    private $job;
-    /**
-     * @var Protocol
-     */
-    private $protocol;
+    private Job $job;
+
+    private Protocol $protocol;
 
     public function __construct(Protocol $protocol, Job $job)
     {
