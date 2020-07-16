@@ -136,6 +136,21 @@ class ProtocolOverSocketSpec extends ObjectBehavior
             ->shouldBeLike(new Job(32, '12.4'));
     }
 
+    public function it_should_reserve_job_with_no_payload(SocketHandle $socketHandle): void
+    {
+        $socketHandle->write("reserve\r\n")
+            ->shouldBeCalled();
+
+        $socketHandle->readLine(10, true)
+            ->willReturn('RESERVED 32 0');
+
+        $socketHandle->read(2)
+            ->willReturn("\r\n");
+
+        $this->reserve()
+            ->shouldBeLike(new Job(32, ''));
+    }
+
     public function it_should_throw_deadline_soon_exception_on_reserve(SocketHandle $socketHandle): void
     {
         $socketHandle->write(Argument::any())
@@ -664,6 +679,21 @@ class ProtocolOverSocketSpec extends ObjectBehavior
         $this->listTubesWatched()
             ->toArray()
             ->shouldReturn($statsArray);
+    }
+
+    public function it_should_list_empty_tubes_watching(SocketHandle $socketHandle): void
+    {
+        $socketHandle->write("list-tubes-watched\r\n")
+            ->shouldBeCalled();
+
+        $socketHandle->readLine(4, false)
+            ->willReturn('OK 0');
+        $socketHandle->read(2)
+            ->willReturn("\r\n");
+
+        $this->listTubesWatched()
+            ->toArray()
+            ->shouldReturn([]);
     }
 
     public function it_should_pause_tube(SocketHandle $socketHandle): void
