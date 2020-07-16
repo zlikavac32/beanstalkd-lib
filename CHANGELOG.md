@@ -1,5 +1,9 @@
 # Beanstalkd lib
 
+## Unreleased
+
+* **[FIXED]** Don't go to the socket with a 0 length payload
+
 ## 0.5.0 (2020-04-11)
 
 * **[CHANGED]** Minimum supported `zlikavac32/php-enum` version is 3.0.0

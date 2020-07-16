@@ -606,6 +606,9 @@ class ProtocolOverSocket implements Protocol
                     self::T_OK => [
                         ['int'],
                         function (int $payloadSize): array {
+                            if ($payloadSize === 0) {
+                                return [];
+                            }
                             return $this->readYamlPayload($payloadSize);
                         },
                     ],
@@ -727,6 +730,10 @@ class ProtocolOverSocket implements Protocol
 
     private function readPayload(int $size): string
     {
+        if ($size === 0) {
+            return '';
+        }
+
         $payload = $this->readFromSocket($size);
 
         if ("\r\n" !== $this->readFromSocket(2)) {
