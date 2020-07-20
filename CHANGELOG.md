@@ -1,6 +1,6 @@
 # Beanstalkd lib
 
-## Unreleased
+## 0.5.2 (2020-07-20)
 
 * **[FIXED]** Read `\r\n` on empty payload
 
