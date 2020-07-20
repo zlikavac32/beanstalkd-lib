@@ -688,7 +688,7 @@ class ProtocolOverSocketSpec extends ObjectBehavior
 
         $socketHandle->readLine(4, false)
             ->willReturn('OK 0');
-        $socketHandle->read(2)
+        $socketHandle->read(2)->shouldBeCalled()
             ->willReturn("\r\n");
 
         $this->listTubesWatched()
