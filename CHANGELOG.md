@@ -1,5 +1,9 @@
 # Beanstalkd lib
 
+## Unreleased
+
+* **[FIXED]** Read `\r\n` on empty payload
+
 ## 0.5.1 (2020-07-16)
 
 * **[FIXED]** Don't go to the socket with a 0 length payload

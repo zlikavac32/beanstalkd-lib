@@ -435,4 +435,14 @@ class BasicFunctionalityTest extends TestCase
             new JobIdIsInState($this->protocol, JobState::BURIED())
         );
     }
+
+    /**
+     * @test
+     */
+    public function job_with_zero_lenght_payload_can_be_read(): void
+    {
+        $createdJob = createJob($this->protocol, '');
+
+        self::assertThat($this->protocol->reserve(), new JobIsEqualTo($createdJob));
+    }
 }

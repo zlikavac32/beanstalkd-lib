@@ -606,9 +606,6 @@ class ProtocolOverSocket implements Protocol
                     self::T_OK => [
                         ['int'],
                         function (int $payloadSize): array {
-                            if ($payloadSize === 0) {
-                                return [];
-                            }
                             return $this->readYamlPayload($payloadSize);
                         },
                     ],
@@ -730,11 +727,11 @@ class ProtocolOverSocket implements Protocol
 
     private function readPayload(int $size): string
     {
-        if ($size === 0) {
-            return '';
-        }
+        $payload = '';
 
-        $payload = $this->readFromSocket($size);
+        if ($size > 0) {
+            $payload = $this->readFromSocket($size);
+        }
 
         if ("\r\n" !== $this->readFromSocket(2)) {
             throw new BeanstalkdLibException('Expected \r\n from server after payload');
@@ -746,6 +743,10 @@ class ProtocolOverSocket implements Protocol
     private function readYamlPayload(int $size): array
     {
         $payload = $this->readPayload($size);
+
+        if ($payload === '') {
+            return [];
+        }
 
         try {
             return $this->yamlParser->parse($payload);
